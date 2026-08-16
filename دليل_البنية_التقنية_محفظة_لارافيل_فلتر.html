@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل البنية التقنية — Laravel + Flutter | محفظة USDT/USD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --laravel: #ff2d20;
+            --flutter: #02569b;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warn: #f59e0b;
+            --shadow: 0 4px 24px rgba(30, 64, 175, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; }
+
+        .doc-header {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-dark) 40%, var(--primary-light) 100%);
+            color: white; padding: 3rem 2rem 4rem; text-align: center; position: relative;
+        }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .doc-header .subtitle { opacity: 0.9; font-size: 1.05rem; }
+        .tech-badges { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .tech-badge {
+            padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 700; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .badge-laravel { background: var(--laravel); }
+        .badge-flutter { background: var(--flutter); }
+        .badge-api { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+        .main-content { margin-top: -2rem; padding-bottom: 4rem; }
+
+        .toc-nav {
+            background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 1.5rem 2rem; margin-bottom: 2rem; position: sticky; top: 1rem; z-index: 100;
+        }
+        .toc-nav h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1rem; }
+        .toc-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .toc-links a {
+            text-decoration: none; color: var(--text-muted); font-size: 0.82rem;
+            padding: 0.35rem 0.85rem; border-radius: 50px; border: 1px solid var(--border); transition: 0.2s;
+        }
+        .toc-links a:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .section {
+            background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 2rem; margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.35rem; color: var(--primary); margin-bottom: 1.2rem;
+            padding-bottom: 0.6rem; border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .section h2 .num {
+            background: var(--primary); color: white; width: 32px; height: 32px;
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
+        }
+        .section h3 { font-size: 1.05rem; color: var(--primary-dark); margin: 1.3rem 0 0.7rem; }
+        .section h4 { font-size: 0.95rem; color: var(--text); margin: 1rem 0 0.5rem; }
+        .section p { margin-bottom: 0.8rem; }
+        .section ul, .section ol { margin: 0.5rem 1.5rem 1rem 0; }
+        .section li { margin-bottom: 0.35rem; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+        th { background: var(--primary); color: white; padding: 0.7rem 1rem; text-align: right; font-weight: 600; }
+        td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:hover td { background: #f1f5f9; }
+
+        .alert {
+            padding: 1rem 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.9rem;
+        }
+        .alert-info { background: #dbeafe; color: #1e40af; border-right: 4px solid var(--primary-light); }
+        .alert-warn { background: #fef3c7; color: #92400e; border-right: 4px solid var(--warn); }
+        .alert-danger { background: #fee2e2; color: #991b1b; border-right: 4px solid var(--danger); }
+        .alert-success { background: #d1fae5; color: #065f46; border-right: 4px solid var(--success); }
+
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .card {
+            border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem;
+            transition: 0.2s;
+        }
+        .card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+        .card-laravel { border-top: 3px solid var(--laravel); }
+        .card-flutter { border-top: 3px solid var(--flutter); }
+        .card h4 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .card p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+
+        /* Architecture diagrams */
+        .diagram {
+            background: #f1f5f9; border-radius: var(--radius-sm); padding: 1.5rem;
+            margin: 1rem 0; overflow-x: auto;
+        }
+        .layer-stack { display: flex; flex-direction: column; gap: 0.5rem; max-width: 700px; margin: 0 auto; }
+        .layer {
+            padding: 0.9rem 1.2rem; border-radius: var(--radius-sm); text-align: center;
+            font-weight: 600; font-size: 0.88rem; position: relative;
+        }
+        .layer-flutter { background: #dbeafe; color: var(--flutter); border: 2px solid var(--flutter); }
+        .layer-api { background: #e0e7ff; color: var(--primary-dark); border: 2px solid var(--primary); }
+        .layer-laravel { background: #fee2e2; color: var(--laravel); border: 2px solid var(--laravel); }
+        .layer-data { background: #d1fae5; color: #065f46; border: 2px solid var(--success); }
+        .layer-external { background: #fef3c7; color: #92400e; border: 2px solid var(--warn); }
+        .layer-arrow { text-align: center; color: var(--text-muted); font-size: 1.2rem; }
+
+        .flow-horizontal {
+            display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+            gap: 0.4rem; margin: 1rem 0;
+        }
+        .flow-box {
+            background: white; border: 2px solid var(--primary-light); border-radius: var(--radius-sm);
+            padding: 0.7rem 1rem; font-size: 0.82rem; font-weight: 600; text-align: center; min-width: 100px;
+        }
+        .flow-arrow { color: var(--primary-light); font-size: 1.3rem; font-weight: bold; }
+
+        .module-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;
+        }
+        .module-box {
+            background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 1rem 1.2rem;
+        }
+        .module-box h4 {
+            font-size: 0.9rem; color: var(--primary); margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .module-box ul { margin: 0 1rem 0 0; font-size: 0.82rem; color: var(--text-muted); }
+
+        .compare-table .col-laravel { background: #fff5f5; }
+        .compare-table .col-flutter { background: #eff6ff; }
+
+        .step-list { counter-reset: steps; list-style: none; margin: 1rem 0; padding: 0; }
+        .step-list li {
+            counter-increment: steps; padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.8rem;
+            background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border);
+            position: relative;
+        }
+        .step-list li::before {
+            content: counter(steps); position: absolute; right: 1rem; top: 1rem;
+            width: 28px; height: 28px; background: var(--primary); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700;
+        }
+        .step-list li strong { color: var(--primary-dark); }
+
+        .trust-level {
+            display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0;
+        }
+        .trust-bar { flex: 1; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+        .trust-fill { height: 100%; border-radius: 4px; }
+        .trust-low { width: 25%; background: var(--danger); }
+        .trust-med { width: 55%; background: var(--warn); }
+        .trust-high { width: 80%; background: var(--success); }
+        .trust-max { width: 100%; background: var(--primary); }
+
+        .license-card {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 1.2rem; margin-bottom: 0.8rem;
+        }
+        .license-card h4 { color: var(--primary); margin-bottom: 0.4rem; }
+        .license-card .region { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+
+        .tag {
+            display: inline-block; padding: 0.15rem 0.6rem; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 600; margin: 0.1rem;
+        }
+        .tag-required { background: #fee2e2; color: #991b1b; }
+        .tag-optional { background: #dbeafe; color: #1e40af; }
+        .tag-recommended { background: #d1fae5; color: #065f46; }
+
+        .folder-tree {
+            background: #1e293b; color: #e2e8f0; border-radius: var(--radius-sm);
+            padding: 1.2rem 1.5rem; font-family: 'Courier New', monospace; font-size: 0.8rem;
+            line-height: 1.6; overflow-x: auto; direction: ltr; text-align: left;
+        }
+        .folder-tree .dir { color: #fbbf24; }
+        .folder-tree .file { color: #94a3b8; }
+        .folder-tree .comment { color: #64748b; }
+
+        .doc-footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .doc-header h1 { font-size: 1.5rem; }
+            .flow-horizontal { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+        @media print {
+            .toc-nav { position: static; }
+            .section { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="doc-header">
+    <h1>دليل البنية التقنية للمحفظة الرقمية</h1>
+    <p class="subtitle">Laravel Backend + Flutter Mobile — البنية، التراخيص، والموثوقية</p>
+    <div class="tech-badges">
+        <span class="tech-badge badge-laravel">🔴 Laravel 11</span>
+        <span class="tech-badge badge-flutter">🔵 Flutter 3</span>
+        <span class="tech-badge badge-api">REST API + JWT</span>
+    </div>
+</header>
+
+<div class="container main-content">
+
+    <nav class="toc-nav">
+        <h3>جدول المحتويات</h3>
+        <div class="toc-links">
+            <a href="#overview">نظرة عامة</a>
+            <a href="#architecture">البنية الكلية</a>
+            <a href="#laravel">بنية Laravel</a>
+            <a href="#flutter">بنية Flutter</a>
+            <a href="#communication">التواصل بينهما</a>
+            <a href="#wallet-models">نماذج المحفظة</a>
+            <a href="#usdt-flow">مسار USDT</a>
+            <a href="#usd-flow">مسار USD</a>
+            <a href="#security-arch">الأمان</a>
+            <a href="#licenses">التراخيص</a>
+            <a href="#trust">الموثوقية</a>
+            <a href="#roadmap">خارطة الطريق</a>
+        </div>
+    </nav>
+
+    <!-- 1. Overview -->
+    <section class="section" id="overview">
+        <h2><span class="num">1</span> نظرة عامة — كيف يعمل النظام؟</h2>
+        <p>المحفظة الرقمية ليست "تطبيقاً واحداً" — بل **نظام موزّع** من طبقات منفصلة لكل منها مسؤولية واضحة. الفكرة الأساسية:</p>
+
+        <div class="cards">
+            <div class="card card-flutter">
+                <h4>📱 Flutter (الواجهة)</h4>
+                <p>ما يراه المستخدم: شاشات، أزرار، عرض الرصيد. لا يحتفظ بالمفاتيح الخاصة ولا يتصل بالبلوكشين مباشرة.</p>
+            </div>
+            <div class="card">
+                <h4>🔗 REST API (الجسر)</h4>
+                <p>قناة اتصال آمنة بين التطبيق والخادم. كل طلب موقّع بـ JWT Token.</p>
+            </div>
+            <div class="card card-laravel">
+                <h4>🔴 Laravel (العقل)</h4>
+                <p>منطق الأعمال: حسابات، أرصدة، معاملات، صلاحيات، تدقيق. يتصل بالبلوكشين وقاعدة البيانات.</p>
+            </div>
+            <div class="card">
+                <h4>🗄️ البيانات + البلوكشين</h4>
+                <p>PostgreSQL للسجلات + Redis للطوابير + TronGrid للـ USDT على شبكة TRON.</p>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>مبدأ ذهبي:</strong> Flutter يعرض فقط — Laravel يقرر فقط — البلوكشين ينفّذ فقط. لا تضع منطق مالي أو مفاتيح خاصة في تطبيق Flutter أبداً.
+        </div>
+    </section>
+
+    <!-- 2. Architecture -->
+    <section class="section" id="architecture">
+        <h2><span class="num">2</span> البنية المعمارية الكلية (High-Level Architecture)</h2>
+
+        <div class="diagram">
+            <div class="layer-stack">
+                <div class="layer layer-flutter">📱 Flutter App (iOS + Android + Web)</div>
+                <div class="layer-arrow">↕ HTTPS — REST API — JSON</div>
+                <div class="layer layer-api">🛡️ API Gateway — Rate Limiting — JWT Auth — Validation</div>
+                <div class="layer-arrow">↕</div>
+                <div class="layer layer-laravel">🔴 Laravel Application Layer</div>
+                <div class="layer-arrow">↕</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                    <div class="layer layer-data">🗄️ PostgreSQL</div>
+                    <div class="layer layer-data">⚡ Redis (Queue + Cache)</div>
+                </div>
+                <div class="layer-arrow">↕</div>
+                <div class="layer layer-external">⛓️ Blockchain Service (TronGrid) &nbsp;|&nbsp; 📧 Email/SMS &nbsp;|&nbsp; 🔐 Vault/KMS</div>
+            </div>
+        </div>
+
+        <h3>لماذا هذا الفصل؟</h3>
+        <table>
+            <thead><tr><th>الطبقة</th><th>لماذا منفصلة؟</th><th>ماذا لو دمجناها؟</th></tr></thead>
+            <tbody>
+                <tr><td>Flutter منفصل</td><td>تحديث الواجهة بدون لمس الخادم — iOS/Android من كود واحد</td><td>تطبيقان منفصلان = ضعف الجهد</td></tr>
+                <tr><td>Laravel منفصل</td><td>منطق مركزي — مصدر حقيقة واحد للأرصدة</td><td>تناقض أرصدة بين أجهزة المستخدمين</td></tr>
+                <tr><td>Blockchain Service منفصل</td><td>عزل تعقيد البلوكشين — سهولة الاختبار والاستبدال</td><td>كود معقّد ومتشابك في كل مكان</td></tr>
+                <tr><td>Queue (Redis) منفصل</td><td>معالجة الإيداعات والإشعارات في الخلفية</td><td>بطء الاستجابة وتعليق الطلبات</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 3. Laravel -->
+    <section class="section" id="laravel">
+        <h2><span class="num">3</span> بنية Laravel Backend — الطبقات والوحدات</h2>
+
+        <h3>3.1 هيكل المجلدات (Folder Structure)</h3>
+        <div class="folder-tree">
+<span class="dir">wallet-api/</span>                          <span class="comment"># مشروع Laravel منفصل</span>
+├── <span class="dir">app/</span>
+│   ├── <span class="dir">Http/Controllers/Api/</span>          <span class="comment"># Auth, Wallet, Transaction, Admin</span>
+│   ├── <span class="dir">Services/</span>                        <span class="comment"># منطق الأعمال (القلب)</span>
+│   │   ├── <span class="file">WalletService.php</span>            <span class="comment"># إنشاء محافظ، عرض رصيد</span>
+│   │   ├── <span class="file">TransactionService.php</span>       <span class="comment"># إرسال، تسجيل، تحديث حالة</span>
+│   │   ├── <span class="file">LedgerService.php</span>            <span class="comment"># دفتر محاسبي USD</span>
+│   │   ├── <span class="file">BalanceService.php</span>           <span class="comment"># حساب الرصيد من السجلات</span>
+│   │   └── <span class="file">Blockchain/</span>
+│   │       ├── <span class="file">TronService.php</span>          <span class="comment"># إرسال USDT</span>
+│   │       └── <span class="file">DepositListener.php</span>      <span class="comment"># مراقبة الإيداعات</span>
+│   ├── <span class="dir">Models/</span>                          <span class="comment"># User, Wallet, Transaction, Balance</span>
+│   ├── <span class="dir">Jobs/</span>                            <span class="comment"># مهام خلفية (Queue)</span>
+│   │   ├── <span class="file">ProcessDepositJob.php</span>
+│   │   ├── <span class="file">BroadcastTransactionJob.php</span>
+│   │   └── <span class="file">SendNotificationJob.php</span>
+│   ├── <span class="dir">Events/Listeners/</span>                <span class="comment"># أحداث: DepositReceived, WithdrawalSent</span>
+│   ├── <span class="dir">Policies/</span>                        <span class="comment"># صلاحيات: من يرسل؟ من يشاهد؟</span>
+│   └── <span class="dir">Repositories/</span>                    <span class="comment"># (اختياري) عزل استعلامات DB</span>
+├── <span class="dir">routes/api.php</span>                       <span class="comment"># مسارات API فقط</span>
+├── <span class="dir">database/migrations/</span>               <span class="comment"># جداول DB</span>
+└── <span class="dir">config/</span>                              <span class="comment"># blockchain.php, wallet.php</span>
+        </div>
+
+        <h3>3.2 الوحدات (Modules) ومسؤولياتها</h3>
+        <div class="module-grid">
+            <div class="module-box">
+                <h4>🔐 Auth Module</h4>
+                <ul>
+                    <li>تسجيل / دخول / خروج</li>
+                    <li>JWT Tokens + Refresh Token</li>
+                    <li>2FA (TOTP)</li>
+                    <li>استعادة كلمة المرور</li>
+                    <li>تعليق الحساب</li>
+                </ul>
+            </div>
+            <div class="module-box">
+                <h4>💼 Wallet Module</h4>
+                <ul>
+                    <li>إنشاء محفظة USDT (عنوان TRC-20)</li>
+                    <li>إنشاء حساب USD داخلي</li>
+                    <li>عرض الرصيد المتاح</li>
+                    <li>QR Code generation</li>
+                </ul>
+            </div>
+            <div class="module-box">
+                <h4>💸 Transaction Module</h4>
+                <ul>
+                    <li>إرسال USDT (سحب)</li>
+                    <li>تسجيل إيداع USDT (وارد)</li>
+                    <li>تحويل USD داخلي</li>
+                    <li>سحب / إيداع USD</li>
+                    <li>تقدير الرسوم</li>
+                </ul>
+            </div>
+            <div class="module-box">
+                <h4>📒 Ledger Module (USD)</h4>
+                <ul>
+                    <li>دفتر محاسبي مزدوج القيد</li>
+                    <li>كل حركة: debit + credit</li>
+                    <li>الرصيد = مجموع القيود</li>
+                    <li>لا يُعدَّل الرصيد مباشرة أبداً</li>
+                </ul>
+            </div>
+            <div class="module-box">
+                <h4>⛓️ Blockchain Module</h4>
+                <ul>
+                    <li>الاتصال بـ TronGrid API</li>
+                    <li>مراقبة عناوين الإيداع</li>
+                    <li>توقيع وإرسال معاملات USDT</li>
+                    <li>التحقق من تأكيدات الشبكة</li>
+                </ul>
+            </div>
+            <div class="module-box">
+                <h4>👨‍💼 Admin Module</h4>
+                <ul>
+                    <li>إدارة المستخدمين</li>
+                    <li>اعتماد إيداعات USD يدوياً</li>
+                    <li>تقارير وإحصائيات</li>
+                    <li>ضبط الحدود والرسوم</li>
+                    <li>Audit Log</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>3.3 قاعدة البيانات — الجداول الأساسية</h3>
+        <table>
+            <thead><tr><th>الجدول</th><th>الغرض</th><th>علاقات</th></tr></thead>
+            <tbody>
+                <tr><td><code>users</code></td><td>بيانات المستخدم والمصادقة</td><td>1 → N wallets, transactions</td></tr>
+                <tr><td><code>wallets</code></td><td>عنوان USDT لكل مستخدم</td><td>belongs to user</td></tr>
+                <tr><td><code>balances</code></td><td>رصيد مجمّع (USDT + USD)</td><td>belongs to user — يُحدَّث عبر Ledger فقط</td></tr>
+                <tr><td><code>transactions</code></td><td>كل حركة مالية</td><td>type, amount, status, tx_hash</td></tr>
+                <tr><td><code>ledger_entries</code></td><td>قيود محاسبية USD</td><td>debit/credit — مصدر الحقيقة للدولار</td></tr>
+                <tr><td><code>wallet_keys</code></td><td>مفاتيح مشفّرة</td><td>مشفّرة بـ Vault — لا تُقرأ بنص صريح</td></tr>
+                <tr><td><code>audit_logs</code></td><td>سجل تدقيق</td><td>كل عملية حساسة</td></tr>
+                <tr><td><code>system_settings</code></td><td>حدود ورسوم</td><td>min/max withdraw, fees</td></tr>
+            </tbody>
+        </table>
+
+        <div class="alert alert-warn">
+            <strong>قاعدة ذهبية للأرصدة:</strong> لا تُحدَّث قيمة <code>balance</code> مباشرة بـ <code>UPDATE balance = 500</code>. كل تغيير يمر عبر <code>transactions</code> + <code>ledger_entries</code> ثم يُعاد حساب الرصيد. هذا يمنع فقدان الأموال وتناقض السجلات.
+        </div>
+    </section>
+
+    <!-- 4. Flutter -->
+    <section class="section" id="flutter">
+        <h2><span class="num">4</span> بنية Flutter — الطبقات والشاشات</h2>
+
+        <h3>4.1 هيكل المشروع (Clean Architecture مبسّطة)</h3>
+        <div class="folder-tree">
+<span class="dir">wallet_app/</span>                          <span class="comment"># مشروع Flutter منفصل</span>
+├── <span class="dir">lib/</span>
+│   ├── <span class="dir">main.dart</span>
+│   ├── <span class="dir">core/</span>                            <span class="comment"># أساسيات مشتركة</span>
+│   │   ├── <span class="file">api_client.dart</span>                <span class="comment"># Dio HTTP + JWT Interceptor</span>
+│   │   ├── <span class="file">constants.dart</span>
+│   │   ├── <span class="file">theme.dart</span>
+│   │   └── <span class="dir">utils/</span>
+│   ├── <span class="dir">features/</span>                        <span class="comment"># كل ميزة = مجلد مستقل</span>
+│   │   ├── <span class="dir">auth/</span>
+│   │   │   ├── <span class="dir">presentation/</span>              <span class="comment"># الشاشات (UI)</span>
+│   │   │   ├── <span class="dir">domain/</span>                    <span class="comment"># Models + Use Cases</span>
+│   │   │   └── <span class="dir">data/</span>                      <span class="comment"># API calls + Repositories</span>
+│   │   ├── <span class="dir">wallet/</span>                      <span class="comment"># الرصيد + التبديل USDT/USD</span>
+│   │   ├── <span class="dir">receive/</span>                     <span class="comment"># QR + عنوان</span>
+│   │   ├── <span class="dir">send/</span>                        <span class="comment"># نموذج إرسال</span>
+│   │   ├── <span class="dir">transactions/</span>              <span class="comment"># السجل</span>
+│   │   └── <span class="dir">settings/</span>                    <span class="comment"># 2FA + الملف الشخصي</span>
+│   └── <span class="dir">shared/</span>                          <span class="comment"># Widgets مشتركة</span>
+│       ├── <span class="file">balance_card.dart</span>
+│       ├── <span class="file">currency_toggle.dart</span>
+│       └── <span class="file">transaction_tile.dart</span>
+        </div>
+
+        <h3>4.2 ماذا يفعل Flutter وماذا لا يفعل</h3>
+        <table class="compare-table">
+            <thead><tr><th>المهمة</th><th>Flutter</th><th>Laravel</th></tr></thead>
+            <tbody>
+                <tr><td>عرض الرصيد</td><td class="col-flutter">✓ يعرض ما يأتي من API</td><td class="col-laravel">✓ يحسب ويرسل</td></tr>
+                <tr><td>إرسال USDT</td><td class="col-flutter">✓ يجمع المدخلات ويرسل طلب</td><td class="col-laravel">✓ يتحقق وينفّذ على البلوكشين</td></tr>
+                <tr><td>تخزين JWT Token</td><td class="col-flutter">✓ Secure Storage</td><td class="col-laravel">✓ يُصدِره ويتحقق منه</td></tr>
+                <tr><td>المفاتيح الخاصة</td><td class="col-flutter">✗ أبداً</td><td class="col-laravel">✓ مشفّرة في Vault</td></tr>
+                <tr><td>الاتصال بالبلوكشين</td><td class="col-flutter">✗ أبداً</td><td class="col-laravel">✓ عبر TronService</td></tr>
+                <tr><td>حساب الرصيد</td><td class="col-flutter">✗ أبداً</td><td class="col-laravel">✓ من السجلات</td></tr>
+                <tr><td>2FA</td><td class="col-flutter">✓ يعرض QR ويدخل الكود</td><td class="col-laravel">✓ يتحقق من TOTP</td></tr>
+                <tr><td>QR Code للاستقبال</td><td class="col-flutter">✓ يعرض من بيانات API</td><td class="col-laravel">✓ يولّد العنوان</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4.3 الشاشات (Screens Map)</h3>
+        <div class="flow-horizontal">
+            <div class="flow-box">Splash</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Login / Register</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Dashboard</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Receive</div>
+        </div>
+        <div class="flow-horizontal">
+            <div class="flow-box" style="opacity:0.3">—</div><span class="flow-arrow" style="opacity:0.3">→</span>
+            <div class="flow-box" style="opacity:0.3">—</div><span class="flow-arrow" style="opacity:0.3">→</span>
+            <div class="flow-box">Dashboard</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Send</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Confirm</div>
+        </div>
+        <div class="flow-horizontal">
+            <div class="flow-box" style="opacity:0.3">—</div><span class="flow-arrow" style="opacity:0.3">→</span>
+            <div class="flow-box" style="opacity:0.3">—</div><span class="flow-arrow" style="opacity:0.3">→</span>
+            <div class="flow-box">Dashboard</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Transactions</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Details</div>
+        </div>
+
+        <h3>4.4 إدارة الحالة (State Management)</h3>
+        <table>
+            <thead><tr><th>الخيار</th><th>متى تستخدمه</th><th>التوصية</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Riverpod</strong></td><td>مشاريع متوسطة-كبيرة، اختبار سهل</td><td><span class="tag tag-recommended">موصى به</span></td></tr>
+                <tr><td><strong>Bloc/Cubit</strong></td><td>منطق معقّد، فريق كبير</td><td><span class="tag tag-optional">بديل جيد</span></td></tr>
+                <tr><td><strong>Provider</strong></td><td>مشاريع صغيرة بسيطة</td><td><span class="tag tag-optional">للبداية</span></td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 5. Communication -->
+    <section class="section" id="communication">
+        <h2><span class="num">5</span> كيف يتواصل Flutter مع Laravel؟</h2>
+
+        <h3>5.1 مسار طلب API نموذجي</h3>
+        <div class="diagram">
+            <div class="flow-horizontal">
+                <div class="flow-box" style="border-color:var(--flutter)">Flutter<br><small>POST /api/transactions/send</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Middleware<br><small>JWT + Rate Limit</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box" style="border-color:var(--laravel)">Controller<br><small>يستقبل الطلب</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Service<br><small>منطق الأعمال</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">DB + Blockchain<br><small>تنفيذ</small></div>
+            </div>
+        </div>
+
+        <h3>5.2 نقاط API الرئيسية</h3>
+        <table>
+            <thead><tr><th>Method</th><th>Endpoint</th><th>الوظيفة</th><th>Flutter Screen</th></tr></thead>
+            <tbody>
+                <tr><td>POST</td><td><code>/api/auth/register</code></td><td>تسجيل</td><td>Register</td></tr>
+                <tr><td>POST</td><td><code>/api/auth/login</code></td><td>دخول → JWT</td><td>Login</td></tr>
+                <tr><td>GET</td><td><code>/api/wallet</code></td><td>رصيد USDT + USD</td><td>Dashboard</td></tr>
+                <tr><td>GET</td><td><code>/api/wallet/address</code></td><td>عنوان + QR data</td><td>Receive</td></tr>
+                <tr><td>POST</td><td><code>/api/transactions/estimate</code></td><td>تقدير رسوم</td><td>Send</td></tr>
+                <tr><td>POST</td><td><code>/api/transactions/send</code></td><td>إرسال USDT/USD</td><td>Confirm</td></tr>
+                <tr><td>GET</td><td><code>/api/transactions</code></td><td>سجل المعاملات</td><td>Transactions</td></tr>
+                <tr><td>POST</td><td><code>/api/auth/2fa/enable</code></td><td>تفعيل 2FA</td><td>Settings</td></tr>
+            </tbody>
+        </table>
+
+        <h3>5.3 شكل الاستجابة (Response Format موحّد)</h3>
+        <div class="folder-tree">
+<span class="comment">// كل استجابة API تتبع هذا الشكل:</span>
+{
+  "<span class="dir">success</span>": true,
+  "<span class="dir">data</span>": { ... },          <span class="comment">// البيانات المطلوبة</span>
+  "<span class="dir">message</span>": "تم بنجاح",
+  "<span class="dir">meta</span>": { "page": 1 }     <span class="comment">// للتصفح فقط</span>
+}
+
+<span class="comment">// عند الخطأ:</span>
+{
+  "<span class="dir">success</span>": false,
+  "<span class="dir">message</span>": "الرصيد غير كافٍ",
+  "<span class="dir">errors</span>": { "amount": ["الحد الأدنى 10 USDT"] }
+}
+        </div>
+
+        <h3>5.4 المصادقة (Authentication Flow)</h3>
+        <ol class="step-list">
+            <li><strong>تسجيل الدخول:</strong> Flutter يرسل email + password → Laravel يتحقق → يُرجع <code>access_token</code> + <code>refresh_token</code></li>
+            <li><strong>تخزين آمن:</strong> Flutter يحفظ الـ tokens في <code>flutter_secure_storage</code> (مشفّر على الجهاز)</li>
+            <li><strong>كل طلب:</strong> Dio Interceptor يضيف <code>Authorization: Bearer {token}</code> تلقائياً</li>
+            <li><strong>انتهاء الصلاحية:</strong> عند 401 → Flutter يستخدم refresh_token → يحصل على token جديد → يعيد الطلب</li>
+            <li><strong>قبل الإرسال:</strong> Laravel يطلب 2FA أو كلمة مرور إضافية لعمليات السحب</li>
+        </ol>
+    </section>
+
+    <!-- 6. Wallet Models -->
+    <section class="section" id="wallet-models">
+        <h2><span class="num">6</span> نماذج المحفظة — أي واحد تختار؟</h2>
+
+        <table>
+            <thead><tr><th>النموذج</th><th>كيف يعمل</th><th>الأمان</th><th>التعقيد</th><th>التوصية</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>Custodial</strong><br><small>المنصة تحتفظ بالمفاتيح</small></td>
+                    <td>مفتاح رئيسي عندك — مستخدمون يحصلون على عناوين فرعية</td>
+                    <td>يعتمد على أمان خادمك</td>
+                    <td>متوسط</td>
+                    <td><span class="tag tag-recommended">موصى به للبداية</span></td>
+                </tr>
+                <tr>
+                    <td><strong>HD Wallet</strong><br><small>عنوان فريد لكل مستخدم</small></td>
+                    <td>Seed واحد → عناوين مشتقة (BIP44)</td>
+                    <td>أفضل تتبعاً للإيداعات</td>
+                    <td>مرتفع</td>
+                    <td><span class="tag tag-recommended">موصى به مع Custodial</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Non-Custodial</strong><br><small>المستخدم يملك المفتاح</small></td>
+                    <td>المفتاح على جهاز المستخدم</td>
+                    <td>لا مسؤولية على المنصة</td>
+                    <td>منخفض للمنصة</td>
+                    <td><span class="tag tag-optional">للمحافظ الشخصية فقط</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>النموذج الموصى به: Custodial + HD Wallet</h3>
+        <div class="diagram">
+            <div class="flow-horizontal">
+                <div class="flow-box">Master Seed<br><small>مشفّر في Vault</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">HD Derivation<br><small>m/44'/195'/0'/0/N</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">عنوان لكل مستخدم<br><small>TRC-20 Address</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">مراقبة الإيداعات<br><small>Deposit Listener</small></div>
+            </div>
+        </div>
+
+        <h3>Hot Wallet vs Cold Wallet</h3>
+        <table>
+            <thead><tr><th>النوع</th><th>الغرض</th><th>النسبة المقترحة</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Hot Wallet</strong></td><td>سحوبات يومية سريعة — متصل بالإنترنت</td><td>5–10% من الأموال</td></tr>
+                <tr><td><strong>Cold Wallet</strong></td><td>تخزين احتياطي — غير متصل — يُعاد شحن Hot منه يدوياً</td><td>90–95% من الأموال</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 7. USDT Flow -->
+    <section class="section" id="usdt-flow">
+        <h2><span class="num">7</span> مسار USDT — من الإيداع للسحب (Backend Flow)</h2>
+
+        <h3>7.1 استقبال USDT (Deposit)</h3>
+        <ol class="step-list">
+            <li><strong>المستخدم يحصل على عنوانه</strong> — Laravel يولّده من HD Wallet ويخزنه في <code>wallets</code></li>
+            <li><strong>مرسل خارجي يحوّل USDT</strong> — المعاملة تدخل شبكة TRON</li>
+            <li><strong>Deposit Listener</strong> — Job يعمل كل 15–30 ثانية عبر TronGrid API يفحص العناوين</li>
+            <li><strong>اكتشاف معاملة جديدة</strong> — يُسجَّل في <code>transactions</code> بحالة <code>pending</code></li>
+            <li><strong>انتظار التأكيد</strong> — ≥ 1 confirmation على TRON</li>
+            <li><strong>تحديث الحالة</strong> — <code>confirmed</code> → تحديث <code>balance</code> → إرسال إشعار للمستخدم</li>
+        </ol>
+
+        <h3>7.2 إرسال USDT (Withdrawal)</h3>
+        <ol class="step-list">
+            <li><strong>Flutter يرسل طلب</strong> — عنوان المستلم + المبلغ + 2FA</li>
+            <li><strong>Laravel يتحقق</strong> — رصيد كافٍ؟ حد يومي؟ عنوان صالح؟ حساب غير معلّق؟</li>
+            <li><strong>حجز المبلغ</strong> — <code>pending_balance</code> يزيد — الرصيد المتاح ينقص</li>
+            <li><strong>توقيع المعاملة</strong> — Hot Wallet يوقّع عبر TronService</li>
+            <li><strong>بث على الشبكة</strong> — الحصول على TX Hash</li>
+            <li><strong>تأكيد أو فشل</strong> — confirmed → إتمام | failed → إرجاع الرصيد المحجوز</li>
+        </ol>
+
+        <div class="alert alert-danger">
+            <strong>مهم:</strong> لا تُرسل المعاملة للبلوكشين قبل حجز الرصيد في DB. وإلا قد يرسل مستخدم نفس الرصيد مرتين (Double Spend).
+        </div>
+    </section>
+
+    <!-- 8. USD Flow -->
+    <section class="section" id="usd-flow">
+        <h2><span class="num">8</span> مسار USD — المحفظة الداخلية (بدون بلوكشين)</h2>
+        <p>USD ليس على بلوكشين — بل <strong>رصيد محاسبي داخلي</strong> تديره المنصة. هذا أبسط تقنياً لكنه يتطلب ثقة أكبر من المستخدم.</p>
+
+        <h3>8.1 آلية الدفتر المحاسبي (Double-Entry Ledger)</h3>
+        <div class="diagram">
+            <div class="flow-horizontal">
+                <div class="flow-box">إيداع $500<br><small>من الإدارة</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Ledger Entry<br><small>Credit: User +500<br>Debit: System -500</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Balance<br><small>= SUM(credits) - SUM(debits)</small></div>
+            </div>
+        </div>
+
+        <h3>8.2 عمليات USD المدعومة</h3>
+        <table>
+            <thead><tr><th>العملية</th><th>من</th><th>إلى</th><th>آلية التنفيذ</th></tr></thead>
+            <tbody>
+                <tr><td>إيداع</td><td>خارج المنصة (بنك/نقد)</td><td>محفظة المستخدم</td><td>الإدارة تعتمد يدوياً</td></tr>
+                <tr><td>سحب</td><td>محفظة المستخدم</td><td>خارج المنصة</td><td>طلب → مراجعة → تحويل بنكي</td></tr>
+                <tr><td>تحويل داخلي</td><td>مستخدم A</td><td>مستخدم B</td><td>فوري — قيدين في Ledger</td></tr>
+                <tr><td>تحويل USDT↔USD</td><td>محفظة USDT</td><td>محفظة USD</td><td>سعر صرف تحدده الإدارة</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 9. Security -->
+    <section class="section" id="security">
+        <h2><span class="num">9</span> بنية الأمان — طبقة بطبقة</h2>
+
+        <table>
+            <thead><tr><th>الطبقة</th><th>الإجراء</th><th>الأداة</th></tr></thead>
+            <tbody>
+                <tr><td>النقل</td><td>HTTPS/TLS 1.3 إلزامي</td><td>Let's Encrypt / Cloudflare</td></tr>
+                <tr><td>المصادقة</td><td>JWT + Refresh Token + 2FA</td><td>Laravel Sanctum / Passport</td></tr>
+                <tr><td>المفاتيح الخاصة</td><td>تشفير AES-256 — لا تُخزَّن بنص صريح</td><td>HashiCorp Vault / AWS KMS</td></tr>
+                <tr><td>قاعدة البيانات</td><td>تشفير at-rest + نسخ احتياطي يومي</td><td>PostgreSQL + pg_dump</td></tr>
+                <tr><td>API</td><td>Rate Limiting + IP Whitelist للإدارة</td><td>Laravel Throttle</td></tr>
+                <tr><td>التطبيق</td><td>Certificate Pinning (اختياري)</td><td>Dio في Flutter</td></tr>
+                <tr><td>السحوبات</td><td>حد يومي + 2FA + تأخير للمبالغ الكبيرة</td><td>Business Logic</td></tr>
+                <tr><td>التدقيق</td><td>Audit Log لكل عملية حساسة</td><td>audit_logs table</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Queue Jobs — لماذا مهمة؟</h3>
+        <div class="cards">
+            <div class="card"><h4>ProcessDepositJob</h4><p>معالجة إيداع USDT في الخلفية — لا تُبطئ API</p></div>
+            <div class="card"><h4>BroadcastTransactionJob</h4><p>إرسال معاملة للبلوكشين — قد يستغرق ثوانٍ</p></div>
+            <div class="card"><h4>SendNotificationJob</h4><p>إشعار المستخدم بالبريد/Push</p></div>
+            <div class="card"><h4>ReconcileBalanceJob</h4><p>مطابقة أرصدة DB مع البلوكشين — يومياً</p></div>
+        </div>
+    </section>
+
+    <!-- 10. Licenses -->
+    <section class="section" id="licenses">
+        <h2><span class="num">10</span> التراخيص والمتطلبات القانونية والتنظيمية</h2>
+
+        <div class="alert alert-danger">
+            <strong>تنبيه قانوني مهم:</strong> تشغيل محفظة رقمية تحتفظ بأموال المستخدمين (Custodial) يُعتبر في أغلب الدول <strong>نشاطاً مالياً مرخّصاً</strong>. البدء بدون ترخيص يعرّضك لعقوبات قانونية وإغلاق الخدمة.
+        </div>
+
+        <h3>10.1 ما الذي قد تحتاجه؟</h3>
+        <table>
+            <thead><tr><th>المتطلب</th><th>الوصف</th><th>إلزامي؟</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>ترخيص مالي / VASP</strong></td>
+                    <td>ترخيص مزوّد خدمات الأصول الافتراضية — يسمح بحفظ وتحويل العملات الرقمية</td>
+                    <td><span class="tag tag-required">إلزامي في معظم الدول</span></td>
+                </tr>
+                <tr>
+                    <td><strong>KYC (اعرف عميلك)</strong></td>
+                    <td>التحقق من هوية المستخدم — هوية، صورة، عنوان</td>
+                    <td><span class="tag tag-required">إلزامي</span></td>
+                </tr>
+                <tr>
+                    <td><strong>AML (مكافحة غسل الأموال)</strong></td>
+                    <td>مراقبة معاملات مشبوهة، تقارير للجهات الرقابية</td>
+                    <td><span class="tag tag-required">إلزامي</span></td>
+                </tr>
+                <tr>
+                    <td><strong>ترخيص صرف عملات</strong></td>
+                    <td>إذا كنت تتيح تحويل USDT ↔ USD أو عملات ورقية</td>
+                    <td><span class="tag tag-required">إلزامي</span></td>
+                </tr>
+                <tr>
+                    <td><strong>تسجيل شركة</strong></td>
+                    <td>كيان قانوني في دولة تسمح بهذا النشاط</td>
+                    <td><span class="tag tag-required">إلزامي</span></td>
+                </tr>
+                <tr>
+                    <td><strong>GDPR / حماية البيانات</strong></td>
+                    <td>سياسة خصوصية، موافقة المستخدم، حق الحذف</td>
+                    <td><span class="tag tag-recommended">موصى به</span></td>
+                </tr>
+                <tr>
+                    <td><strong>PCI DSS</strong></td>
+                    <td>فقط إذا قبلت بطاقات ائتمان</td>
+                    <td><span class="tag tag-optional">حسب الحاجة</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>10.2 أين يمكن الحصول على ترخيص؟ (أمثلة)</h3>
+
+        <div class="license-card">
+            <h4>🇦🇪 الإمارات — VARA</h4>
+            <div class="region">هيئة تنظيم الأصول الافتراضية في دبي</div>
+            <p>ترخيص VASP لخدمات المحافظ والتبادل. من أشهر الخيارات في المنطقة العربية. يتطلب كياناً في الإمارات + رأس مال + امتثال AML.</p>
+        </div>
+        <div class="license-card">
+            <h4>🇱🇹 ليتوانيا — EMI / Crypto License</h4>
+            <div class="region">أوروبا — جواز سفر EU للخدمات</div>
+            <p>ترخيص أوروبي يسمح بالعمل في الاتحاد الأوروبي (MiCA). تكلفة ووقت أقل نسبياً من بعض الدول الغربية.</p>
+        </div>
+        <div class="license-card">
+            <h4>🇨🇭 سويسرا — FINMA</h4>
+            <div class="region">أعلى مصداقية — أعلى تكلفة</div>
+            <p>ترخيص FinTech من FINMA. مثالي للثقة العالية لكن يتطلب رأس مال كبير وامتثال صارم.</p>
+        </div>
+        <div class="license-card">
+            <h4>🇪🇪 إستونيا — e-Residency + FIU</h4>
+            <div class="region">أوروبا — تسجيل إلكتروني</div>
+            <p>تسجيل شركة إلكترونياً + تسجيل لدى FIU كمقدم خدمات أصول افتراضية.</p>
+        </div>
+        <div class="license-card">
+            <h4>🇸🇾 سوريا / المنطقة</h4>
+            <div class="region">الوضع التنظيمي غير واضح حالياً</div>
+            <p>لا يوجد إطار تنظيمي واضح للعملات الرقمية. يُنصح بشدة باستشارة محامٍ محلي قبل الإطلاق. الخيار العملي: تأسيس كيان في دولة مرخّصة والعمل عبرها.</p>
+        </div>
+
+        <h3>10.3 KYC — مستويات التحقق</h3>
+        <table>
+            <thead><tr><th>المستوى</th><th>المطلوب</th><th>الحدود</th></tr></thead>
+            <tbody>
+                <tr><td>Level 0</td><td>بريد + هاتف فقط</td><td>عرض الرصيد فقط — لا إرسال</td></tr>
+                <tr><td>Level 1</td><td>هوية + صورة شخصية</td><td>إرسال حتى $1,000/يوم</td></tr>
+                <tr><td>Level 2</td><td>إثبات عنوان + مصدر الأموال</td><td>إرسال حتى $10,000/يوم</td></tr>
+                <tr><td>Level 3</td><td>تحقق فيديو + مراجعة يدوية</td><td>بدون حدود</td></tr>
+            </tbody>
+        </table>
+
+        <h3>10.4 مزوّدو KYC/AML الجاهزون (Integration)</h3>
+        <table>
+            <thead><tr><th>الخدمة</th><th>الوظيفة</th><th>التكامل</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Sumsub</strong></td><td>KYC + AML + Liveness</td><td>REST API → Laravel Webhook</td></tr>
+                <tr><td><strong>Onfido</strong></td><td>تحقق هوية + وجه</td><td>SDK في Flutter + API</td></tr>
+                <tr><td><strong>Chainalysis</strong></td><td>تحليل عناوين مشبوهة</td><td>API قبل قبول إيداع</td></tr>
+                <tr><td><strong>Elliptic</strong></td><td>AML للعملات الرقمية</td><td>API</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 11. Trust -->
+    <section class="section" id="trust">
+        <h2><span class="num">11</span> كيف تجعل المحفظة رسمية ومعتمدة وموثوقة؟</h2>
+
+        <p>الموثوقية ليست ميزة تقنية واحدة — بل **مجموعة طبقات** يبنيها المستخدمون والجهات الرقابية والسوق معاً.</p>
+
+        <h3>11.1 مستويات الموثوقية</h3>
+
+        <div style="margin:1.5rem 0;">
+            <div class="trust-level">
+                <span style="width:140px; font-size:0.85rem;">محفظة شخصية</span>
+                <div class="trust-bar"><div class="trust-fill trust-low"></div></div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">منخفض</span>
+            </div>
+            <div class="trust-level">
+                <span style="width:140px; font-size:0.85rem;">تطبيق بدون ترخيص</span>
+                <div class="trust-bar"><div class="trust-fill trust-med"></div></div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">متوسط</span>
+            </div>
+            <div class="trust-level">
+                <span style="width:140px; font-size:0.85rem;">ترخيص + KYC</span>
+                <div class="trust-bar"><div class="trust-fill trust-high"></div></div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">عالي</span>
+            </div>
+            <div class="trust-level">
+                <span style="width:140px; font-size:0.85rem;">ترخيص + تدقيق + تأمين</span>
+                <div class="trust-bar"><div class="trust-fill trust-max"></div></div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">أقصى</span>
+            </div>
+        </div>
+
+        <h3>11.2 خارطة طريق بناء الثقة</h3>
+        <ol class="step-list">
+            <li><strong>كيان قانوني مسجّل</strong> — شركة في دولة تسمح بالنشاط. عرض اسم الشركة ورقم التسجيل في التطبيق والموقع.</li>
+            <li><strong>ترخيص VASP / مالي</strong> — أهم خطوة. اعرض رقم الترخيص في التطبيق والموقع الإلكتروني.</li>
+            <li><strong>KYC/AML مفعّل</strong> — تحقق هوية قبل تفعيل الإرسال. يربط كل محفظة بشخص حقيقي.</li>
+            <li><strong>تدقيق أمني (Security Audit)</strong> — شركة متخصصة تفحص الكود والبنية. شهادة مثل CertiK أو Hacken.</li>
+            <li><strong>Proof of Reserves</strong> — إثبات أن أموال المستخدمين موجودة فعلاً. مراجعة طرف ثالث دورية.</li>
+            <li><strong>تأمين الأموال</strong> — بوليصة تأمين ضد الاختراق أو Lloyd's of London للعملات الرقمية.</li>
+            <li><strong>شفافية الرسوم</strong> — عرض كل الرسوم قبل التأكيد. لا رسوم مخفية.</li>
+            <li><strong>دعم عملاء حقيقي</strong> — قنوات تواصل واضحة + وقت استجابة محدد.</li>
+            <li><strong>سياسات قانونية واضحة</strong> — شروط الاستخدام، سياسة الخصوصية، سياسة استرداد الأموال.</li>
+            <li><strong>نشر في متاجر رسمية</strong> — Google Play + App Store باسم الشركة المسجّلة.</li>
+        </ol>
+
+        <h3>11.3 Proof of Reserves — كيف يعمل؟</h3>
+        <div class="diagram">
+            <div class="flow-horizontal">
+                <div class="flow-box">مجموع أرصدة<br>المستخدمين في DB</div>
+                <span class="flow-arrow">=? </span>
+                <div class="flow-box">رصيد Hot + Cold<br>على البلوكشين</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">مراجعة طرف ثالث<br>شهادة دورية</div>
+            </div>
+        </div>
+        <p style="font-size:0.88rem; color:var(--text-muted);">إذا كان مجموع أرصدة المستخدمين ≤ ما تملكه على البلوكشين = أموالهم آمنة. هذا ما تفعله منصات مثل Binance وKraken بشكل دوري.</p>
+
+        <h3>11.4 الفرق بين "تطبيق" و"محفظة معتمدة"</h3>
+        <table>
+            <thead><tr><th>البند</th><th>تطبيق عادي</th><th>محفظة معتمدة</th></tr></thead>
+            <tbody>
+                <tr><td>كيان قانوني</td><td>✗</td><td>✓ شركة مسجّلة</td></tr>
+                <tr><td>ترخيص مالي</td><td>✗</td><td>✓ VASP / EMI</td></tr>
+                <tr><td>KYC</td><td>✗ أو شكلي</td><td>✓ تحقق حقيقي</td></tr>
+                <tr><td>تدقيق أمني</td><td>✗</td><td>✓ سنوي</td></tr>
+                <tr><td>Proof of Reserves</td><td>✗</td><td>✓ ربع سنوي</td></tr>
+                <tr><td>تأمين</td><td>✗</td><td>✓</td></tr>
+                <tr><td>دعم قانوني</td><td>✗</td><td>✓ محامون + امتثال</td></tr>
+                <tr><td>مسؤولية قانونية</td><td>لا أحد مسؤول</td><td>الشركة مسؤولة</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 12. Roadmap -->
+    <section class="section" id="roadmap">
+        <h2><span class="num">12</span> خارطة الطريق التقنية — من الصفر للإطلاق</h2>
+
+        <h3>المرحلة 0: قبل كتابة أي كود</h3>
+        <table>
+            <thead><tr><th>الخطوة</th><th>المخرج</th><th>المدة</th></tr></thead>
+            <tbody>
+                <tr><td>استشارة قانونية — أين تُسجَّل الشركة؟</td><td>قرار الدولة + نوع الترخيص</td><td>2–4 أسابيع</td></tr>
+                <tr><td>تأسيس الكيان القانوني</td><td>شركة مسجّلة</td><td>2–6 أسابيع</td></tr>
+                <tr><td>بدء إجراءات الترخيص</td><td>طلب مقدّم</td><td>3–12 شهر (بالتوازي مع التطوير)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>المرحلة 1: البنية التحتية (أسبوع 1–2)</h3>
+        <ul>
+            <li>إعداد Git repos منفصلة: <code>wallet-api</code> (Laravel) + <code>wallet_app</code> (Flutter)</li>
+            <li>إعداد VPS/Cloud + PostgreSQL + Redis</li>
+            <li>إعداد بيئة Staging + Production</li>
+            <li>CI/CD (GitHub Actions)</li>
+            <li>إعداد Vault/KMS للمفاتيح</li>
+        </ul>
+
+        <h3>المرحلة 2: Laravel Core (أسبوع 3–6)</h3>
+        <ul>
+            <li>Auth Module (JWT + 2FA)</li>
+            <li>Wallet Module (إنشاء عناوين HD)</li>
+            <li>Transaction Module + Ledger</li>
+            <li>Blockchain Service (TronGrid — Testnet أولاً)</li>
+            <li>Deposit Listener (Queue Job)</li>
+            <li>Admin Panel (يمكن Laravel Blade أو API منفصل)</li>
+        </ul>
+
+        <h3>المرحلة 3: Flutter App (أسبوع 5–8)</h3>
+        <ul>
+            <li>Auth Screens + Secure Storage</li>
+            <li>Dashboard + Currency Toggle</li>
+            <li>Receive (QR) + Send + Confirm</li>
+            <li>Transaction History</li>
+            <li>Settings + 2FA Setup</li>
+            <li>Push Notifications (Firebase)</li>
+        </ul>
+
+        <h3>المرحلة 4: الامتثال والأمان (أسبوع 8–10)</h3>
+        <ul>
+            <li>تكامل KYC (Sumsub / Onfido)</li>
+            <li>AML monitoring</li>
+            <li>Security Audit (شركة خارجية)</li>
+            <li>Penetration Testing</li>
+            <li>سياسات قانونية (شروط + خصوصية)</li>
+        </ul>
+
+        <h3>المرحلة 5: الإطلاق (أسبوع 10–12)</h3>
+        <ul>
+            <li>Testnet كامل → ثم Mainnet</li>
+            <li>نشر Production</li>
+            <li>رفع التطبيق على Google Play + App Store</li>
+            <li>مراقبة (Monitoring) + تنبيهات</li>
+            <li>تدريب فريق الدعم</li>
+        </ul>
+
+        <div class="alert alert-success">
+            <strong>نصيحة عملية:</strong> ابدأ التطوير على <strong>Testnet</strong> فوراً بالتوازي مع إجراءات الترخيص. لا تنتظر الترخيص لتبدأ البرمجة — لكن لا تُطلق Mainnet بدون ترخيص.
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section">
+        <h2><span class="num">✓</span> ملخص سريع</h2>
+        <div class="cards">
+            <div class="card card-laravel">
+                <h4>Laravel = العقل</h4>
+                <p>Auth, Wallet, Transactions, Ledger, Blockchain Service, Admin, Queue Jobs</p>
+            </div>
+            <div class="card card-flutter">
+                <h4>Flutter = الوجه</h4>
+                <p>شاشات فقط — API calls — لا مفاتيح — لا بلوكشين مباشر</p>
+            </div>
+            <div class="card">
+                <h4>API = الجسر</h4>
+                <p>REST + JWT — استجابة موحّدة — Rate Limiting</p>
+            </div>
+            <div class="card">
+                <h4>الترخيص = الأساس</h4>
+                <p>VASP + KYC + AML — بدونه لا محفظة "رسمية"</p>
+            </div>
+        </div>
+
+        <table style="margin-top:1.5rem;">
+            <thead><tr><th>السؤال</th><th>الجواب المختصر</th></tr></thead>
+            <tbody>
+                <tr><td>أين يعيش منطق الأموال؟</td><td>Laravel فقط — Services + Ledger</td></tr>
+                <tr><td>أين المفاتيح الخاصة؟</td><td>Vault مشفّر — Laravel فقط — أبداً في Flutter</td></tr>
+                <tr><td>كيف يعرف Laravel بإيداع جديد؟</td><td>Deposit Listener Job يفحص TronGrid كل 15–30 ثانية</td></tr>
+                <tr><td>USD بدون بلوكشين؟</td><td>Double-Entry Ledger — الإدارة تعتمد الإيداعات</td></tr>
+                <tr><td>كيف أكون "معتمد"؟</td><td>ترخيص + KYC + Audit + Proof of Reserves + تأمين</td></tr>
+                <tr><td>متى أطلق Mainnet؟</td><td>بعد Testnet كامل + ترخيص + Security Audit</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+<footer class="doc-footer">
+    <p>دليل البنية التقنية — Laravel + Flutter — محفظة USDT/USD</p>
+    <p style="margin-top:0.5rem;">وثيقة تقنية للمطورين وصناع القرار — ليست استشارة قانونية</p>
+    <p style="margin-top:0.5rem;">[اسم الشركة] | [البريد الإلكتروني] | يوليو 2026</p>
+</footer>
+
+</body>
+</html>

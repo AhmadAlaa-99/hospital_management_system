@@ -1,0 +1,35 @@
+<!-- main-sidebar -->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar sidebar-scroll">
+    <div class="main-sidebar-header active">
+        <a class="desktop-logo logo-light active" href="{{ Auth::guard('admin')->check() ? route('dashboard.admin') : url('/') }}">
+            <img src="{{ URL::asset('Dashboard/img/brand/hospital-logo.png') }}" class="main-logo" alt="logo">
+            <span class="hms-sidebar-brand-text">{{ app()->getLocale() === 'ar' ? 'مستشفى الشام التخصصي' : 'Hospital System' }}</span>
+        </a>
+        <a class="logo-icon mobile-logo icon-light active" href="{{ Auth::guard('admin')->check() ? route('dashboard.admin') : url('/') }}">
+            <img src="{{ URL::asset('Dashboard/img/brand/hospital-logo.png') }}" class="logo-icon" alt="logo">
+        </a>
+    </div>
+
+    @if(\Auth::guard('admin')->check())
+        @include('Dashboard.layouts.main-sidebar.admin-sidebar-main')
+    @endif
+
+    @if(\Auth::guard('doctor')->check())
+        @include('Dashboard.layouts.main-sidebar.doctor-sidebar-main')
+    @endif
+
+    @if(\Auth::guard('ray_employee')->check())
+        @include('Dashboard.layouts.main-sidebar.ray_employee-sidebar-main')
+    @endif
+
+    @if(\Auth::guard('laboratorie_employee')->check())
+        @include('Dashboard.layouts.main-sidebar.laboratorie_employee-sidebar-main')
+    @endif
+
+    @if(\Auth::guard('patient')->check())
+        @include('Dashboard.layouts.main-sidebar.patient-sidebar-main')
+    @endif
+
+</aside>
+<!-- main-sidebar -->

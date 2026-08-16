@@ -1,0 +1,2389 @@
+/* Hospital website — brand identity (logo teal) */
+:root {
+    --hms-brand: #0d7377;
+    --hms-brand-2: #14a3a8;
+    --hms-brand-dark: #085458;
+    --hms-brand-soft: #e8f6f6;
+    --hms-brand-ink: #0a3d40;
+}
+
+/* Hospital website header & chrome polish */
+.hms-site-header .header-upper {
+    background: linear-gradient(135deg, var(--hms-brand-dark), var(--hms-brand));
+}
+
+.hms-site-header .header-upper .inner-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 78px;
+    padding: 8px 20px;
+}
+
+.hms-site-header .logo-outer {
+    flex: 0 0 auto;
+    float: none !important;
+    margin: 0 !important;
+}
+
+.hms-site-header .logo-outer .logo img {
+    max-height: 52px;
+    width: auto;
+    display: block;
+}
+
+.hms-site-header .hms-web-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    flex: 1 1 auto;
+    float: none !important;
+    width: auto !important;
+}
+
+.hms-site-header .main-menu {
+    float: none !important;
+    margin: 0 !important;
+}
+
+.hms-site-header .navigation {
+    display: flex !important;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+}
+
+.hms-site-header .navigation > li {
+    float: none !important;
+    margin: 0 !important;
+}
+
+.hms-site-header .navigation > li > a {
+    color: #fff !important;
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+    font-weight: 600;
+    border-radius: 8px;
+    line-height: 1.2;
+}
+
+.hms-site-header .navigation > li.current > a,
+.hms-site-header .navigation > li > a:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff !important;
+}
+
+.hms-site-header .hms-web-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    float: none !important;
+    margin: 0 !important;
+}
+
+.hms-site-header .social-box {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0 !important;
+    float: none !important;
+}
+
+.hms-site-header .social-box li {
+    float: none !important;
+    margin: 0 !important;
+}
+
+.hms-site-header .social-box li a,
+.hms-site-header .nav-box .nav-btn {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hms-site-header .social-box li a:hover,
+.hms-site-header .nav-box .nav-btn:hover {
+    background: var(--hms-brand-2) !important;
+}
+
+.hms-site-header .nav-box {
+    float: none !important;
+    margin: 0 !important;
+}
+
+.hms-site-header .search-box-btn,
+.hms-site-header .mobile-nav-toggler {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    .hms-site-header .header-upper .inner-container {
+        flex-wrap: wrap;
+    }
+
+    .hms-site-header .hms-web-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .hms-site-header .navigation > li > a {
+        padding: 8px 10px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* Hide theme junk */
+.color-palate {
+    display: none !important;
+}
+
+/* Articles cards */
+.hms-article-card {
+    background: #fff !important;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    padding: 0 !important;
+}
+
+.hms-article-card:before {
+    display: none !important;
+}
+
+.hms-article-card .lower-content {
+    padding: 22px !important;
+    position: relative !important;
+}
+
+.hms-article-card .lower-content .content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.hms-article-card .post-info {
+    display: none !important;
+}
+
+.hms-article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 18px;
+    margin-bottom: 14px;
+    color: #5b6b7c;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hms-article-meta__item,
+.hms-article-meta .hms-like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #5b6b7c;
+    line-height: 1.2;
+}
+
+.hms-article-meta__item i,
+.hms-article-meta .hms-like-btn i {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal;
+    color: var(--hms-brand);
+    font-size: 14px;
+}
+
+.hms-article-meta .hms-like-btn i.fa-heart,
+.hms-like-btn .fa-heart {
+    color: #e11d48;
+}
+
+.hms-article-card .lower-content h3 {
+    font-size: 20px !important;
+    line-height: 1.55 !important;
+    margin: 0 0 10px !important;
+    color: #1f2a37 !important;
+}
+
+.hms-article-card .lower-content h3 a {
+    color: #1f2a37 !important;
+}
+
+.hms-article-card .lower-content .text {
+    color: #556274 !important;
+    margin: 0 0 18px !important;
+}
+
+.hms-article-card .image {
+    overflow: hidden;
+    background: linear-gradient(145deg, var(--hms-brand-dark), var(--hms-brand-2));
+}
+
+.hms-article-card .image img {
+    border-radius: 14px 14px 0 0;
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.hms-like-btn {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+}
+
+.hms-like-btn.is-liked {
+    color: #e11d48;
+}
+
+.hms-like-btn.is-liked i {
+    transform: scale(1.12);
+}
+
+
+/* Brand link + sticky header clarity */
+.hms-brand-link {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none !important;
+}
+
+.hms-logo-img {
+    width: 48px !important;
+    height: 48px !important;
+    max-height: 48px !important;
+    object-fit: contain !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    padding: 4px !important;
+    border: 1px solid rgba(215, 236, 236, 0.9) !important;
+    box-shadow: 0 4px 12px rgba(13, 115, 119, 0.15);
+}
+
+.hms-site-header .header-upper .hms-logo-img {
+    border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.hms-brand-text {
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 1.25;
+    max-width: 170px;
+}
+
+.hms-brand-text span {
+    color: #8fdfe2;
+}
+
+.hms-brand-text.sticky {
+    color: #0d7377;
+}
+
+.hms-brand-text.sticky span {
+    color: #14a3a8;
+}
+
+.hms-site-header .sticky-header {
+    background: #fff !important;
+    box-shadow: 0 8px 24px rgba(11, 31, 58, 0.12);
+    border-bottom: 1px solid #e6eef5;
+}
+
+.hms-site-header .sticky-header .navigation > li > a {
+    color: var(--hms-brand-ink) !important;
+    font-weight: 700;
+    padding: 10px 12px !important;
+}
+
+.hms-site-header .sticky-header .navigation > li.current > a,
+.hms-site-header .sticky-header .navigation > li > a:hover {
+    color: var(--hms-brand) !important;
+    background: var(--hms-brand-soft);
+    border-radius: 8px;
+}
+
+.hms-site-header .sticky-header .logo img,
+.hms-site-header .logo-outer .logo img,
+.hms-site-header .nav-logo img {
+    max-height: 48px;
+    width: auto;
+}
+
+.main-footer .footer-list.hms-footer-sections li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    color: #fff !important;
+}
+
+.main-footer .footer-list.hms-footer-sections li a:before {
+    display: none !important;
+    content: none !important;
+}
+
+.main-footer .footer-list.hms-footer-sections li a i {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.14);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #8fdfe2 !important;
+    font-size: 13px;
+    flex-shrink: 0;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal;
+}
+
+/* قسم أقسام المستشفى في الفوتر */
+.hms-footer-depts__hint {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: -4px 0 14px;
+}
+
+.main-footer .footer-list.hms-footer-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.main-footer .footer-list.hms-footer-sections li {
+    margin: 0 !important;
+}
+
+.main-footer a.hms-footer-dept {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px !important;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: background .15s ease, transform .15s ease;
+    color: #fff !important;
+}
+
+.main-footer a.hms-footer-dept:hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: translateX(-2px);
+    color: #fff !important;
+}
+
+.main-footer a.hms-footer-dept i {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 9px !important;
+    color: #fff !important;
+    background: #14a3a8 !important;
+}
+
+.main-footer a.hms-footer-dept--rose i { background: #e11d48 !important; }
+.main-footer a.hms-footer-dept--violet i { background: #7c3aed !important; }
+.main-footer a.hms-footer-dept--amber i { background: #d97706 !important; }
+.main-footer a.hms-footer-dept--sky i { background: #0284c7 !important; }
+.main-footer a.hms-footer-dept--emerald i { background: #059669 !important; }
+.main-footer a.hms-footer-dept--orange i { background: #ea580c !important; }
+.main-footer a.hms-footer-dept--teal i { background: #0d7377 !important; }
+
+/* روابط سريعة — أزرار واضحة لا تختفي */
+.hms-footer-cta {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hms-footer-cta__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.hms-footer-cta__title i {
+    color: #ffe08a;
+}
+
+.hms-footer-cta__text {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+
+.hms-footer-cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hms-footer-cta__btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+    line-height: 1.3 !important;
+    overflow: visible !important;
+    white-space: nowrap;
+}
+
+.hms-footer-cta__btn span,
+.hms-footer-cta__btn i {
+    color: inherit !important;
+    opacity: 1 !important;
+}
+
+.hms-footer-cta__btn--primary {
+    background: #fff !important;
+    color: #0d7377 !important;
+    border: 0 !important;
+}
+
+.hms-footer-cta__btn--primary:hover {
+    background: #e8f6f6 !important;
+    color: #0b5f63 !important;
+}
+
+.hms-footer-cta__btn--light {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+}
+
+.hms-footer-cta__btn--light:hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #fff !important;
+}
+
+.main-footer .widgets-section {
+    padding-bottom: 40px !important;
+    overflow: visible !important;
+}
+
+.main-footer .logo-widget {
+    overflow: visible !important;
+}
+
+.main-footer .footer-bottom {
+    position: relative;
+    z-index: 1;
+}
+
+/* إصلاح أيقونات الفوتر المكسورة في الثيم */
+.main-footer .footer-list li a:before {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+}
+
+.feature-block .inner-box .upper-box .icon.fas,
+.feature-block .inner-box .upper-box .icon.fa {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal;
+}
+
+/* أيقونات تبويبات الأقسام */
+.department-section-three .department-tabs .tab-btns .tab-btn {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+}
+
+.hms-dept-tab-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal;
+}
+
+.department-section-three .department-tabs .tab-btns .tab-btn.active-btn .hms-dept-tab-icon,
+.department-section-three .department-tabs .tab-btns .tab-btn:hover .hms-dept-tab-icon {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+
+/* Counter expressive icons */
+.fact-counter.style-two .icon.fas,
+.fact-counter.style-two .icon.fa,
+.counter-section .icon.fas {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-size: 34px !important;
+    line-height: 1 !important;
+    color: #fff !important;
+}
+
+/* Appointment visual */
+.hms-appointment-visual {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(13, 115, 119, 0.18);
+    background: #e8f6f6;
+    min-height: 420px;
+}
+
+.hms-appointment-visual img {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    object-position: center 25%;
+    display: block;
+}
+
+.hms-appointment-badge {
+    position: absolute;
+    inset-inline-start: 18px;
+    bottom: 18px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #0d7377;
+    border-radius: 999px;
+    padding: 10px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Doctor cards */
+.team-section .team-block .image img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background: #e8f6f6;
+}
+
+.testimonial-block-two .image img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Success modal */
+body.hms-modal-open {
+    overflow: hidden;
+}
+
+.hms-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.hms-modal.is-open {
+    display: flex;
+}
+
+.hms-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 31, 58, 0.55);
+}
+
+.hms-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(440px, 100%);
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 24px 22px;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+    animation: hmsModalIn .25s ease;
+}
+
+@keyframes hmsModalIn {
+    from { transform: translateY(12px) scale(.98); opacity: 0; }
+    to { transform: none; opacity: 1; }
+}
+
+.hms-modal__close {
+    position: absolute;
+    top: 10px;
+    inset-inline-end: 12px;
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+    line-height: 1;
+    color: #7a8a99;
+    cursor: pointer;
+}
+
+.hms-modal__icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: #e8f6f6;
+    color: #0d7377;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+}
+
+.hms-modal__dialog h3 {
+    margin: 0 0 8px;
+    color: #0b1f3a;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.hms-modal__dialog p {
+    color: #4b5c6b;
+    line-height: 1.7;
+    margin: 0 0 18px;
+}
+
+.hms-modal__icon--ambulance {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+.hms-modal__icon--error {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.hms-modal__dialog--ambulance h3 {
+    color: #8b1e1e;
+}
+
+.hms-appointment-form label i {
+    color: #0d7377;
+    margin-inline-end: 4px;
+}
+
+/* تنسيق السيليكت وحقول الموعد */
+.hms-appointment-form .form-group {
+    margin-bottom: 16px;
+}
+
+.hms-appointment-form .form-group:last-child {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+}
+
+.hms-appointment-form select.form-select,
+.hms-appointment-form select,
+.hms-appointment-form input[type="date"].form-control,
+.hms-appointment-form input.form-control,
+.hms-appointment-form input[type="text"],
+.hms-appointment-form input[type="email"],
+.hms-appointment-form input[type="tel"],
+.hms-appointment-form textarea {
+    width: 100%;
+    min-height: 48px;
+    border: 1.5px solid #d7ecec !important;
+    border-radius: 12px !important;
+    background: #f7fbfb !important;
+    padding: 10px 14px !important;
+    color: #163a3c !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    box-shadow: none !important;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.hms-appointment-form select.form-select,
+.hms-appointment-form select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230d7377' d='M1.4 0L6 4.6 10.6 0 12 1.4 6 7.4 0 1.4z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 14px center !important;
+    padding-inline-end: 14px !important;
+    padding-inline-start: 36px !important;
+    cursor: pointer;
+}
+
+.hms-appointment-form select:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: #eef5f5 !important;
+}
+
+.hms-appointment-form select:focus,
+.hms-appointment-form input:focus,
+.hms-appointment-form textarea:focus {
+    border-color: #0d7377 !important;
+    background: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(13, 115, 119, 0.12) !important;
+}
+
+.hms-appointment-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.hms-appointment-form #appointmentSubmitBtn {
+    margin-top: 6px;
+    min-height: 48px;
+    padding: 12px 28px !important;
+    overflow: visible !important;
+}
+
+@media (max-width: 767px) {
+    .hms-brand-text {
+        font-size: 13px;
+        max-width: 110px;
+    }
+
+    .hms-appointment-visual,
+    .hms-appointment-visual img {
+        min-height: 280px;
+    }
+}
+
+/* Global brand overrides (logo teal identity) */
+.main-slider-three,
+.counter-section,
+.main-footer.style-two,
+.main-footer .footer-bottom,
+.btn-style-two,
+.scroll-to-top:hover,
+.sec-title .separator:after {
+    background-color: var(--hms-brand) !important;
+}
+
+/* موجة الفوتر لا تمنع الضغط على الأزرار فوقها */
+.main-footer.style-two {
+    position: relative;
+    z-index: 1;
+    margin-top: 40px;
+}
+
+.main-footer.style-two:after {
+    pointer-events: none !important;
+    z-index: 0;
+}
+
+/* صفحة تتبع الانتظار */
+.hms-queue-track-page {
+    position: relative;
+    z-index: 2;
+    padding: 150px 0 100px;
+    background: #f4fafb;
+    overflow: visible;
+}
+
+.hms-queue-track-page .auto-container,
+.hms-queue-track-page .row,
+.hms-queue-track-page [class*="col-"] {
+    overflow: visible !important;
+}
+
+.hms-queue-card {
+    position: relative;
+    z-index: 3;
+    background: #fff;
+    border-radius: 18px;
+    padding: 40px 28px 32px;
+    box-shadow: 0 16px 40px rgba(13, 115, 119, 0.12);
+    border: 1px solid #d7ecec;
+    text-align: center;
+    overflow: visible !important;
+}
+
+.hms-queue-card__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d7377, #14a3a8);
+    color: #fff !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    overflow: visible;
+    position: relative;
+    z-index: 4;
+    box-shadow: 0 8px 18px rgba(13, 115, 119, 0.22);
+}
+
+.hms-queue-card__icon i {
+    color: #fff !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+}
+
+.hms-queue-card__title {
+    margin: 0 0 8px;
+    color: #0d7377;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.hms-queue-card__text {
+    color: #5b6e75;
+    margin: 0 0 22px;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: normal;
+    overflow: visible;
+    word-wrap: break-word;
+}
+
+@media (max-width: 991px) {
+    .hms-queue-track-page {
+        padding-top: 130px;
+    }
+}
+
+@media (max-width: 767px) {
+    .hms-queue-track-page {
+        padding-top: 120px;
+        padding-bottom: 70px;
+    }
+
+    .hms-queue-card {
+        padding: 28px 18px 24px;
+    }
+}
+
+.hms-queue-form {
+    text-align: start;
+}
+
+.hms-queue-form label {
+    display: block;
+    font-weight: 700;
+    color: #163a3c;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.hms-queue-input {
+    width: 100%;
+    min-height: 52px;
+    border: 1.5px solid #d7ecec;
+    border-radius: 12px;
+    background: #f7fbfb;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #0d7377;
+    margin-bottom: 14px;
+}
+
+.hms-queue-input:focus {
+    outline: none;
+    border-color: #0d7377;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(13, 115, 119, 0.12);
+}
+
+.hms-queue-error {
+    display: block;
+    color: #e11d48;
+    font-size: 13px;
+    margin: -6px 0 12px;
+}
+
+.hms-queue-submit {
+    width: 100% !important;
+    min-height: 52px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #0d7377, #14a3a8) !important;
+    color: #fff !important;
+    font-weight: 800 !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 5;
+    overflow: visible !important;
+    box-shadow: 0 10px 24px rgba(13, 115, 119, 0.25);
+}
+
+.hms-queue-submit:hover,
+.hms-queue-submit:focus {
+    background: linear-gradient(135deg, #0b5f63, #0d7377) !important;
+    color: #fff !important;
+}
+
+.hms-queue-submit .txt {
+    color: #fff !important;
+    position: static !important;
+}
+
+.hms-queue-result {
+    margin-top: 20px;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+}
+
+.hms-queue-result--ok {
+    background: #e8f6f6;
+    border: 1px solid #b7e0e2;
+    color: #163a3c;
+}
+
+.hms-queue-result--ok h3 {
+    color: #0d7377;
+    margin: 0 0 8px;
+}
+
+.hms-queue-result--empty {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.hms-queue-result--empty i {
+    font-size: 28px;
+    color: #ea580c;
+    margin-bottom: 4px;
+}
+
+.hms-queue-result--empty strong {
+    font-size: 18px;
+    color: #c2410c;
+}
+
+.hms-queue-result--empty p {
+    margin: 0;
+    font-weight: 600;
+    color: #9a3412;
+}
+
+.hms-queue-result--empty span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #b45309;
+    opacity: 0.95;
+}
+
+.hms-queue-badge {
+    display: inline-block;
+    background: #0d7377;
+    color: #fff;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hms-queue-result__alert {
+    margin: 8px 0 0;
+    color: #059669;
+    font-weight: 800;
+}
+
+
+.video-section:before {
+    background-color: rgba(8, 84, 88, 0.55) !important;
+}
+
+.btn-style-two {
+    background: linear-gradient(135deg, var(--hms-brand), var(--hms-brand-2)) !important;
+    border: 0 !important;
+}
+
+.main-slider-three .content-column .btn-box .appointment-btn {
+    color: var(--hms-brand) !important;
+}
+
+.main-slider-three .content-column .btn-box .services-btn {
+    border-color: #fff !important;
+}
+
+.main-slider-three .content-column .btn-box .services-btn:hover {
+    background: #fff !important;
+    color: var(--hms-brand) !important;
+}
+
+/* أزرار الهيرو: ظاهرة فوق الموجة البيضاء بدون اختفاء */
+.main-slider-three .content-column .btn-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    position: relative;
+    z-index: 6;
+    margin-top: 28px;
+    margin-bottom: 20px;
+}
+
+.main-slider-three .content-column .btn-box a.theme-btn.hms-hero-btn,
+.main-slider-three .content-column .btn-box .hms-hero-btn,
+.main-slider-three .content-column .btn-box .appointment-btn,
+.main-slider-three .content-column .btn-box .services-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 50px;
+    min-width: 140px;
+    padding: 12px 28px !important;
+    line-height: 1.4 !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    overflow: visible !important;
+    border-radius: 50px !important;
+    margin: 0 !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    position: relative;
+    z-index: 7;
+    box-shadow: 0 8px 20px rgba(8, 84, 88, 0.22);
+}
+
+.main-slider-three .content-column .btn-box .hms-hero-btn:before,
+.main-slider-three .content-column .btn-box .hms-hero-btn:after,
+.main-slider-three .content-column .btn-box .hms-hero-btn .txt:before,
+.main-slider-three .content-column .btn-box .hms-hero-btn .txt:after {
+    display: none !important;
+}
+
+.main-slider-three .content-column .btn-box .hms-hero-btn .txt,
+.main-slider-three .content-column .btn-box .appointment-btn .txt,
+.main-slider-three .content-column .btn-box .services-btn .txt {
+    position: static !important;
+    display: inline !important;
+    line-height: 1.4 !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.main-slider-three .content-column .btn-box a.hms-hero-btn--primary,
+.main-slider-three .content-column .btn-box .hms-hero-btn--primary,
+.main-slider-three .content-column .btn-box .appointment-btn {
+    background: #ffffff !important;
+    border: 2px solid #0d7377 !important;
+    color: #084f52 !important;
+}
+
+.main-slider-three .content-column .btn-box a.hms-hero-btn--primary .txt,
+.main-slider-three .content-column .btn-box .hms-hero-btn--primary .txt {
+    color: #0b5f63 !important;
+}
+
+.main-slider-three .content-column .btn-box a.hms-hero-btn--primary:hover,
+.main-slider-three .content-column .btn-box .hms-hero-btn--primary:hover,
+.main-slider-three .content-column .btn-box .appointment-btn:hover {
+    background: #e8f6f6 !important;
+    border-color: #e8f6f6 !important;
+    color: #084f52 !important;
+}
+
+.main-slider-three .content-column .btn-box a.hms-hero-btn--ghost,
+.main-slider-three .content-column .btn-box .hms-hero-btn--ghost,
+.main-slider-three .content-column .btn-box .services-btn {
+    background: #0b5f63 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+.main-slider-three .content-column .btn-box a.hms-hero-btn--ghost .txt,
+.main-slider-three .content-column .btn-box .hms-hero-btn--ghost .txt {
+    color: #ffffff !important;
+}
+
+.main-slider-three .content-column .btn-box a.hms-hero-btn--ghost:hover,
+.main-slider-three .content-column .btn-box .hms-hero-btn--ghost:hover,
+.main-slider-three .content-column .btn-box .services-btn:hover {
+    background: #084f52 !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.feature-block .inner-box .upper-box .icon,
+.department-section-three .department-tabs .tabs-content h3,
+.appointment-form label,
+.theme_color {
+    color: var(--hms-brand) !important;
+}
+
+/* زر تواصل معنا وغيره: النص يبقى ظاهراً عند الـ hover */
+a.theme-btn.btn-style-one,
+button.theme-btn.btn-style-one {
+    color: var(--hms-brand) !important;
+    border-color: var(--hms-brand) !important;
+    background: #fff !important;
+}
+
+a.theme-btn.btn-style-one:hover,
+a.theme-btn.btn-style-one:focus,
+button.theme-btn.btn-style-one:hover,
+button.theme-btn.btn-style-one:focus {
+    color: #fff !important;
+    border-color: var(--hms-brand-dark) !important;
+    background: var(--hms-brand) !important;
+}
+
+.btn-style-one:before,
+.btn-style-one:after {
+    border-bottom-color: var(--hms-brand) !important;
+}
+
+.appointment-section-two .inner-container,
+.appointment-form .form-group input:focus,
+.appointment-form .form-group select:focus,
+.appointment-form .form-group textarea:focus {
+    border-color: var(--hms-brand-2) !important;
+}
+
+.scroll-to-top {
+    background: var(--hms-brand-dark) !important;
+}
+
+.hms-modal__backdrop {
+    background: rgba(8, 84, 88, 0.55) !important;
+}
+
+.hms-modal__dialog h3 {
+    color: var(--hms-brand-ink) !important;
+}
+
+.preloader {
+    background: var(--hms-brand-soft) !important;
+}
+
+.page-wrapper.rtl .main-header.header-style-three .header-upper {
+    background: linear-gradient(135deg, var(--hms-brand-dark), var(--hms-brand));
+}
+
+.news-block-two .inner-box:hover::before {
+    background-color: var(--hms-brand-dark) !important;
+}
+
+/* صور الهيرو: دائرة كاملة بدون قص مسطح */
+.main-slider-three .image-column .image.hms-hero-photo {
+    width: 360px;
+    height: 360px;
+    max-width: 100%;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 10px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.28);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.main-slider-three .image-column .image.hms-hero-photo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    border-radius: 50% !important;
+    display: block;
+}
+
+.main-slider-three .image-column .image.hms-hero-photo--logo {
+    background: #fff;
+    border-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 42px;
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22), inset 0 0 0 8px rgba(13, 115, 119, 0.08);
+}
+
+.main-slider-three .image-column .image.hms-hero-photo--logo img {
+    width: 78% !important;
+    height: 78% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border-radius: 0 !important;
+}
+
+.main-slider-three .image-column .image.hms-hero-photo--logo:before {
+    display: none !important;
+}
+
+/* قسم من نحن: محاذاة الصورة والإطار بدون تداخل */
+.health-section {
+    padding: 70px 0 40px;
+}
+
+.health-section .content-column .inner-column {
+    padding: 36px 40px;
+}
+
+.health-section .content-column .border-line {
+    border-color: var(--hms-brand) !important;
+}
+
+.health-section .content-column .border-line:before,
+.health-section .content-column .border-line:after {
+    background-color: var(--hms-brand) !important;
+}
+
+.health-section .image-column .inner-column {
+    padding: 20px 10px 40px;
+}
+
+.health-section .image-column .inner-column:before {
+    right: 12px;
+    bottom: 10px;
+    width: 88%;
+    height: 88%;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(13, 115, 119, 0.12), rgba(13, 115, 119, 0.04));
+    background-image: none;
+    border: 1px dashed rgba(13, 115, 119, 0.25);
+    z-index: 0;
+}
+
+.health-section .image-column .inner-column .image,
+.health-section .image-column .inner-column .image.hms-about-photo {
+    position: relative;
+    z-index: 1;
+    margin: 0 !important;
+}
+
+.hms-about-photo {
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 0 16px 36px rgba(13, 115, 119, 0.18);
+}
+
+.hms-about-photo img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* طلب إسعاف: بطاقة مستقلة بدون تداخل مع حجز الموعد */
+.hms-ambulance-section {
+    position: relative;
+    margin-top: 0 !important;
+    padding: 70px 0;
+    background: #f4fafb;
+}
+
+.hms-ambulance-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 12px 32px rgba(13, 115, 119, 0.1);
+    border: 1px solid #d7ecec;
+}
+
+.hms-ambulance-card .form-group {
+    margin-bottom: 14px;
+}
+
+.hms-ambulance-card input,
+.hms-ambulance-card textarea {
+    width: 100%;
+    border: 1px solid #d7ecec;
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: #f8fcfc;
+}
+
+.hms-ambulance-card input:focus,
+.hms-ambulance-card textarea:focus {
+    outline: none;
+    border-color: var(--hms-brand);
+    background: #fff;
+}
+
+.appointment-section-two {
+    margin-bottom: 20px;
+}
+
+.appointment-section-two .inner-container {
+    padding: 28px 32px 36px !important;
+    border-radius: 18px !important;
+    overflow: hidden;
+}
+
+.appointment-section-two .form-column .inner-column {
+    padding: 36px 28px 28px !important;
+}
+
+.appointment-section-two .image-column .inner-column {
+    padding: 28px !important;
+}
+
+.hms-appointment-form {
+    padding: 4px 4px 8px;
+}
+
+.hms-appointment-auth-notice {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: #fff8e6;
+    border: 1px solid #f0dfa0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    color: #6b5a1e;
+}
+
+.hms-appointment-auth-notice i {
+    font-size: 28px;
+    color: #c9a227;
+}
+
+.hms-appointment-auth-notice p {
+    margin: 4px 0 0;
+    font-size: 14px;
+}
+
+.hms-appointment-user-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    background: #e8f6f6;
+    border: 1px solid #d7ecec;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    color: #163a3c;
+    font-size: 14px;
+}
+
+.hms-appointment-user-bar i {
+    color: #0d7377;
+}
+
+.hms-appointment-user-bar__meta {
+    color: #6b8587;
+    font-size: 13px;
+}
+
+.hms-appointment-form--guest .theme-btn[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.hms-appointment-form .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.hms-appointment-form [class*="col-"] {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.hms-dept-photo {
+    margin-bottom: 22px;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.hms-dept-photo img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.video-section {
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.sponsors-carousel .image-box img {
+    max-height: 70px;
+    width: auto;
+    object-fit: contain;
+    filter: none;
+    opacity: 1;
+}
+
+/* بانر صفحات داخلية معبر */
+.page-title.hms-page-hero,
+.page-title {
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.page-title.hms-page-hero:before {
+    background-color: rgba(8, 84, 88, 0.72) !important;
+}
+
+.page-title h1 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    position: relative;
+    z-index: 2;
+}
+
+.page-title .page-breadcrumb,
+.page-title .bread-crumb {
+    position: relative !important;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 8px 14px;
+    max-width: max-content;
+    background: rgba(8, 84, 88, 0.82);
+    border-radius: 999px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.page-title .page-breadcrumb li,
+.page-title .bread-crumb li {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.page-title .page-breadcrumb li:after,
+.page-title .bread-crumb li:after {
+    content: "/";
+    display: inline-block;
+    margin-inline-start: 10px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 700;
+    position: static !important;
+    right: auto !important;
+}
+
+.page-title .page-breadcrumb li:last-child:after,
+.page-title .bread-crumb li:last-child:after {
+    display: none;
+}
+
+.page-title .page-breadcrumb a,
+.page-title .bread-crumb a,
+.page-title .page-breadcrumb a:hover,
+.page-title .bread-crumb a:hover {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-decoration: none;
+}
+
+/* تفاصيل المقال: نص واضح على الخلفية البيضاء */
+.news-detail-section .news-detail .lower-content h2,
+.news-detail .lower-content h2 {
+    color: #163a3c !important;
+    font-weight: 800;
+}
+
+.news-detail-section .news-detail .text,
+.news-detail .lower-content .text,
+.news-detail .lower-content .text p {
+    color: #2a4547 !important;
+    font-size: 16px !important;
+    line-height: 1.95 !important;
+}
+
+.news-detail-section .post-meta,
+.news-detail-section .post-meta li,
+.news-detail .post-meta,
+.news-detail .post-meta li {
+    color: #3d5254 !important;
+    border-color: #d7ecec !important;
+}
+
+.news-detail-section .sidebar-widget h3 {
+    color: #0d7377 !important;
+    font-weight: 800;
+}
+
+.news-detail-section .sidebar-widget p,
+.news-detail-section .sidebar-widget small,
+.news-detail-section .sidebar-widget h5 a,
+.news-detail-section .sidebar-widget a {
+    color: #163a3c !important;
+}
+
+.news-detail-section .sidebar-widget a:hover {
+    color: #0d7377 !important;
+}
+
+@media (max-width: 991px) {
+    .main-slider-three .image-column .image.hms-hero-photo {
+        width: 280px;
+        height: 280px;
+        border-width: 6px;
+    }
+}
+
+@media (max-width: 575px) {
+    .main-slider-three .image-column .image.hms-hero-photo {
+        width: 220px;
+        height: 220px;
+    }
+
+    .hms-article-meta {
+        gap: 10px 12px;
+    }
+}
+
+/* Patient auth modal */
+.hms-auth-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.hms-auth-modal.is-open {
+    display: flex;
+}
+
+.hms-auth-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 84, 88, 0.55);
+}
+
+.hms-auth-modal__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.hms-auth-modal__close {
+    position: absolute;
+    top: 10px;
+    inset-inline-end: 12px;
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+    line-height: 1;
+    color: #777;
+    cursor: pointer;
+}
+
+.hms-auth-modal__title {
+    margin: 0 0 8px;
+    color: #0d7377;
+    font-size: 22px;
+}
+
+.hms-auth-modal__text {
+    color: #556274;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.hms-auth-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.hms-auth-tab {
+    flex: 1;
+    border: 1px solid #d7ecec;
+    background: #f4fafb;
+    color: #3d5c5e;
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hms-auth-tab.is-active {
+    background: #0d7377;
+    border-color: #0d7377;
+    color: #fff;
+}
+
+.hms-auth-form {
+    display: none;
+}
+
+.hms-auth-form.is-active {
+    display: block;
+}
+
+.hms-auth-form label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #163a3c;
+    font-size: 13px;
+}
+
+.hms-auth-form input,
+.hms-comment-form textarea {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    border: 1px solid #d7ecec;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.hms-auth-submit {
+    width: 100%;
+    margin-top: 8px;
+    text-align: center;
+    position: relative;
+}
+
+.hms-auth-submit.is-loading {
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.hms-auth-submit.is-loading .txt::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-inline-end: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: hms-spin 0.7s linear infinite;
+}
+
+.hms-auth-submit.btn-style-two {
+    width: 100%;
+    color: #fff !important;
+}
+
+@keyframes hms-spin {
+    to { transform: rotate(360deg); }
+}
+
+.hms-auth-alert {
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.hms-auth-alert.is-ok {
+    background: #e8f8ef;
+    color: #0b7a3b;
+}
+
+.hms-auth-alert.is-error {
+    background: #fde8ec;
+    color: #b42318;
+}
+
+body.hms-auth-open {
+    overflow: hidden;
+}
+
+/* Comments — Facebook-like */
+.hms-comments-box {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 20px 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.hms-comments-box h3 {
+    margin: 0 0 18px;
+    color: #0d7377;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hms-comments-box h3 i {
+    opacity: 0.9;
+}
+
+.hms-comment-composer {
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eef2f5;
+}
+
+.hms-comment-composer__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.hms-comment-composer__fields {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f2f5;
+    border-radius: 24px;
+    padding: 6px 8px 6px 6px;
+    border: 1px solid transparent;
+    transition: border-color .15s ease, background .15s ease;
+}
+
+.hms-comment-composer__fields:focus-within {
+    background: #fff;
+    border-color: #c5e4e5;
+}
+
+.hms-comment-composer__fields textarea {
+    flex: 1;
+    border: 0 !important;
+    background: transparent !important;
+    resize: none;
+    min-height: 36px;
+    max-height: 120px;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: none !important;
+}
+
+.hms-comment-composer__fields textarea:focus {
+    outline: none;
+}
+
+.hms-comment-post-btn {
+    border: 0;
+    background: #0d7377;
+    color: #fff;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s ease, transform .15s ease;
+}
+
+.hms-comment-post-btn:hover {
+    background: #0b5f63;
+    transform: translateY(-1px);
+}
+
+.hms-comment-hint {
+    margin: 10px 0 0;
+    color: #777;
+    font-size: 13px;
+}
+
+.hms-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.hms-comments-empty {
+    margin: 8px 0 0;
+    color: #8896a0;
+    font-size: 14px;
+}
+
+.hms-fb-comment {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.hms-comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #0d7377, #14919b);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(13, 115, 119, 0.2);
+}
+
+.hms-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 1;
+    background: #fff;
+}
+
+.hms-comment-avatar img[src=""],
+.hms-comment-avatar img:not([src]) {
+    display: none;
+}
+
+.hms-comment-avatar--logo {
+    background: #fff;
+    border: 1px solid #e5eef0;
+}
+
+.hms-comment-avatar--logo img {
+    object-fit: contain;
+    padding: 4px;
+    background: #fff;
+}
+
+.hms-comment-avatar--logo .hms-comment-avatar__fallback {
+    background: linear-gradient(145deg, #0d7377, #14919b);
+}
+
+.hms-comment-avatar__fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    z-index: 0;
+    text-transform: uppercase;
+}
+
+.hms-fb-comment__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.hms-fb-bubble {
+    display: inline-block;
+    max-width: 100%;
+    background: #f0f2f5;
+    border-radius: 18px;
+    padding: 8px 14px 10px;
+    text-align: start;
+}
+
+.hms-fb-bubble__name {
+    display: block;
+    color: #050505;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+.hms-fb-bubble__text {
+    margin: 0;
+    color: #050505;
+    font-size: 14px;
+    line-height: 1.55;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.hms-fb-meta {
+    margin-top: 4px;
+    padding-inline-start: 12px;
+    font-size: 12px;
+    color: #65676b;
+    font-weight: 600;
+}
+
+.hms-article-meta .hms-comment-open {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* legacy comment classes (fallback) */
+.hms-comment-form {
+    margin-bottom: 22px;
+}
+
+.hms-comment-item {
+    border-top: 1px solid #eef3f3;
+    padding: 14px 0;
+}
+
+
+
+/* ===== English / LTR mode ===== */
+html[dir='ltr'] body.hms-ltr,
+body.hms-ltr,
+.page-wrapper.ltr {
+    direction: ltr !important;
+    text-align: left;
+}
+
+html[dir='ltr'] .page-wrapper.ltr .main-menu .navigation,
+.page-wrapper.ltr .main-menu .navigation {
+    float: none;
+}
+
+html[dir='ltr'] .hms-site-header .navigation > li > a,
+.page-wrapper.ltr .navigation > li > a {
+    direction: ltr;
+}
+
+html[dir='ltr'] .hms-appointment-form select.form-select,
+html[dir='ltr'] .hms-appointment-form select,
+.page-wrapper.ltr .hms-appointment-form select {
+    background-position: right 14px center !important;
+    padding-right: 36px !important;
+    padding-left: 14px !important;
+}
+
+html[dir='ltr'] .main-footer a.hms-footer-dept:hover,
+.page-wrapper.ltr .main-footer a.hms-footer-dept:hover {
+    transform: translateX(2px);
+}
+
+html[dir='ltr'] .hms-brand-text,
+.page-wrapper.ltr .hms-brand-text {
+    text-align: left;
+}
+
+/* ===== Fix: نصوص مقصوصة / باهتة / متداخلة في الصفحة الرئيسية ===== */
+
+/* الهيرو: إظهار النص والأزرار دائماً بدون قص من الموجة أو الأنيميشن */
+.main-slider-three {
+    overflow: visible !important;
+    padding-bottom: 140px !important;
+}
+
+.main-slider-three .banner-carousel,
+.main-slider-three .swiper-wrapper,
+.main-slider-three .swiper-slide,
+.main-slider-three .content-column,
+.main-slider-three .content-column .inner-column {
+    overflow: visible !important;
+}
+
+.main-slider-three:before,
+.main-slider-three:after {
+    pointer-events: none;
+    z-index: 0;
+}
+
+.main-slider-three .auto-container,
+.main-slider-three .content-column .inner-column {
+    position: relative;
+    z-index: 2;
+}
+
+.main-slider-three .content-column h2,
+.main-slider-three .content-column .text,
+.main-slider-three .content-column .btn-box,
+.main-slider-three .swiper-slide .content-column h2,
+.main-slider-three .swiper-slide .content-column .text,
+.main-slider-three .swiper-slide .content-column .btn-box,
+.main-slider-three .image-column .image {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+}
+
+.main-slider-three .content-column .text {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    line-height: 1.75 !important;
+    max-width: 560px;
+    margin-bottom: 8px;
+    overflow: visible !important;
+    clip: auto !important;
+    max-height: none !important;
+    position: relative;
+    z-index: 5;
+    display: inline-block;
+    background: rgba(8, 84, 88, 0.88);
+    padding: 10px 16px;
+    border-radius: 12px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.main-slider-three .content-column .btn-box {
+    margin-top: 28px !important;
+    position: relative;
+    z-index: 6;
+}
+
+/* فقرات الميزات / من نحن / الأقسام: تباين أوضح */
+.feature-block .inner-box .text,
+.health-section .content-column .text,
+.department-section-three .department-tabs .tabs-content .text,
+.department-section-three .department-tabs .tabs-content .text p,
+.department-section-three .department-tabs .tabs-content .title,
+.department-section-three .department-tabs .tabs-content .column-text,
+.testimonial-block-two .inner-box .text,
+.testimonial-block-two .inner-box .author-info .author {
+    color: #3d5254 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.health-section .content-column .text {
+    max-width: 100% !important;
+    font-size: 16px !important;
+    line-height: 1.85 !important;
+}
+
+html[dir='ltr'] .health-section .content-column .text,
+.page-wrapper.ltr .health-section .content-column .text {
+    direction: ltr;
+    text-align: left;
+}
+
+/* عنوان «الأقسام» كان أبيض على خلفية فاتحة */
+.department-section-three .sec-title.light h2,
+.department-section-three .sec-title.light .title {
+    color: #163a3c !important;
+}
+
+.department-section-three .sec-title.light .separator:after {
+    background-color: var(--hms-brand) !important;
+}
+
+/* محتوى الأقسام: بطاقة بيضاء فوق صورة الخلفية حتى لا يختفي النص */
+.department-section-three {
+    overflow: hidden;
+}
+
+.department-section-three .department-tabs .tabs-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    position: relative;
+    z-index: 2;
+}
+
+.department-section-three .department-tabs .tabs-content .tab .content {
+    position: relative !important;
+    display: block !important;
+    overflow: visible !important;
+    clear: both;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px 22px 26px;
+    box-shadow: 0 12px 32px rgba(8, 84, 88, 0.12);
+}
+
+.department-section-three .department-tabs .tabs-content .text,
+.department-section-three .department-tabs .tabs-content .text p,
+.department-section-three .department-tabs .tabs-content .title,
+.department-section-three .department-tabs .tabs-content .column-text,
+.department-section-three .department-tabs .tabs-content h2,
+.department-section-three .department-tabs .tabs-content h3 {
+    color: #163a3c !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.department-section-three .department-tabs .tabs-content .text {
+    margin-bottom: 24px !important;
+    position: relative;
+    z-index: 1;
+}
+
+.department-section-three .department-tabs .tabs-content .two-column {
+    position: relative !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    clear: both;
+    margin-top: 8px;
+    margin-bottom: 28px !important;
+    gap: 16px;
+}
+
+.department-section-three .department-tabs .tabs-content .two-column .column {
+    position: relative !important;
+    float: none !important;
+    background: #f4fafb;
+    border: 1px solid #d7ecec;
+    border-radius: 12px;
+    padding: 16px 18px;
+}
+
+.department-section-three .department-tabs .tabs-content h2 {
+    color: #163a3c !important;
+}
+
+.department-section-three .department-tabs .tabs-content h3 {
+    color: #0d7377 !important;
+    margin-bottom: 8px !important;
+}
+
+.hms-dept-photo {
+    position: relative !important;
+    float: none !important;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 22px !important;
+}
+
+/* آراء المرضى: شبكة ثابتة بدل كاروسيل فارغ */
+.hms-testimonials-grid {
+    margin-top: 20px;
+}
+
+.hms-testimonials-grid .testimonial-block-two {
+    margin-bottom: 90px;
+}
+
+.hms-testimonials-grid .testimonial-block-two .inner-box {
+    height: calc(100% - 20px);
+    padding-top: 24px;
+    padding-bottom: 8px;
+    overflow: visible !important;
+}
+
+.hms-testimonials-grid .testimonial-block-two .text {
+    min-height: 96px;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #4a5f61;
+    text-align: center;
+    padding: 0 12px;
+}
+
+.hms-testimonial-card .hms-testimonial-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.hms-testimonial-card .author-info {
+    text-align: right;
+}
+
+.hms-testimonial-card .author-info h3 {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.hms-testimonial-stars {
+    color: #f0ad4e;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.hms-testimonial-card .quote-icon {
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    border-radius: 10px;
+    background: var(--hms-primary, #0d7377);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.hms-testimonials-grid .testimonial-block-two {
+    margin-bottom: 48px;
+}
+
+.hms-testimonials-grid .testimonial-block-two .inner-box {
+    padding: 28px 22px 18px;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(13, 115, 119, 0.08);
+}
+
+.hms-testimonials-grid .testimonial-block-two .image img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+/* عناصر wow: لا تبقى مخفية إذا تعطّل السكربت */
+.featured-section .wow,
+.health-section .wow,
+.department-section-three .wow,
+.testimonial-section-two .wow {
+    visibility: visible !important;
+    opacity: 1 !important;
+    animation: none !important;
+    -webkit-animation: none !important;
+}
+
+@media (max-width: 991px) {
+    .department-section-three .department-tabs .tabs-content {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-top: 24px;
+    }
+
+    .main-slider-three {
+        padding-bottom: 60px !important;
+    }
+
+    .appointment-section-two .inner-container,
+    .appointment-section-two .form-column .inner-column,
+    .appointment-section-two .image-column .inner-column {
+        padding: 20px 16px !important;
+    }
+
+    .main-slider-three .swiper-button-next.hms-slider-nav,
+    .main-slider-three .swiper-button-prev.hms-slider-nav {
+        width: 42px;
+        height: 42px;
+        margin-top: -21px;
+    }
+
+    .main-slider-three .swiper-button-next.hms-slider-nav {
+        right: 12px !important;
+    }
+
+    .main-slider-three .swiper-button-prev.hms-slider-nav {
+        left: 12px !important;
+    }
+}
+
+/* أسهم السلايدر داخل الشاشة مع أيقونة واضحة */
+.main-slider-three {
+    overflow: hidden !important;
+}
+
+.main-slider-three .banner-carousel {
+    overflow: hidden !important;
+}
+
+.main-slider-three .swiper-button-next.hms-slider-nav,
+.main-slider-three .swiper-button-prev.hms-slider-nav {
+    position: absolute;
+    top: 46%;
+    width: 50px;
+    height: 50px;
+    margin-top: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    background-image: none !important;
+    border: 2px solid #0d7377 !important;
+    box-shadow: 0 10px 22px rgba(8, 84, 88, 0.25);
+    color: #0d7377 !important;
+    opacity: 1 !important;
+    z-index: 20;
+    outline: none;
+    cursor: pointer;
+}
+
+.main-slider-three .swiper-button-next.hms-slider-nav {
+    right: 28px !important;
+    left: auto !important;
+}
+
+.main-slider-three .swiper-button-prev.hms-slider-nav {
+    left: 28px !important;
+    right: auto !important;
+}
+
+.main-slider-three .swiper-button-next.hms-slider-nav:before,
+.main-slider-three .swiper-button-prev.hms-slider-nav:before,
+.main-slider-three .swiper-button-next.hms-slider-nav:after,
+.main-slider-three .swiper-button-prev.hms-slider-nav:after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+}
+
+.main-slider-three .hms-slider-nav i {
+    display: block !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    color: #0d7377 !important;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+}
+
+.main-slider-three .hms-slider-nav:hover {
+    background: #0d7377 !important;
+    border-color: #084f52 !important;
+}
+
+.main-slider-three .hms-slider-nav:hover i {
+    color: #ffffff !important;
+}

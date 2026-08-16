@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'Welcome' => 'Welcome back',
+    'Welcome_sub' => 'Hospital Management System',
+    'Select_Enter' => 'Select login role',
+    'Choose_list' => 'Choose from the list',
+    'user' => 'Login as Patient',
+    'admin' => 'Login as Admin',
+    'doctor' => 'Login as Doctor',
+    'ray_employee' => 'Login as Radiology Staff',
+    'laboratorie_employee' => 'Login as Laboratory Staff',
+    'Email' => 'Email',
+    'Password' => 'Password',
+    'Sign_In' => 'Sign In',
+    'Email_placeholder' => 'Enter your email',
+    'Password_placeholder' => 'Enter your password',
+    'Back_Home' => 'Back to Home',
+    'login_as_patient' => 'Patient Login',
+    'login_as_admin' => 'Admin Login',
+    'login_as_doctor' => 'Doctor Login',
+    'login_as_ray' => 'Radiology Staff Login',
+    'login_as_lab' => 'Laboratory Staff Login',
+    'secure_note' => 'Please select your role, then enter your credentials.',
+];

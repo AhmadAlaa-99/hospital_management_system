@@ -1,0 +1,6 @@
+﻿  63| Normal              | 12.7.17 ╪ح╪»╪د╪▒╪ر ╪د┘╪╖╪د╪ذ┘ê╪▒ (Queue Management)
+  87| Normal              | ╪د┘╪ث┘à╪▒: php artisan db:seed  ╪ث┘ê  php artisan db:seed --class=HmsFullDemoSeeder
+  88| Normal              | Seeder ╪▒╪خ┘è╪│┘è: HmsFullDemoSeeder ظ¤ ┘è┘╪ص┘à┘ّ┘ ┘â┘ ╪ذ┘è╪د┘╪د╪ز ╪د┘╪╣╪▒╪╢ ╪د┘╪ز╪ش╪▒┘è╪ذ┘è╪ر.
+  89| Normal              | 12.7.18 ╪ذ┘è╪د┘╪د╪ز ╪ز╪ش╪▒┘è╪ذ┘è╪ر (Database Seeders)
+ 922| Normal              | 12.7.6 ╪د┘┘à┘ê┘é╪╣ ╪د┘╪ح┘┘â╪ز╪▒┘ê┘┘è ╪د┘╪╣╪د┘à
+1135| Normal              | 16. ╪ذ┘è╪د┘╪د╪ز Seeders ╪ز╪ش╪▒┘è╪ذ┘è╪ر (HmsFullDemoSeeder)
