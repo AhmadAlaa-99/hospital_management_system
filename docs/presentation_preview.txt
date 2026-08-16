@@ -1,20 +1,0 @@
-Slide 1: تطوير مستشفى الشام التخصصي // Hospital Management System (HMS) // إعداد: صفا بديع الشهابي — ميسون حسين عبداللهإشراف: د. م. نضال زيدانالعام الدراسي: 2025–2026هندسة الاتصالات والإلكترون
-Slide 2: محتوى العرض // 1. المقدمة والمشكلة والأهداف | 2. نظرة عامة — الأدوار | 3. التقنيات والمعمارية | 4. قاعدة البيانات | 5. لوحة المدير | 6.
-Slide 3: المشكلة // • العمل اليدوي: مواعيد، فواتير، انتظار، نتائج فحوصات | • أخطاء بشرية وتأخير في خدمة المريض | • صعوبة التنسيق بين الإدارة
-Slide 4: أهداف المشروع // • أتمتة العمليات الإدارية والطبية والمالية | • لوحات تحكم لـ 6 أدوار + موقع عام للمريض | • نظام انتظار رقمي + شاشة TV + 
-Slide 5: الأدوار في النظام // لوحات التحكم // المدير — إدارة شاملة + تقارير | الطبيب — تشخيص + مواعيد + انتظار | المريض — مواعيدي + نتائج + PDF | موظف المختبر — إدخال // الموقع العام // الصفحة الرئيسية | حجز م
-Slide 6: التقنيات المستخدمة // Backend: Laravel 8 + PHP 8 + MySQL | Frontend: Blade + Livewire 2 + Bootstrap (Valex) | Architecture: MVC + Repository P
-Slide 7: معمارية النظام // الموقع / لوحات التحكم → Routes → Controllers |                     ↓ |               Services ↔ Repository ↔ Models |   
-Slide 8: قاعدة البيانات // 【أساس】 sections, doctors, patients, appointments | 【طبي】 diagnostics, prescriptions, rays, laboratories | 【مالي】 invoice
-Slide 9: لوحة المدير // Dashboard + إدارة (أقسام، أطباء، مرضى، مواعيد) | قبول/رفض المواعيد → بريد AppointmentConfirmation | فواتير Livewire (فرد
-Slide 10: لوحة الطبيب // مواعيد اليوم / المنتهية | قائمة انتظار العيادة /doctor/queue |   نداء التالي → بدء كشف → إنهاء → no-show | تشخيص + e-Pre
-Slide 11: المريض — موظفو الفحوصات // لوحة المريض // مواعيدي | نتائج أشعة ومختبر | فواتير ومدفوعات | تقييم الطبيب (1–5) | تصدير PDF | محادثة مع الطبيب // موظف الأشعة / المختبر // قائمة الطلبات | إدخال النتائج | 
-Slide 12: الموقع الإلكتروني // / — رئيسية | /appointments — حجز AJAX | /blogs — مدونة | /ambulance — إسعاف | /queue/track — تتبع الانتظار |  | Appointm
-Slide 13: الميزات المتقدمة // 1. e-Prescription  2. تقارير Chart.js | 3. جدولة أطباء + validateSlot | 4. تأمين: خصم + insurance_claims | 5. تذكير Emai
-Slide 14: نظام إدارة الانتظار // queue_tickets — أرقام: CARD-003, NEUR-003... | waiting → called → serving → completed |  | /queue — استقبال: رقم walk-in
-Slide 15: الاختبار والأمان // اختبار يدوي // دخول كل الأدوار | حجز + منع تعارض | فاتورة + تأمين | أشعة/مختبر + إشعار | انتظار: حضور→نداء→TV | migrate:fresh --seed // أمان // Multi-guard + Middleware | CSRF + bc
-Slide 16: التحديات والحلول // 6 أدوار → Multi-guard + Controllers منفصلة | RTL → mcamara/laravel-localization | تعارض مواعيد → AppointmentScheduleServ
-Slide 17: النتائج // نظام متكامل — أساسي + متقدم | أتمتة: مواعيد، فواتير، فحوصات، انتظار، تأمين | أداء: تحميل < 2 ث | 100+ مستخدم | تقليل وقت
-Slide 18: الأفاق المستقبل // تطبيق موبايل (Flutter / React Native) | API REST + ربط تأمين خارجي | تصدير Excel/PDF من التقارير | PHPUnit/Pest — اختبار
-Slide 19: العرض التوضيحي — Demo // قبل العرض:  php artisan migrate:fresh --seedمدير:  admin@gmail.com  /  123456789مريض:  patient@yahoo.com  /  1234567
-Slide 20: شكراً لكم // هل من أسئلة؟ // Questions & Answers
