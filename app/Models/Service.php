@@ -10,6 +10,11 @@ class Service extends Model
 {
     use Translatable;
     use HasFactory;
+
+    protected $table = 'Services';
+
+    public $translationForeignKey = 'Service_id';
+
     public $translatedAttributes = ['name'];
     public $fillable= ['price','description','status'];
 }

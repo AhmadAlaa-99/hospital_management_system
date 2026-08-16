@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceTranslation extends Model
 {
     use HasFactory;
+
+    protected $table = 'Service_translations';
+
     protected $fillable = ['name'];
     public $timestamps = false;
 }
