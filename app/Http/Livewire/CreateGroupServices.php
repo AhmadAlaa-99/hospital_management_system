@@ -188,6 +188,13 @@ class CreateGroupServices extends Component
         $this->taxes = 17;
     }
 
+    public function show_form_table()
+    {
+        $this->show_table = true;
+        $this->updateMode = false;
+        $this->catchError = null;
+    }
+
     public function edit($id)
     {
         $this->show_table = false;
@@ -223,6 +230,7 @@ class CreateGroupServices extends Component
             $this->ServiceSaved = false;
             $this->ServiceUpdated = false;
             $this->catchError = null;
+            $this->dispatchBrowserEvent('hms-close-modal', ['modalId' => 'deleteGroup' . $id]);
         } catch (\Exception $e) {
             $this->catchError = \App\Helpers\FriendlyError::message($e->getMessage());
         }

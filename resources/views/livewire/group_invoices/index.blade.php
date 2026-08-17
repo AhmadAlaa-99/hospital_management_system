@@ -19,6 +19,11 @@
 @endsection
 @section('content')
 
+    @include('Dashboard.partials.help-box', [
+        'title' => 'فاتورة مجموعة خدمات',
+        'body' => 'اختر <strong>مجموعة خدمات</strong> (باقة) مُعرّفة مسبقاً من «الخدمات → مجموعة خدمات»، ثم المريض والطبيب. يمكنك الإضافة والتعديل والطباعة والحذف من الأزرار في الجدول.'
+    ])
+
     <div class="row row-sm">
         <div class="col-xl-12">
             <div class="card hms-table-card">

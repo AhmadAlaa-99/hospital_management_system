@@ -53,5 +53,5 @@
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('Dashboard/js/table-data.js')}}"></script>
 
-
 @livewireScripts
+<script src="{{URL::asset('Dashboard/js/livewire-dashboard.js')}}"></script>

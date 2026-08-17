@@ -331,8 +331,12 @@ class GroupInvoices extends Component
     }
 
     public function destroy(){
-        Invoice::destroy($this->group_invoice_id);
+        if ($this->group_invoice_id) {
+            Invoice::destroy($this->group_invoice_id);
+        }
+        $this->group_invoice_id = null;
         $this->show_table = true;
+        $this->dispatchBrowserEvent('hms-close-modal', ['modalId' => 'delete_invoice']);
     }
 
     public function rest()

@@ -18,24 +18,26 @@
     @if($show_table)
         @include('livewire.GroupServices.index')
     @else
-        <form wire:submit.prevent="saveGroup" autocomplete="off">
-            @csrf
+        <form wire:submit.prevent="saveGroup" autocomplete="off" onsubmit="return false;">
+            @error('name_group') <div class="alert alert-warning py-2">{{ $message }}</div> @enderror
+            @error('GroupsItems') <div class="alert alert-warning py-2">{{ $message }}</div> @enderror
             <div class="form-group">
-                <label>اسم المجموعة</label>
-                <input wire:model="name_group" type="text" name="name_group" class="form-control" required>
+                <label>اسم المجموعة <span class="text-danger">*</span></label>
+                <input wire:model.defer="name_group" type="text" name="name_group" class="form-control @error('name_group') is-invalid @enderror" required>
             </div>
 
             <div class="form-group">
                 <label>ملاحظات</label>
-                <textarea wire:model="notes" name="notes" class="form-control" rows="5"></textarea>
+                <textarea wire:model.defer="notes" name="notes" class="form-control" rows="3"></textarea>
             </div>
 
             <div class="card mt-4 hms-form-card">
                 <div class="card-header">
                     <div class="col-md-12">
-                        <button class="btn btn-outline-primary"
+                        <button type="button" class="btn btn-outline-primary btn-hms-primary"
                                 wire:click.prevent="addService">اضافة خدمة فرعية
                         </button>
+                        <small class="text-muted d-block mt-2">اختر الخدمة → اضغط «تأكيد» على السطر → ثم «تأكيد البيانات»</small>
                     </div>
                 </div>
 
@@ -93,17 +95,17 @@
                                     </td>
                                     <td>
                                         @if($groupItem['is_saved'])
-                                            <button class="btn btn-sm btn-primary"
+                                            <button type="button" class="btn btn-sm btn-primary"
                                                     wire:click.prevent="editService({{$index}})">
                                                 تعديل
                                             </button>
                                         @elseif($groupItem['service_id'])
-                                            <button class="btn btn-sm btn-success mr-1"
+                                            <button type="button" class="btn btn-sm btn-success mr-1"
                                                     wire:click.prevent="saveService({{$index}})">
-                                                تاكيد
+                                                تأكيد
                                             </button>
                                         @endif
-                                        <button class="btn btn-sm btn-danger"
+                                        <button type="button" class="btn btn-sm btn-danger"
                                                 wire:click.prevent="removeService({{$index}})">حذف
                                         </button>
                                     </td>
@@ -144,8 +146,8 @@
                     </div>
                     <br/>
                     <div class="hms-form-actions">
-                        <button class="btn btn-primary btn-hms-primary" type="submit">تاكيد البيانات</button>
-                        <button type="button" class="btn btn-secondary" wire:click="$set('show_table', true)">رجوع</button>
+                        <button class="btn btn-primary btn-hms-primary" type="submit">تأكيد البيانات</button>
+                        <button type="button" class="btn btn-secondary" wire:click.prevent="show_form_table">رجوع</button>
                     </div>
                 </div>
             </div>

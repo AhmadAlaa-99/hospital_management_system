@@ -274,9 +274,13 @@ class SingleInvoices extends Component
 
     public function destroy()
     {
-        Invoice::destroy($this->single_invoice_id);
+        if ($this->single_invoice_id) {
+            Invoice::destroy($this->single_invoice_id);
+        }
+        $this->single_invoice_id = null;
         $this->show_table = true;
         $this->InvoiceUpdated = false;
         $this->InvoiceSaved = false;
+        $this->dispatchBrowserEvent('hms-close-modal', ['modalId' => 'delete_invoice']);
     }
 }

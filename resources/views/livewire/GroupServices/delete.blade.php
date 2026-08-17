@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('Dashboard/sections_trans.Close')}}</button>
-                    <button type="button" wire:click.prevent="delete({{ $group->id }})" data-dismiss="modal" class="btn btn-danger">{{trans('Dashboard/sections_trans.submit')}}</button>
+                    <button type="button" wire:click.prevent="delete({{ $group->id }})" class="btn btn-danger">{{trans('Dashboard/sections_trans.submit')}}</button>
                 </div>
         </div>
     </div>

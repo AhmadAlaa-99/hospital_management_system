@@ -18,6 +18,13 @@
 @endsection
 @section('content')
 
+    @include('Dashboard.partials.help-box', [
+        'title' => 'خدمة مفردة vs فاتورة — أين تُستخدم؟',
+        'body' => '<strong>خدمة مفردة</strong> (القائمة ← الخدمات): تعريف سعر خدمة واحدة (أشعة، تحليل...).<br>
+        <strong>هذه الصفحة — فاتورة خدمة مفردة:</strong> إصدار فاتورة للمريض بخدمة واحدة (إضافة / تعديل / طباعة / حذف).<br>
+        <strong>مجموعة خدمات:</strong> باقة عدة خدمات — تُفوتر من «فاتورة مجموعة خدمات».'
+    ])
+
     <div class="row row-sm">
         <div class="col-xl-12">
             <div class="card hms-table-card">

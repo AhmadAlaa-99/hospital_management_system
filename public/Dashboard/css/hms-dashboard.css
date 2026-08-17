@@ -1,10 +1,10 @@
 /* Hospital Management System - Dashboard UI polish (global) */
 :root {
-    --hms-primary: #0f4c75;
-    --hms-primary-2: #3282b8;
-    --hms-soft: #e8f4fc;
-    --hms-border: #c8dce8;
-    --hms-text: #1b3a4b;
+    --hms-primary: #0d7377;
+    --hms-primary-2: #14a3a8;
+    --hms-soft: #e8f6f6;
+    --hms-border: #d7ecec;
+    --hms-text: #0a3d40;
 }
 
 .app-sidebar .main-sidebar-header {
@@ -1482,28 +1482,56 @@ div.dataTables_wrapper div.dataTables_filter input {
     min-width: 130px;
 }
 
+.hms-help-box {
+    background: var(--hms-soft) !important;
+    border-color: var(--hms-border) !important;
+    border-inline-start: 4px solid var(--hms-primary);
+}
+
 /* ===== قائمة جانبية — سكرول أوضح ===== */
 .app-sidebar .main-sidemenu {
     height: calc(100vh - 110px);
-    overflow-y: auto;
+    overflow-y: scroll !important;
     overflow-x: hidden;
     scrollbar-width: auto;
-    scrollbar-color: var(--hms-primary) #eef8f8;
+    scrollbar-color: #0d7377 #dff0f0;
+    scrollbar-gutter: stable;
 }
 
 .app-sidebar .main-sidemenu::-webkit-scrollbar {
-    width: 10px;
+    width: 14px;
 }
 
 .app-sidebar .main-sidemenu::-webkit-scrollbar-track {
-    background: #eef8f8;
-    border-radius: 8px;
+    background: #dff0f0;
+    border-radius: 10px;
+    margin: 4px 0;
 }
 
 .app-sidebar .main-sidemenu::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--hms-primary), var(--hms-primary-2));
-    border-radius: 8px;
-    border: 2px solid #eef8f8;
+    background: linear-gradient(180deg, #0d7377, #14a3a8);
+    border-radius: 10px;
+    border: 3px solid #dff0f0;
+    min-height: 48px;
+}
+
+.app-sidebar .side-menu {
+    overflow-y: visible !important;
+    max-height: none !important;
+}
+
+.app-sidebar .ps__rail-y {
+    opacity: 1 !important;
+    width: 14px !important;
+    background: #dff0f0 !important;
+    border-radius: 10px;
+}
+
+.app-sidebar .ps__thumb-y {
+    background: linear-gradient(180deg, #0d7377, #14a3a8) !important;
+    width: 12px !important;
+    border-radius: 10px !important;
+    right: 1px !important;
 }
 
 /* لوحة التنبيهات — لا تظهر إلا عند فتحها */

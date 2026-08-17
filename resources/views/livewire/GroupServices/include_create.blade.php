@@ -19,6 +19,13 @@
 @endsection
 @section('content')
 
+    @include('Dashboard.partials.help-box', [
+        'title' => 'مجموعة خدمات — أين تُستخدم؟',
+        'body' => '<strong>1. هنا:</strong> تنشئ باقة (مجموعة) من خدمات مفردة مع خصم وضريبة.<br>
+        <strong>2. الفواتير → فاتورة مجموعة خدمات:</strong> تُستخدم عند إصدار فاتورة للمريض.<br>
+        <strong>خطوات الإضافة:</strong> اسم المجموعة → «إضافة خدمة فرعية» → اختر الخدمة → «تأكيد» على السطر → «تأكيد البيانات».'
+    ])
+
     <div class="row row-sm">
         <div class="col-xl-12">
             <div class="card hms-form-card">
