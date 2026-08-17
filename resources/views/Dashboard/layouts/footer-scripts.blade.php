@@ -4,6 +4,8 @@
 <script src="{{URL::asset('Dashboard/plugins/jquery/jquery.min.js')}}"></script>
 <!-- Bootstrap Bundle js -->
 <script src="{{URL::asset('Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+@livewireScripts
+<script src="{{URL::asset('Dashboard/js/livewire-dashboard.js')}}"></script>
 <!-- Ionicons js -->
 <script src="{{URL::asset('Dashboard/plugins/ionicons/ionicons.js')}}"></script>
 <!-- Moment js -->
@@ -31,6 +33,14 @@
 <!-- custom js -->
 <script src="{{URL::asset('Dashboard/js/custom.js')}}"></script><!-- Left-menu js-->
 <script src="{{URL::asset('Dashboard/plugins/side-menu/sidemenu.js')}}"></script>
+<script>
+(function ($) {
+    var $sidemenu = $('.main-sidemenu');
+    if ($sidemenu.length && $.fn.mCustomScrollbar && $sidemenu.data('mcs')) {
+        $sidemenu.mCustomScrollbar('destroy');
+    }
+})(jQuery);
+</script>
 
 
 <!-- Internal Data tables -->
@@ -52,6 +62,3 @@
 <script src="{{URL::asset('Dashboard/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('Dashboard/js/table-data.js')}}"></script>
-
-@livewireScripts
-<script src="{{URL::asset('Dashboard/js/livewire-dashboard.js')}}"></script>

@@ -55,13 +55,13 @@ class CreateGroupServices extends Component
             }
         }
 
-        $this->GroupsItems[] = [
+        $this->GroupsItems = array_merge($this->GroupsItems, [[
             'service_id' => '',
             'quantity' => 1,
             'is_saved' => false,
             'service_name' => '',
-            'service_price' => 0
-        ];
+            'service_price' => 0,
+        ]]);
 
         $this->ServiceSaved = false;
     }
@@ -75,7 +75,9 @@ class CreateGroupServices extends Component
             }
         }
 
-        $this->GroupsItems[$index]['is_saved'] = false;
+        $items = $this->GroupsItems;
+        $items[$index]['is_saved'] = false;
+        $this->GroupsItems = $items;
     }
 
 
@@ -94,9 +96,11 @@ class CreateGroupServices extends Component
             return;
         }
 
-        $this->GroupsItems[$index]['service_name'] = $product->name;
-        $this->GroupsItems[$index]['service_price'] = $product->price;
-        $this->GroupsItems[$index]['is_saved'] = true;
+        $items = $this->GroupsItems;
+        $items[$index]['service_name'] = $product->name;
+        $items[$index]['service_price'] = $product->price;
+        $items[$index]['is_saved'] = true;
+        $this->GroupsItems = $items;
     }
 
     public function removeService($index)
@@ -211,15 +215,17 @@ class CreateGroupServices extends Component
         $this->ServiceSaved = false;
         $this->ServiceUpdated = false;
 
+        $items = [];
         foreach ($group->service_group as $serviceGroup) {
-            $this->GroupsItems[] = [
+            $items[] = [
                 'service_id' => $serviceGroup->id,
                 'quantity' => $serviceGroup->pivot->quantity,
                 'is_saved' => true,
                 'service_name' => $serviceGroup->name,
-                'service_price' => $serviceGroup->price
+                'service_price' => $serviceGroup->price,
             ];
         }
+        $this->GroupsItems = $items;
     }
 
     public function delete($id)

@@ -1372,45 +1372,72 @@ table.hms-table tr.child {
     }
 }
 
-/* ===== Sidebar scrollbar — أوضح ===== */
-.app-sidebar.sidebar-scroll,
-.app-sidebar .main-sidebar-body,
-.app-sidebar .side-menu {
+/* ===== Sidebar scroll — عمودي فقط، بدون يمين/يسار ===== */
+.app-sidebar {
+    overflow-x: hidden !important;
+}
+
+.app-sidebar .main-sidemenu {
+    height: calc(100vh - 110px);
+    max-height: calc(100vh - 110px);
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
     scrollbar-width: auto;
-    scrollbar-color: var(--hms-primary) #eef8f8;
+    scrollbar-color: var(--hms-primary) #dff0f0;
+    scrollbar-gutter: stable;
+    -webkit-overflow-scrolling: touch;
 }
 
-.app-sidebar.sidebar-scroll::-webkit-scrollbar,
-.app-sidebar .main-sidebar-body::-webkit-scrollbar,
-.app-sidebar .side-menu::-webkit-scrollbar {
-    width: 10px;
+.app-sidebar .main-sidemenu::-webkit-scrollbar {
+    width: 12px;
 }
 
-.app-sidebar.sidebar-scroll::-webkit-scrollbar-track,
-.app-sidebar .main-sidebar-body::-webkit-scrollbar-track,
-.app-sidebar .side-menu::-webkit-scrollbar-track {
-    background: #eef8f8;
+.app-sidebar .main-sidemenu::-webkit-scrollbar-track {
+    background: #dff0f0;
     border-radius: 8px;
+    margin: 6px 0;
 }
 
-.app-sidebar.sidebar-scroll::-webkit-scrollbar-thumb,
-.app-sidebar .main-sidebar-body::-webkit-scrollbar-thumb,
-.app-sidebar .side-menu::-webkit-scrollbar-thumb {
+.app-sidebar .main-sidemenu::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, var(--hms-primary), var(--hms-primary-2));
     border-radius: 8px;
-    border: 2px solid #eef8f8;
+    border: 2px solid #dff0f0;
+    min-height: 48px;
 }
 
-.app-sidebar .ps__rail-y {
-    opacity: 1 !important;
-    width: 10px !important;
-    background: #eef8f8 !important;
+.app-sidebar .main-sidemenu::-webkit-scrollbar-thumb:hover {
+    background: var(--hms-primary);
 }
 
-.app-sidebar .ps__thumb-y {
-    background: var(--hms-primary) !important;
-    width: 8px !important;
-    border-radius: 8px !important;
+/* إخفاء أي شريط أفقي من mCustomScrollbar القديم */
+.app-sidebar .mCSB_scrollTools.mCSB_scrollTools_horizontal,
+.app-sidebar .mCSB_horizontal,
+.app-sidebar .mCSB_container_wrapper > .mCSB_scrollTools.mCSB_scrollTools_horizontal {
+    display: none !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.app-sidebar .mCSB_container,
+.app-sidebar .mCSB_container_wrapper {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+
+.app-sidebar .side-menu {
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    width: 100%;
+}
+
+.app-sidebar .side-menu__label,
+.app-sidebar .slide-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 /* ===== Alerts panel ===== */
@@ -1488,52 +1515,6 @@ div.dataTables_wrapper div.dataTables_filter input {
     border-inline-start: 4px solid var(--hms-primary);
 }
 
-/* ===== قائمة جانبية — سكرول أوضح ===== */
-.app-sidebar .main-sidemenu {
-    height: calc(100vh - 110px);
-    overflow-y: scroll !important;
-    overflow-x: hidden;
-    scrollbar-width: auto;
-    scrollbar-color: #0d7377 #dff0f0;
-    scrollbar-gutter: stable;
-}
-
-.app-sidebar .main-sidemenu::-webkit-scrollbar {
-    width: 14px;
-}
-
-.app-sidebar .main-sidemenu::-webkit-scrollbar-track {
-    background: #dff0f0;
-    border-radius: 10px;
-    margin: 4px 0;
-}
-
-.app-sidebar .main-sidemenu::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #0d7377, #14a3a8);
-    border-radius: 10px;
-    border: 3px solid #dff0f0;
-    min-height: 48px;
-}
-
-.app-sidebar .side-menu {
-    overflow-y: visible !important;
-    max-height: none !important;
-}
-
-.app-sidebar .ps__rail-y {
-    opacity: 1 !important;
-    width: 14px !important;
-    background: #dff0f0 !important;
-    border-radius: 10px;
-}
-
-.app-sidebar .ps__thumb-y {
-    background: linear-gradient(180deg, #0d7377, #14a3a8) !important;
-    width: 12px !important;
-    border-radius: 10px !important;
-    right: 1px !important;
-}
-
 /* لوحة التنبيهات — لا تظهر إلا عند فتحها */
 .sidebar.sidebar-left:not(.sidebar-open) {
     visibility: hidden !important;
@@ -1545,3 +1526,60 @@ div.dataTables_wrapper div.dataTables_filter input {
     pointer-events: auto !important;
 }
 
+/* ===== Override default blue theme (#0162e8 / #005ee9) with HMS teal ===== */
+.side-menu .slide.active .side-menu__label,
+.side-menu .slide.active .side-menu__icon,
+.side-menu__item.active,
+.side-menu__item.active .side-menu__label,
+.side-menu__item.active .angle,
+.side-menu__item.active .side-menu__icon,
+.side-menu__item:hover .side-menu__icon,
+.side-menu__item:focus .side-menu__icon,
+.slide:hover .side-menu__label,
+.slide:hover .angle,
+.slide:hover .side-menu__icon,
+.slide.is-expanded .side-menu__label,
+.slide.is-expanded .side-menu__icon,
+.slide.is-expanded .angle,
+.slide-item.active,
+.slide-item:hover,
+.slide-item:focus,
+.app-sidebar .slide.active .side-menu__icon,
+.app-sidebar .slide.is-expanded .side-menu__icon,
+.app-sidebar .slide.active .side-menu__item {
+    color: var(--hms-primary) !important;
+    fill: var(--hms-primary) !important;
+}
+
+.app-sidebar .slide .side-menu__item.active::before,
+.sidenav-toggled.sidenav-toggled-open .app-sidebar .slide .side-menu__item.active::before,
+.sidenav-toggled .side-menu li .side-menu__item.active:before {
+    background: var(--hms-primary-2) !important;
+}
+
+.dark-theme .side-menu__item.active .side-menu__icon {
+    fill: var(--hms-primary) !important;
+}
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: var(--hms-primary) !important;
+    border-color: var(--hms-primary) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--hms-primary-2) !important;
+    border-color: var(--hms-primary-2) !important;
+}
+
+.table-primary,
+.table thead.table-primary th,
+.table thead.table-primary tr {
+    background-color: var(--hms-soft) !important;
+    color: var(--hms-primary) !important;
+    border-color: rgba(13, 115, 119, 0.18) !important;
+}

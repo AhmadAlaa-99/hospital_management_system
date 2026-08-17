@@ -694,7 +694,7 @@ slide is-expanded side-menu__item {
   content: '';
   width: 3px;
   height: 31px;
-  background: #005ee9;
+  background: #0d7377;
   position: absolute;
   left: 0;
 }
@@ -1447,7 +1447,7 @@ slide is-expanded side-menu__item {
     content: '';
     width: 3px;
     height: 31px;
-    background: #005ee9;
+    background: #0d7377;
     position: absolute;
     left: 0;
     display: block;

@@ -547,7 +547,7 @@ slide is-expanded side-menu__item {
   content: '';
   width: 3px;
   height: 31px;
-  background: #005ee9;
+  background: #0d7377;
   position: absolute;
   right: 0; }
 
@@ -1158,12 +1158,12 @@ slide is-expanded side-menu__item {
     content: '';
     width: 3px;
     height: 31px;
-    background: #005ee9;
+    background: #0d7377;
     position: absolute;
     left: 0;
     display: block; } }
 
 .dark-theme .side-menu__item.active .side-menu__icon {
-  fill: #106ef1; }
+  fill: #0d7377; }
 
 /*# sourceMappingURL=sidemenu.css.map */

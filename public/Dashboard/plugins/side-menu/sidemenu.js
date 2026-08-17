@@ -79,11 +79,10 @@
 	$(window).resize(toggleSidebar);
 	
 	
-	//mCustomScrollbar
-	$(".main-sidemenu").mCustomScrollbar({
-		theme:"minimal",
-		autoHideScrollbar: true,
-		scrollbarPosition: "outside"
-	});
+	// Native vertical scroll only — styled in hms-dashboard.css (no horizontal bar)
+	var $sidemenu = $(".main-sidemenu");
+	if ($sidemenu.length && typeof $.fn.mCustomScrollbar !== "undefined" && $sidemenu.data("mcs")) {
+		$sidemenu.mCustomScrollbar("destroy");
+	}
 
 })();

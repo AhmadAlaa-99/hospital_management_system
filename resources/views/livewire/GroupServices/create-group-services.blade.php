@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div wire:key="group-services-panel-{{ $show_table ? 'list' : 'form' }}-{{ $updateMode ? (int) $group_id : 'new' }}">
 
     @if ($catchError)
         <div class="alert alert-danger alert-dismissible fade show">
@@ -55,7 +55,7 @@
                             <tbody>
 
                             @foreach ($GroupsItems as $index => $groupItem)
-                                <tr>
+                                <tr wire:key="group-service-item-{{ $index }}-{{ $groupItem['service_id'] ?: 'new' }}">
                                     <td>
                                         @if($groupItem['is_saved'])
                                             <input type="hidden" name="GroupsItems[{{$index}}][service_id]"

@@ -22,4 +22,19 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     });
+
+    window.addEventListener('livewire:load', function () {
+        if (typeof Livewire === 'undefined') {
+            console.error('Livewire failed to load on this page.');
+        }
+    });
+
+    document.addEventListener('livewire:load', function () {
+        if (typeof Livewire === 'undefined') {
+            return;
+        }
+        Livewire.hook('message.failed', function (message, component) {
+            console.error('Livewire request failed', message, component);
+        });
+    });
 })(window.jQuery);

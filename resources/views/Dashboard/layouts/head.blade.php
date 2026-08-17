@@ -29,7 +29,7 @@
     <link href="{{URL::asset('Dashboard/css-rtl/style-dark.css')}}" rel="stylesheet">
     <!---Skinmodes css-->
     <link href="{{URL::asset('Dashboard/css-rtl/skin-modes.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('Dashboard/css/hms-dashboard.css')}}" rel="stylesheet">
+    <link href="{{URL::asset('Dashboard/css/hms-dashboard.css')}}?v=4" rel="stylesheet">
 
 @else
 
@@ -50,6 +50,6 @@
     <link href="{{URL::asset('Dashboard/css/style-dark.css')}}" rel="stylesheet">
     <!---Skinmodes css-->
     <link href="{{URL::asset('Dashboard/css/skin-modes.css')}}" rel="stylesheet" />
-    <link href="{{URL::asset('Dashboard/css/hms-dashboard.css')}}" rel="stylesheet">
+    <link href="{{URL::asset('Dashboard/css/hms-dashboard.css')}}?v=4" rel="stylesheet">
 
 @endif
