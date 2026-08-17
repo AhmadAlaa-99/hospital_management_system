@@ -58,6 +58,9 @@ class DoctorRepository implements DoctorRepositoryInterface
             DB::rollback();
             return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())])->withInput();
         }
+    }
+
+    public function update($request)
     {
         DB::beginTransaction();
 

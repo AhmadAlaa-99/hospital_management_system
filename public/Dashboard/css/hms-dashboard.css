@@ -1482,3 +1482,38 @@ div.dataTables_wrapper div.dataTables_filter input {
     min-width: 130px;
 }
 
+/* ===== قائمة جانبية — سكرول أوضح ===== */
+.app-sidebar .main-sidemenu {
+    height: calc(100vh - 110px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: auto;
+    scrollbar-color: var(--hms-primary) #eef8f8;
+}
+
+.app-sidebar .main-sidemenu::-webkit-scrollbar {
+    width: 10px;
+}
+
+.app-sidebar .main-sidemenu::-webkit-scrollbar-track {
+    background: #eef8f8;
+    border-radius: 8px;
+}
+
+.app-sidebar .main-sidemenu::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--hms-primary), var(--hms-primary-2));
+    border-radius: 8px;
+    border: 2px solid #eef8f8;
+}
+
+/* لوحة التنبيهات — لا تظهر إلا عند فتحها */
+.sidebar.sidebar-left:not(.sidebar-open) {
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.sidebar.sidebar-left.sidebar-open {
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+

@@ -36,17 +36,4 @@
     <!-- main-content closed -->
 @endsection
 @section('js')
-<script>
-    $(function () {
-        if ($.fn.DataTable && $('#hms-group-services-table').length && !$.fn.DataTable.isDataTable('#hms-group-services-table')) {
-            $('#hms-group-services-table').DataTable({
-                language: {
-                    searchPlaceholder: 'Search...',
-                    sSearch: '',
-                    lengthMenu: '_MENU_',
-                }
-            });
-        }
-    });
-</script>
 @endsection
