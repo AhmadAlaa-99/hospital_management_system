@@ -1,4 +1,4 @@
-﻿<div wire:key="group-services-panel-{{ $show_table ? 'list' : 'form' }}-{{ $updateMode ? (int) $group_id : 'new' }}">
+<div wire:key="group-services-panel-{{ $show_table ? 'list' : 'form' }}-{{ $updateMode ? (int) $group_id : 'new' }}">
 
     @if ($catchError)
         <div class="alert alert-danger alert-dismissible fade show">
@@ -157,4 +157,3 @@
 
 
 </div>
-

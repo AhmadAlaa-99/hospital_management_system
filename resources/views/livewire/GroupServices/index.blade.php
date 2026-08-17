@@ -1,4 +1,3 @@
-﻿
 <button class="btn btn-primary btn-hms-primary pull-right" wire:click.prevent="show_form_add" type="button">اضافة مجموعة خدمات</button><br><br>
 <div class="table-responsive hms-table-scroll-x">
         <table class="table text-md-nowrap hms-table" id="hms-group-services-table" data-page-length="50" style="text-align: center">
@@ -34,4 +33,3 @@
         </tbody>
     </table>
 </div>
-
