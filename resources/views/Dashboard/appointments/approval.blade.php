@@ -41,7 +41,7 @@
                                             <div class="input-group-text">
                                                 <i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>
                                             </div>
-                                        </div><input class="form-control datetimepicker-approval" name="appointment" id="datetimepicker{{ $appointment->id }}" type="text" value="{{ $suggestedAt }}">
+                                        </div><input class="form-control" name="appointment" id="datetimepicker{{ $appointment->id }}" type="datetime-local" value="{{ $suggestedAt ? \Carbon\Carbon::parse($suggestedAt)->format('Y-m-d\TH:i') : '' }}">
                                     </div>
 
                             </div>

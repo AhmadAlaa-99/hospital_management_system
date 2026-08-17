@@ -4,7 +4,7 @@
 <a href="{{ route('export.table', ['type' => 'invoices']) }}" class="btn btn-success pull-right mb-3 ml-2">
     <i class="fas fa-file-export ml-1"></i> تصدير
 </a>
-<div class="table-responsive">
+<div class="table-responsive hms-table-scroll-x">
     <table class="table text-md-nowrap hms-table" id="hms-single-invoices" data-page-length="50" style="text-align: center">
         <thead>
         <tr>
@@ -25,7 +25,7 @@
         </thead>
         <tbody>
         @foreach ($single_invoices as $single_invoice)
-            <tr>
+            <tr wire:key="invoice-row-{{ $single_invoice->id }}">
                 <td>{{ $loop->iteration}}</td>
                 <td>{{ optional($single_invoice->Service)->name }}</td>
                 <td>{{ optional($single_invoice->Patient)->name }}</td>

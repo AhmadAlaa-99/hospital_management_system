@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use App\Models\Doctor;
 use App\Models\FundAccount;
 use App\Models\Group;
-use App\Models\group_invoice;
 use App\Models\Invoice;
 use App\Models\Patient;
 use App\Models\PatientAccount;

@@ -35,7 +35,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive hms-table-scroll-x">
-                        <table id="example" class="table key-buttons text-md-nowrap hms-table">
+                        <table id="hms-doctors-table" class="table key-buttons text-md-nowrap hms-table">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -135,13 +135,30 @@
                     checkboxes[i].checked = source.target.checked;
                 }
             });
-        })
-    </script>
-    <script type="text/javascript">
+
+            if ($.fn.DataTable && $('#hms-doctors-table').length && !$.fn.DataTable.isDataTable('#hms-doctors-table')) {
+                $('#hms-doctors-table').DataTable({
+                    lengthChange: false,
+                    scrollX: true,
+                    autoWidth: false,
+                    responsive: false,
+                    buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                    language: {
+                        searchPlaceholder: 'بحث...',
+                        sSearch: '',
+                        lengthMenu: 'عرض _MENU_',
+                        info: 'عرض _START_ إلى _END_ من _TOTAL_',
+                        paginate: { next: 'التالي', previous: 'السابق' },
+                        buttons: { copy: 'نسخ', colvis: 'الأعمدة', print: 'طباعة', excel: 'Excel', pdf: 'PDF' }
+                    },
+                    columnDefs: [{ orderable: false, targets: [1, -2] }]
+                }).buttons().container().appendTo('#hms-doctors-table_wrapper .col-md-6:eq(0)');
+            }
+        });
         $(function () {
             $("#btn_delete_all").click(function () {
                 var selected = [];
-                $("#example input[name=delete_select]:checked").each(function () {
+                $("#hms-doctors-table input[name=delete_select]:checked").each(function () {
                     selected.push(this.value);
                 });
                 if (selected.length > 0) {

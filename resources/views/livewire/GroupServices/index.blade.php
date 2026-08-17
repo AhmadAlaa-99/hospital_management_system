@@ -1,6 +1,6 @@
 ﻿
 <button class="btn btn-primary btn-hms-primary pull-right" wire:click.prevent="show_form_add" type="button">اضافة مجموعة خدمات</button><br><br>
-<div class="table-responsive">
+<div class="table-responsive hms-table-scroll-x">
         <table class="table text-md-nowrap hms-table" id="hms-group-services-table" data-page-length="50" style="text-align: center">
         <thead>
             <tr>
@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             @foreach ($groups as $group)
-                <tr>
+                <tr wire:key="group-row-{{ $group->id }}">
                     <td>{{ $loop->iteration}}</td>
                     <td>{{ $group->name }}</td>
                     <td>{{ number_format($group->Total_with_tax, 2) }}</td>

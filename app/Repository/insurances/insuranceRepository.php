@@ -38,7 +38,7 @@ class insuranceRepository implements insuranceRepositoryInterface
             return redirect()->route('insurance.index');
         }
         catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())])->withInput();
         }
     }
 

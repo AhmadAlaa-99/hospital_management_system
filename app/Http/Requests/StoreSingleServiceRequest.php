@@ -3,39 +3,37 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSingleServiceRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'name' => 'required|unique:Service_translations,name,'.($this->input('id') ?? 'NULL').',Service_id',
-            'price' => 'numeric|required',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('Service_translations', 'name')->ignore($this->input('id'), 'Service_id'),
+            ],
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string|max:1000',
+            'status' => 'nullable|in:0,1',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => trans('validation.required'),
-            'name.unique' => trans('validation.unique'),
-            'price.required' => trans('validation.required'),
-            'price.numeric' => trans('validation.numeric'),
+            'name.required' => 'اسم الخدمة مطلوب.',
+            'name.unique' => 'اسم الخدمة مستخدم مسبقاً.',
+            'price.required' => 'سعر الخدمة مطلوب.',
+            'price.numeric' => 'سعر الخدمة يجب أن يكون رقماً.',
         ];
     }
 }

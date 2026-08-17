@@ -1,10 +1,10 @@
 /* Hospital Management System - Dashboard UI polish (global) */
 :root {
-    --hms-primary: #1e4d6b;
-    --hms-primary-2: #2e86ab;
-    --hms-soft: #e8f2f8;
-    --hms-border: #c5d9e8;
-    --hms-text: #1a3340;
+    --hms-primary: #0f4c75;
+    --hms-primary-2: #3282b8;
+    --hms-soft: #e8f4fc;
+    --hms-border: #c8dce8;
+    --hms-text: #1b3a4b;
 }
 
 .app-sidebar .main-sidebar-header {
