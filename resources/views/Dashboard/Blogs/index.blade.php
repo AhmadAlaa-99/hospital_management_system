@@ -47,16 +47,40 @@
                                    title="تعديل">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.blogs.destroy', $blog) }}" method="POST" class="d-inline" onsubmit="return confirm('حذف المقال؟')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="hms-action-btn hms-action-btn--delete" title="حذف">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                        class="hms-action-btn hms-action-btn--delete"
+                                        data-toggle="modal"
+                                        data-target="#deleteBlog{{ $blog->id }}"
+                                        title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
+                    <div class="modal fade" id="deleteBlog{{ $blog->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">حذف المقال</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="mb-0">هل أنت متأكد من حذف المقال <strong>{{ $blog->title }}</strong>؟</p>
+                                    <small class="text-muted">لا يمكن التراجع عن هذه العملية.</small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                                    <form action="{{ route('admin.blogs.destroy', $blog) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">نعم، احذف</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
                 </tbody>
             </table>

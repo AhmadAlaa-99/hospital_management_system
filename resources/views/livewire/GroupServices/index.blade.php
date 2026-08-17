@@ -20,7 +20,7 @@
                     <td>{{ $group->notes }}</td>
                     <td class="text-center">
                         <div class="hms-actions">
-                            <button type="button" wire:click="edit({{ $group->id }})" class="hms-action-btn hms-action-btn--edit" title="تعديل">
+                            <button type="button" wire:click.prevent="edit({{ $group->id }})" class="hms-action-btn hms-action-btn--edit" title="تعديل">
                                 <i class="fa fa-edit"></i>
                             </button>
                             <button type="button" class="hms-action-btn hms-action-btn--delete" data-toggle="modal" data-target="#deleteGroup{{$group->id}}" title="حذف">

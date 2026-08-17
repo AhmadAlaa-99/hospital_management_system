@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 trait UploadTrait{
@@ -19,8 +20,13 @@ trait UploadTrait{
             }
 
             $photo = $request->file($inputname);
-            $name = \Str::slug($request->input('name'));
+            $name = \Str::slug($request->input('name') ?: 'doctor');
             $filename = $name. '.' . $photo->getClientOriginalExtension();
+
+            $targetDir = public_path('Dashboard/img/' . trim($foldername, '/'));
+            if (!File::isDirectory($targetDir)) {
+                File::makeDirectory($targetDir, 0755, true);
+            }
 
             // insert Image
             $Image = new Image();

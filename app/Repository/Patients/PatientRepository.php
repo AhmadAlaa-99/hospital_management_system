@@ -53,7 +53,7 @@ class PatientRepository implements PatientRepositoryInterface
            $Patients->Address = $request->Address;
            $Patients->save();
            session()->flash('add');
-           return redirect()->back();
+           return redirect()->route('Patients.index');
        }
 
        catch (\Exception $e) {

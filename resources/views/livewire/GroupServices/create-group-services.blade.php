@@ -1,11 +1,11 @@
 ﻿<div>
 
-{{--    @if ($catchError)--}}
-{{--        <div class="alert alert-danger" id="success-danger">--}}
-{{--            <button type="button" class="close" data-dismiss="alert">x</button>--}}
-{{--            {{ $catchError }}--}}
-{{--        </div>--}}
-{{--    @endif--}}
+    @if ($catchError)
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ $catchError }}
+        </div>
+    @endif
 
     @if ($ServiceSaved)
         <div class="alert alert-info">تم حفظ البيانات بنجاح.</div>
@@ -66,10 +66,10 @@
                                             <select name="GroupsItems[{{$index}}][service_id]"
                                                     class="form-control{{ $errors->has('GroupsItems.' . $index) ? ' is-invalid' : '' }}"
                                                     wire:model="GroupsItems.{{$index}}.service_id">
-                                                <option value="">-- choose product --</option>
+                                                <option value="">-- اختر الخدمة --</option>
                                                 @foreach ($allServices as $service)
                                                     <option value="{{ $service->id }}">
-                                                        {{ \App\Models\ServiceTranslation::where(['Service_id' => $service->id])->pluck('name')->first() }}
+                                                        {{ $service->name }}
                                                         ({{ number_format($service->price, 2) }})
                                                     </option>
                                                 @endforeach

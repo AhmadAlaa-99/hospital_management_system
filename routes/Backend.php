@@ -167,7 +167,10 @@ Route::group(
 
         Route::view('group_invoices','livewire.Group_invoices.index')->name('group_invoices');
 
-        Route::view('group_Print_single_invoices','livewire.Group_invoices.print')->name('group_Print_single_invoices');
+        Route::get('group_Print_single_invoices/{invoice}', function (\App\Models\Invoice $invoice) {
+            $invoice->load(['Group', 'Patient', 'Doctor', 'Section']);
+            return view('livewire.Group_invoices.print', compact('invoice'));
+        })->name('group_Print_single_invoices');
 
         //############################# end single_invoices route ######################################
 

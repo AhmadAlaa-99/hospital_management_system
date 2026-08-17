@@ -33,7 +33,7 @@ class SingleServiceRepository implements \App\Interfaces\Services\SingleServiceR
 
         }
         catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())])->withInput();
         }
     }
 
@@ -56,7 +56,7 @@ class SingleServiceRepository implements \App\Interfaces\Services\SingleServiceR
 
         }
         catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())])->withInput();
         }
     }
 

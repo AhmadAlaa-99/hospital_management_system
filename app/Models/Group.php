@@ -16,6 +16,7 @@ class Group extends Model
 
     public function service_group()
     {
-        return $this->belongsToMany(Service::class,'service_group')->withPivot('quantity');
+        return $this->belongsToMany(Service::class, 'Service_Group', 'Group_id', 'Service_id')
+            ->withPivot('quantity');
     }
 }

@@ -40,7 +40,7 @@ class GroupInvoices extends Component
             'Groups'=>Group::all(),
             'subtotal' => $Total_after_discount = ((is_numeric($this->price) ? $this->price : 0)) - ((is_numeric($this->discount_value) ? $this->discount_value : 0)),
             'tax_value'=> $Total_after_discount * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100)
-        ]) ->extends('Dashboard.layouts');
+        ]);
     }
 
 
@@ -214,7 +214,7 @@ class GroupInvoices extends Component
 
 
             catch (\Exception $e) {
-                $this->catchError = $e->getMessage();
+                $this->catchError = \App\Helpers\FriendlyError::message($e->getMessage());
             }
 
         }
@@ -303,7 +303,7 @@ class GroupInvoices extends Component
             }
 
             catch (\Exception $e) {
-                $this->catchError = $e->getMessage();
+                $this->catchError = \App\Helpers\FriendlyError::message($e->getMessage());
             }
         }
     }
@@ -344,18 +344,6 @@ class GroupInvoices extends Component
 
     public function print($id)
     {
-        $single_invoice = Invoice::findorfail($id);
-        return Redirect::route('group_Print_single_invoices',[
-            'invoice_date' => $single_invoice->invoice_date,
-            'doctor_id' => $single_invoice->Doctor->name,
-            'section_id' => $single_invoice->Section->name,
-            'Group_id' => $single_invoice->Group->name,
-            'type' => $single_invoice->type,
-            'price' => $single_invoice->price,
-            'discount_value' => $single_invoice->discount_value,
-            'tax_rate' => $single_invoice->tax_rate,
-            'total_with_tax' => $single_invoice->total_with_tax,
-        ]);
-
+        return Redirect::route('group_Print_single_invoices', $id);
     }
 }

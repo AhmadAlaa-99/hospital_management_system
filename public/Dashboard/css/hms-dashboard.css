@@ -1,10 +1,10 @@
 /* Hospital Management System - Dashboard UI polish (global) */
 :root {
-    --hms-primary: #0d7377;
-    --hms-primary-2: #14a3a8;
-    --hms-soft: #e8f6f6;
-    --hms-border: #d7ecec;
-    --hms-text: #163a3c;
+    --hms-primary: #1e4d6b;
+    --hms-primary-2: #2e86ab;
+    --hms-soft: #e8f2f8;
+    --hms-border: #c5d9e8;
+    --hms-text: #1a3340;
 }
 
 .app-sidebar .main-sidebar-header {
@@ -1446,6 +1446,36 @@ table.hms-table tr.child {
     align-items: center;
     gap: 6px;
     flex-wrap: nowrap;
+}
+
+/* ===== جداول أفقية — سكرول يمين/يسار ===== */
+.hms-table-scroll-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+    scrollbar-color: var(--hms-primary) #eef4f8;
+}
+
+.hms-table-scroll-x::-webkit-scrollbar {
+    height: 10px;
+}
+
+.hms-table-scroll-x::-webkit-scrollbar-track {
+    background: #eef4f8;
+    border-radius: 8px;
+}
+
+.hms-table-scroll-x::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--hms-primary), var(--hms-primary-2));
+    border-radius: 8px;
+}
+
+.hms-table-scroll-x .dataTables_wrapper {
+    min-width: 960px;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+    margin-right: 0.5em;
 }
 
 .hms-inline-form select {

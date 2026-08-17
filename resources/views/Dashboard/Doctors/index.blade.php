@@ -34,7 +34,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive hms-table-scroll-x">
                         <table id="example" class="table key-buttons text-md-nowrap hms-table">
                             <thead>
                             <tr>

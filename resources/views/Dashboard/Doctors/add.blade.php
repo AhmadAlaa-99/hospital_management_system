@@ -55,7 +55,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-md-3"><label>{{ trans('Doctors.doctor_photo') }}</label></div>
+                                <div class="col-md-3"><label>{{ trans('doctors.doctor_photo') }}</label></div>
                                 <div class="col-md-9">
                                     <input type="file" accept="image/*" name="photo" onchange="loadFile(event)">
                                     <div class="mt-3">
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                             <div class="hms-form-actions">
-                                <button type="submit" class="btn btn-primary btn-hms-primary pd-x-30">{{ trans('Doctors.submit') }}</button>
+                                <button type="submit" class="btn btn-primary btn-hms-primary pd-x-30">{{ trans('doctors.submit') }}</button>
                                 <a href="{{ route('Doctors.index') }}" class="btn btn-secondary pd-x-30">{{ app()->getLocale()==='ar' ? 'رجوع' : 'Back' }}</a>
                             </div>
                         </div>

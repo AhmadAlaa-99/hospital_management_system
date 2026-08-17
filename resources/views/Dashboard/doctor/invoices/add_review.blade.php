@@ -29,7 +29,7 @@
 
                 <div class="form-group" style="position:relative;">
                     <label>تاريخ المراجعة</label>
-                    <input class="form-control fc-datepicker" id="review_date" name="review_date" type="text" required>
+                    <input class="form-control" id="review_date" name="review_date" type="date" required>
                 </div>
 
 

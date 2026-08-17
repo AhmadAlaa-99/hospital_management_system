@@ -32,6 +32,18 @@ class DoctorController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|unique:doctors,email',
+            'password' => 'required|min:6',
+            'phone' => 'required|numeric|unique:doctors,phone',
+            'name' => 'required|string|max:255',
+            'section_id' => 'required|exists:sections,id',
+            'photo' => 'nullable|image|max:4096',
+        ], [
+            'email.unique' => 'البريد الإلكتروني مستخدم مسبقاً.',
+            'phone.unique' => 'رقم الهاتف مستخدم مسبقاً.',
+        ]);
+
         return $this->Doctors->store($request);
     }
 
@@ -50,6 +62,18 @@ class DoctorController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'id' => 'required|exists:doctors,id',
+            'email' => 'required|email|unique:doctors,email,' . $request->id,
+            'phone' => 'required|numeric|unique:doctors,phone,' . $request->id,
+            'name' => 'required|string|max:255',
+            'section_id' => 'required|exists:sections,id',
+            'photo' => 'nullable|image|max:4096',
+        ], [
+            'email.unique' => 'البريد الإلكتروني مستخدم مسبقاً.',
+            'phone.unique' => 'رقم الهاتف مستخدم مسبقاً.',
+        ]);
+
         return $this->Doctors->update($request);
     }
 

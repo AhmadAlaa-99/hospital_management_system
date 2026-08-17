@@ -35,7 +35,7 @@ class insuranceRepository implements insuranceRepositoryInterface
             $insurances->notes = $request->notes;
             $insurances->save();
             session()->flash('add');
-            return redirect()->route('insurance.create');
+            return redirect()->route('insurance.index');
         }
         catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

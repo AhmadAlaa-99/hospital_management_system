@@ -45,7 +45,7 @@
 
                         <div class="col">
                             <label>تاريخ الميلاد</label>
-                            <input class="form-control fc-datepicker" value="{{$Patient->Date_Birth}}" name="Date_Birth" type="text" required>
+                            <input class="form-control" value="{{$Patient->Date_Birth}}" name="Date_Birth" type="date" required>
                         </div>
 
                     </div>
@@ -115,14 +115,6 @@
 <!-- row closed -->
 @endsection
 @section('js')
-
-    <!--Internal  Datepicker js -->
-    <script src="{{ URL::asset('dashboard/plugins/jquery-ui/ui/widgets/datepicker.js') }}"></script>
-    <script>
-        var date = $('.fc-datepicker').datepicker({
-            dateFormat: 'yy-mm-dd'
-        }).val();
-    </script>
     <script src="{{URL::asset('dashboard/plugins/notify/js/notifIt.js')}}"></script>
     <script src="{{URL::asset('/plugins/notify/js/notifit-custom.js')}}"></script>
 @endsection

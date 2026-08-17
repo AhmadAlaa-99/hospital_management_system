@@ -27,7 +27,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card hms-form-card">
                 <div class="card-body">
-                        <form action="{{ route('Receipt.update', 'test') }}" method="post" autocomplete="off">
+                        <form action="{{ route('Receipt.update', $receipt_accounts->id) }}" method="post" autocomplete="off">
                             {{ method_field('patch') }}
                             {{ csrf_field() }}
                         <div class="pd-30 pd-sm-40 bg-gray-200 hms-form-box">
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-main-primary btn-hms-primary pd-x-30 mg-r-5 mg-t-5">{{ trans('Doctors.submit') }}</button>
+                            <button type="submit" class="btn btn-main-primary btn-hms-primary pd-x-30 mg-r-5 mg-t-5">{{ trans('doctors.submit') }}</button>
                         </div>
                     </form>
                 </div>

@@ -1,5 +1,12 @@
 ﻿<div >
 
+    @if ($catchError)
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ $catchError }}
+        </div>
+    @endif
+
     @if ($InvoiceSaved)
         <div class="alert alert-info">تم حفظ البيانات بنجاح.</div>
     @endif

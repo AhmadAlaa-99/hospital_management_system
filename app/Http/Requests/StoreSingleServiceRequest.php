@@ -24,7 +24,7 @@ class StoreSingleServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:service_translations,name,'.$this->id.',Service_id',
+            'name' => 'required|unique:Service_translations,name,'.($this->input('id') ?? 'NULL').',Service_id',
             'price' => 'numeric|required',
         ];
     }

@@ -263,7 +263,7 @@ class SingleInvoices extends Component
             $this->updateMode = false;
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->catchError = $e->getMessage();
+            $this->catchError = \App\Helpers\FriendlyError::message($e->getMessage());
         }
     }
 

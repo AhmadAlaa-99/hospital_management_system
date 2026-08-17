@@ -56,13 +56,8 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
         catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())])->withInput();
         }
-
-
-    }
-
-    public function update($request)
     {
         DB::beginTransaction();
 
@@ -96,7 +91,7 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
         catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())])->withInput();
         }
     }
 
@@ -155,7 +150,7 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
 
         catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())]);
         }
     }
 
@@ -172,7 +167,7 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
 
         catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => \App\Helpers\FriendlyError::message($e->getMessage())]);
         }
     }
 

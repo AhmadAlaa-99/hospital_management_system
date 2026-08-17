@@ -39,7 +39,7 @@ class AmbulanceRepository implements AmbulanceRepositoryInterface
        $ambulances->save();
 
       session()->flash('add');
-      return redirect()->back();
+      return redirect()->route('Ambulance.index');
 
         }
 
