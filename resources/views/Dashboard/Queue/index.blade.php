@@ -25,10 +25,11 @@
 @endif
 
 @include('Dashboard.partials.help-box', [
-    'title' => 'ربط الانتظار بالمواعيد',
-    'body' => 'كل رقم انتظار يجب أن يكون مربوطاً ب<strong>موعد</strong>:<br>
-    • <strong>من موعد مجدول:</strong> اختر مريضاً من مواعيد اليوم المؤكدة.<br>
-    • <strong>مريض جديد:</strong> يُنشأ موعد مؤكد تلقائياً ثم يُصدر الرقم.'
+    'title' => 'إضافة مريض للانتظار',
+    'body' => 'اختر أحد المسارات الثلاثة — كل رقم انتظار مربوط ب<strong>موعد</strong>:<br>
+    • <strong>موعد مجدول:</strong> مريض حجز لليوم ووصل — اختر موعده وأصدر الرقم.<br>
+    • <strong>مريض مسجّل:</strong> له حساب في النظام — إن كان له موعد اليوم يُربط به، وإلا يُنشأ موعد مؤكد ثم الرقم.<br>
+    • <strong>مريض جديد:</strong> غير موجود في النظام — يُنشأ حساب (كالتسجيل من الموقع) ثم موعد ورقم.'
 ])
 
 <div class="row row-sm mb-3">
@@ -57,72 +58,127 @@
 
 <div class="row row-sm">
     <div class="col-lg-4">
-        @if($appointmentsToday->count())
-        <div class="card mb-3">
-            <div class="card-header"><h5 class="mb-0">إصدار رقم — من موعد مجدول</h5></div>
-            <div class="card-body">
-                <form action="{{ route('admin.queue.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="section_id" value="{{ $sectionId }}">
-                    <div class="form-group">
-                        <label>مواعيد اليوم المؤكدة (بدون رقم)</label>
-                        <select name="appointment_id" class="form-control" required>
-                            <option value="">— اختر الموعد —</option>
-                            @foreach($appointmentsToday as $apt)
-                                <option value="{{ $apt->id }}">
-                                    {{ $apt->name }} — {{ optional($apt->doctor)->name }} — {{ $apt->appointment }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-success btn-block">
-                        <i class="fas fa-ticket-alt ml-1"></i> تسجيل حضور وإصدار رقم
-                    </button>
-                </form>
-            </div>
-        </div>
-        @else
-        <div class="alert alert-info mb-3">لا توجد مواعيد مؤكدة لليوم بدون رقم انتظار في هذا القسم.</div>
-        @endif
-
         <div class="card">
-            <div class="card-header"><h5 class="mb-0">مريض جديد — إنشاء موعد + رقم</h5></div>
-            <div class="card-body">
-                <p class="text-muted small">للمريض الذي حضر بدون حجز: يُسجّل موعد مؤكد لليوم ثم يُصدر رقم الانتظار.</p>
-                <form action="{{ route('admin.queue.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="section_id" value="{{ $sectionId }}">
-                    <div class="form-group">
-                        <label>اسم المريض</label>
-                        <input type="text" name="patient_name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>الهاتف</label>
-                        <input type="text" name="phone" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>البريد (اختياري)</label>
-                        <input type="email" name="email" class="form-control" placeholder="إن وُجد في سجل المرضى">
-                    </div>
-                    <div class="form-group">
-                        <label>الطبيب <span class="text-danger">*</span></label>
-                        <select name="doctor_id" class="form-control" required>
-                            <option value="">— اختر الطبيب —</option>
-                            @foreach($doctors->where('section_id', $sectionId) as $doc)
-                                <option value="{{ $doc->id }}" {{ $doctorId == $doc->id ? 'selected' : '' }}>{{ $doc->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>الأولوية</label>
-                        <select name="priority" class="form-control">
-                            @foreach(\App\Models\QueueTicket::$priorityLabels as $key => $label)
-                                <option value="{{ $key }}">{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">إنشاء موعد وإصدار رقم</button>
-                </form>
+            <div class="card-header pb-0 border-bottom-0">
+                <ul class="nav nav-tabs card-header-tabs" id="queueReceptionTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab-scheduled" data-toggle="tab" href="#pane-scheduled" role="tab">موعد مجدول</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-existing" data-toggle="tab" href="#pane-existing" role="tab">مريض مسجّل</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-new" data-toggle="tab" href="#pane-new" role="tab">مريض جديد</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body tab-content" id="queueReceptionContent">
+                {{-- 1) موعد مجدول لليوم --}}
+                <div class="tab-pane fade show active" id="pane-scheduled" role="tabpanel">
+                    @if($appointmentsToday->count())
+                        <p class="text-muted small mb-3">مريض له موعد مؤكد اليوم ولم يُصدر له رقم بعد.</p>
+                        <form action="{{ route('admin.queue.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="flow" value="scheduled">
+                            <input type="hidden" name="section_id" value="{{ $sectionId }}">
+                            <div class="form-group">
+                                <label>مواعيد اليوم المؤكدة (بدون رقم)</label>
+                                <select name="appointment_id" class="form-control" required>
+                                    <option value="">— اختر الموعد —</option>
+                                    @foreach($appointmentsToday as $apt)
+                                        <option value="{{ $apt->id }}" {{ old('appointment_id') == $apt->id ? 'selected' : '' }}>
+                                            {{ $apt->name }} — {{ optional($apt->doctor)->name }} — {{ $apt->appointment }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">
+                                <i class="fas fa-ticket-alt ml-1"></i> تسجيل حضور وإصدار رقم
+                            </button>
+                        </form>
+                    @else
+                        <div class="alert alert-info mb-0">لا توجد مواعيد مؤكدة لليوم بدون رقم انتظار في هذا القسم.</div>
+                    @endif
+                </div>
+
+                {{-- 2) مريض مسجّل في النظام --}}
+                <div class="tab-pane fade" id="pane-existing" role="tabpanel">
+                    <p class="text-muted small mb-3">اختر مريضاً من السجل. إن كان له موعد اليوم يُربط به، وإلا يُنشأ موعد مؤكد ثم يُصدر الرقم.</p>
+                    <form action="{{ route('admin.queue.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="flow" value="existing">
+                        <input type="hidden" name="section_id" value="{{ $sectionId }}">
+                        <div class="form-group">
+                            <label>المريض <span class="text-danger">*</span></label>
+                            <select name="patient_id" class="form-control select2-patient" required>
+                                <option value="">— اختر المريض —</option>
+                                @foreach($patients as $patient)
+                                    <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
+                                        {{ $patient->name }} — {{ $patient->Phone }} — {{ $patient->email }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الطبيب <span class="text-danger">*</span></label>
+                            <select name="doctor_id" class="form-control" required>
+                                <option value="">— اختر الطبيب —</option>
+                                @foreach($doctors->where('section_id', $sectionId) as $doc)
+                                    <option value="{{ $doc->id }}" {{ old('doctor_id', $doctorId) == $doc->id ? 'selected' : '' }}>{{ $doc->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الأولوية</label>
+                            <select name="priority" class="form-control">
+                                @foreach(\App\Models\QueueTicket::$priorityLabels as $key => $label)
+                                    <option value="{{ $key }}" {{ old('priority') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">ربط الموعد وإصدار رقم</button>
+                    </form>
+                </div>
+
+                {{-- 3) مريض جديد — حساب + موعد + رقم --}}
+                <div class="tab-pane fade" id="pane-new" role="tabpanel">
+                    <p class="text-muted small mb-3">مريض غير موجود في النظام — يُنشأ حساب (كالتسجيل من الموقع) ثم موعد مؤكد ورقم انتظار. كلمة المرور الافتراضية = رقم الهاتف.</p>
+                    <form action="{{ route('admin.queue.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="flow" value="new">
+                        <input type="hidden" name="section_id" value="{{ $sectionId }}">
+                        <div class="form-group">
+                            <label>اسم المريض <span class="text-danger">*</span></label>
+                            <input type="text" name="patient_name" class="form-control" value="{{ old('patient_name') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني <span class="text-danger">*</span></label>
+                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الهاتف <span class="text-danger">*</span></label>
+                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الطبيب <span class="text-danger">*</span></label>
+                            <select name="doctor_id" class="form-control" required>
+                                <option value="">— اختر الطبيب —</option>
+                                @foreach($doctors->where('section_id', $sectionId) as $doc)
+                                    <option value="{{ $doc->id }}" {{ old('doctor_id', $doctorId) == $doc->id ? 'selected' : '' }}>{{ $doc->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الأولوية</label>
+                            <select name="priority" class="form-control">
+                                @foreach(\App\Models\QueueTicket::$priorityLabels as $key => $label)
+                                    <option value="{{ $key }}" {{ old('priority') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-teal btn-block" style="background:#20c997;border-color:#20c997;color:#fff;">إنشاء حساب وموعد ورقم</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -209,4 +265,31 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('css')
+    <link href="{{ URL::asset('Dashboard/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+@endsection
+
+@section('js')
+    <script src="{{ URL::asset('Dashboard/plugins/select2/js/select2.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('.select2-patient').select2({
+                width: '100%',
+                placeholder: '— اختر المريض —',
+                dir: 'rtl'
+            });
+
+            var flowTabMap = {
+                scheduled: '#tab-scheduled',
+                existing: '#tab-existing',
+                new: '#tab-new'
+            };
+            var oldFlow = @json(old('flow'));
+            if (oldFlow && flowTabMap[oldFlow]) {
+                $(flowTabMap[oldFlow]).tab('show');
+            }
+        });
+    </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\QueueTicket;
 use App\Models\Section;
 use App\Services\QueueService;
@@ -39,46 +40,69 @@ class QueueController extends Controller
                     ->whereNotIn('status', ['cancelled'])->exists();
             });
 
+        $patients = Patient::orderBy('id')->get();
+
         return view('Dashboard.Queue.index', compact(
-            'sections', 'doctors', 'tickets', 'appointmentsToday', 'sectionId', 'doctorId'
+            'sections', 'doctors', 'tickets', 'appointmentsToday', 'sectionId', 'doctorId',
+            'patients'
         ));
     }
 
     public function store(Request $request, QueueService $queue)
     {
-        if ($request->filled('appointment_id')) {
-            $appointment = Appointment::findOrFail($request->appointment_id);
+        $flow = $request->input('flow', 'scheduled');
 
-            try {
+        try {
+            if ($flow === 'scheduled') {
+                $request->validate([
+                    'appointment_id' => 'required|exists:appointments,id',
+                    'section_id' => 'required|exists:sections,id',
+                ]);
+
+                $appointment = Appointment::findOrFail($request->appointment_id);
                 $result = $queue->checkInAppointment($appointment);
                 $message = $result['created']
                     ? 'تم إصدار رقم ' . $result['ticket']->ticket_number . ' للموعد المجدول'
                     : 'المريض مسجّل مسبقاً — رقم ' . $result['ticket']->ticket_number;
                 session()->flash('add', $message);
-            } catch (\RuntimeException $e) {
-                return back()->withErrors(['error' => $e->getMessage()]);
+
+                return back();
             }
 
-            return back();
-        }
+            if ($flow === 'existing') {
+                $data = $request->validate([
+                    'section_id' => 'required|exists:sections,id',
+                    'doctor_id' => 'required|exists:doctors,id',
+                    'patient_id' => 'required|exists:patients,id',
+                    'priority' => 'nullable|in:normal,urgent,elderly',
+                ]);
 
-        $data = $request->validate([
-            'section_id' => 'required|exists:sections,id',
-            'doctor_id' => 'required|exists:doctors,id',
-            'patient_name' => 'required|string|min:2|max:100',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'priority' => 'nullable|in:normal,urgent,elderly',
-        ]);
+                $ticket = $queue->issueForExistingPatient($data);
+                session()->flash('add', 'تم ربط الموعد وإصدار رقم ' . $ticket->ticket_number);
 
-        try {
-            $ticket = $queue->issueWalkInTicket($data);
-            session()->flash('add', 'تم إنشاء موعد للمريض وإصدار رقم ' . $ticket->ticket_number);
+                return back();
+            }
+
+            if ($flow === 'new') {
+                $data = $request->validate([
+                    'section_id' => 'required|exists:sections,id',
+                    'doctor_id' => 'required|exists:doctors,id',
+                    'patient_name' => 'required|string|min:2|max:100',
+                    'email' => 'required|email|unique:patients,email',
+                    'phone' => 'required|string|min:8|max:20|unique:patients,Phone',
+                    'priority' => 'nullable|in:normal,urgent,elderly',
+                ]);
+
+                $ticket = $queue->registerPatientAndIssue($data);
+                session()->flash('add', 'تم إنشاء حساب المريض والموعد ورقم ' . $ticket->ticket_number);
+
+                return back();
+            }
+
+            throw new \RuntimeException('نوع العملية غير صالح');
         } catch (\RuntimeException $e) {
-            return back()->withErrors(['error' => $e->getMessage()]);
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
-
-        return back();
     }
 
     public function checkIn(Appointment $appointment, QueueService $queue)

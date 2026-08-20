@@ -11,6 +11,7 @@ use App\Models\QueueTicket;
 use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class QueueService
@@ -123,7 +124,15 @@ class QueueService
     public function issueWalkInTicket(array $data): QueueTicket
     {
         return DB::transaction(function () use ($data) {
-            $appointment = $this->createWalkInAppointment($data);
+            $appointment = $this->createConfirmedAppointment([
+                'section_id' => $data['section_id'],
+                'doctor_id' => $data['doctor_id'],
+                'patient_name' => $data['patient_name'],
+                'email' => $data['email'] ?? null,
+                'phone' => $data['phone'] ?? '',
+                'patient_id' => $data['patient_id'] ?? null,
+                'notes' => 'موعد استقبال — مريض بدون حجز مسبق',
+            ]);
 
             return $this->issueTicket([
                 'section_id' => $appointment->section_id,
@@ -137,18 +146,125 @@ class QueueService
         });
     }
 
-    protected function createWalkInAppointment(array $data): Appointment
+    /**
+     * مريض مسجّل في النظام: ربط بموعد اليوم إن وُجد، أو إنشاء موعد مؤكد ثم إصدار رقم.
+     */
+    public function issueForExistingPatient(array $data): QueueTicket
+    {
+        $patient = Patient::findOrFail($data['patient_id']);
+        $sectionId = (int) $data['section_id'];
+        $doctorId = (int) $data['doctor_id'];
+
+        if (!$doctorId) {
+            throw new \RuntimeException('يجب اختيار الطبيب');
+        }
+
+        return DB::transaction(function () use ($patient, $data, $sectionId, $doctorId) {
+            $appointment = $this->findTodayConfirmedAppointmentForPatient($patient, $sectionId, $doctorId);
+
+            if ($appointment) {
+                $hasActiveTicket = QueueTicket::today()
+                    ->where('appointment_id', $appointment->id)
+                    ->whereNotIn('status', ['cancelled', 'no_show'])
+                    ->exists();
+
+                if ($hasActiveTicket) {
+                    throw new \RuntimeException('المريض لديه رقم انتظار فعّال لهذا الموعد');
+                }
+
+                return $this->checkInAppointment($appointment)['ticket'];
+            }
+
+            $appointment = $this->createConfirmedAppointment([
+                'section_id' => $sectionId,
+                'doctor_id' => $doctorId,
+                'patient_id' => $patient->id,
+                'patient_name' => $patient->name,
+                'email' => $patient->email,
+                'phone' => (string) ($patient->Phone ?? ''),
+                'notes' => 'موعد استقبال — مريض مسجّل بدون حجز لليوم',
+            ]);
+
+            return $this->issueTicket([
+                'section_id' => $sectionId,
+                'doctor_id' => $doctorId,
+                'appointment_id' => $appointment->id,
+                'patient_id' => $patient->id,
+                'patient_name' => $patient->name,
+                'phone' => $patient->Phone,
+                'priority' => $data['priority'] ?? 'normal',
+            ]);
+        });
+    }
+
+    /**
+     * مريض جديد: إنشاء حساب (كالموقع) + موعد مؤكد + رقم انتظار.
+     */
+    public function registerPatientAndIssue(array $data): QueueTicket
+    {
+        return DB::transaction(function () use ($data) {
+            $patient = $this->registerPatientAccount($data);
+
+            $appointment = $this->createConfirmedAppointment([
+                'section_id' => $data['section_id'],
+                'doctor_id' => $data['doctor_id'],
+                'patient_id' => $patient->id,
+                'patient_name' => $patient->name,
+                'email' => $patient->email,
+                'phone' => (string) $patient->Phone,
+                'notes' => 'موعد استقبال — حساب مريض جديد من الاستقبال',
+            ]);
+
+            return $this->issueTicket([
+                'section_id' => $appointment->section_id,
+                'doctor_id' => $appointment->doctor_id,
+                'appointment_id' => $appointment->id,
+                'patient_id' => $patient->id,
+                'patient_name' => $patient->name,
+                'phone' => $patient->Phone,
+                'priority' => $data['priority'] ?? 'normal',
+            ]);
+        });
+    }
+
+    protected function registerPatientAccount(array $data): Patient
+    {
+        if (Patient::where('email', $data['email'])->exists()) {
+            throw new \RuntimeException('البريد مسجّل مسبقاً — استخدم تبويب «مريض مسجّل»');
+        }
+
+        if (Patient::where('Phone', $data['phone'])->exists()) {
+            throw new \RuntimeException('رقم الهاتف مسجّل مسبقاً — استخدم تبويب «مريض مسجّل»');
+        }
+
+        $patient = new Patient();
+        $patient->email = $data['email'];
+        $patient->password = Hash::make($data['phone']);
+        $patient->Phone = $data['phone'];
+        $patient->Gender = 1;
+        $patient->Date_Birth = now()->subYears(25)->toDateString();
+        $patient->Blood_Group = 'O+';
+        $patient->save();
+
+        $patient->name = $data['patient_name'];
+        $patient->Address = 'سوريا';
+        $patient->save();
+
+        return $patient;
+    }
+
+    protected function createConfirmedAppointment(array $data): Appointment
     {
         $sectionId = (int) $data['section_id'];
         $doctorId = (int) $data['doctor_id'];
 
         if (!$doctorId) {
-            throw new \RuntimeException('يجب اختيار الطبيب لإنشاء موعد للمريض الجديد');
+            throw new \RuntimeException('يجب اختيار الطبيب');
         }
 
         $this->validateDoctorSection($sectionId, $doctorId);
 
-        $patientId = $this->resolvePatientId($data);
+        $patientId = $data['patient_id'] ?? $this->resolvePatientId($data);
         $email = $data['email'] ?? null;
 
         if (!$email && $patientId) {
@@ -167,8 +283,27 @@ class QueueService
             'section_id' => $sectionId,
             'type' => 'مؤكد',
             'appointment' => now()->format('Y-m-d H:i:s'),
-            'notes' => 'موعد استقبال — مريض بدون حجز مسبق',
+            'notes' => $data['notes'] ?? 'موعد استقبال',
         ]);
+    }
+
+    protected function findTodayConfirmedAppointmentForPatient(Patient $patient, int $sectionId, ?int $doctorId = null): ?Appointment
+    {
+        $query = Appointment::where('type', 'مؤكد')
+            ->whereDate('appointment', today())
+            ->where('section_id', $sectionId)
+            ->where(function ($q) use ($patient) {
+                $q->where('email', $patient->email);
+                if ($patient->Phone) {
+                    $q->orWhere('phone', $patient->Phone);
+                }
+            });
+
+        if ($doctorId) {
+            $query->where('doctor_id', $doctorId);
+        }
+
+        return $query->orderBy('appointment')->first();
     }
 
     protected function resolvePatientId(array $data, ?Appointment $appointment = null): ?int
