@@ -163,7 +163,7 @@ class GroupInvoices extends Component
 
                     InsuranceClaimService::createFromInvoice($group_invoices);
 
-                    $fund_accounts = FundAccount::where('invoice_id',$this->group_invoice_id)->first();
+                    $fund_accounts = FundAccount::firstOrNew(['invoice_id' => $group_invoices->id]);
                     $fund_accounts->date = date('Y-m-d');
                     $fund_accounts->invoice_id = $group_invoices->id;
                     $fund_accounts->Debit = $group_invoices->total_with_tax;
@@ -249,7 +249,7 @@ class GroupInvoices extends Component
 
                     InsuranceClaimService::createFromInvoice($group_invoices);
 
-                    $patient_accounts = PatientAccount::where('invoice_id',$this->group_invoice_id)->first();
+                    $patient_accounts = PatientAccount::firstOrNew(['invoice_id' => $group_invoices->id]);
                     $patient_accounts->date = date('Y-m-d');
                     $patient_accounts->invoice_id = $group_invoices->id;
                     $patient_accounts->patient_id = $group_invoices->patient_id;

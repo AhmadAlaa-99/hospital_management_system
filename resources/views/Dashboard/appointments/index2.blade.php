@@ -22,6 +22,13 @@
 @endsection
 @section('content')
     @include('Dashboard.messages_alert')
+
+    @include('Dashboard.partials.help-box', [
+        'title' => 'رموز العمليات — المواعيد المؤكدة',
+        'body' => '<strong><i class="fas fa-ticket-alt text-success"></i> تسجيل حضور:</strong> يظهر فقط لمواعيد <strong>اليوم</strong> — يُصدر رقم انتظار للمريض في شاشة الاستقبال.<br>
+        <strong><i class="fas fa-check-double text-warning"></i> إنهاء الموعد:</strong> بعد انتهاء الكشف — ينقل الموعد إلى قائمة «المواعيد المنتهية».'
+    ])
+
     <!-- row opened -->
     <div class="row row-sm">
         <!--div-->
@@ -56,14 +63,16 @@
                                         @if(\Carbon\Carbon::parse($appointment->appointment)->isToday())
                                             <form action="{{ route('admin.queue.check-in', $appointment) }}" method="POST" class="d-inline">
                                                 @csrf
-                                                <button class="btn btn-sm btn-success" title="تسجيل حضور وإصدار رقم انتظار">
+                                                <button class="btn btn-sm btn-success" title="تسجيل حضور وإصدار رقم انتظار (مواعيد اليوم فقط)">
                                                     <i class="fas fa-ticket-alt"></i>
+                                                    <span class="d-none d-md-inline mr-1">حضور</span>
                                                 </button>
                                             </form>
                                         @endif
                                         <button class="btn btn-sm btn-warning" data-toggle="modal"
-                                                data-target="#Finish{{$appointment->id}}" title="انهاء الموعد">
+                                                data-target="#Finish{{$appointment->id}}" title="إنهاء الموعد — بعد انتهاء الكشف">
                                             <i class="fas fa-check-double"></i>
+                                            <span class="d-none d-md-inline mr-1">إنهاء</span>
                                         </button>
                                     </td>
                                 </tr>

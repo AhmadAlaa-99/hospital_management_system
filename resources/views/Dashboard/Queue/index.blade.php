@@ -143,10 +143,9 @@
                                 <td>{{ $ticket->estimated_wait_minutes }} د</td>
                                 <td>
                                     @if(in_array($ticket->status, ['waiting', 'called', 'serving']))
-                                        <form action="{{ route('admin.queue.cancel', $ticket) }}" method="POST" class="d-inline" onsubmit="return confirm('إلغاء الرقم؟')">
-                                            @csrf @method('DELETE')
-                                            <button class="btn btn-sm btn-danger">إلغاء</button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#cancelQueue{{ $ticket->id }}">
+                                            إلغاء
+                                        </button>
                                     @endif
                                 </td>
                             </tr>
@@ -156,6 +155,33 @@
                         </tbody>
                     </table>
                 </div>
+                @foreach($tickets as $ticket)
+                    @if(in_array($ticket->status, ['waiting', 'called', 'serving']))
+                        <div class="modal fade" id="cancelQueue{{ $ticket->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">إلغاء رقم الانتظار</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="mb-0">هل تريد إلغاء رقم <strong>{{ $ticket->ticket_number }}</strong> للمريض <strong>{{ $ticket->patient_name }}</strong>؟</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">تراجع</button>
+                                        <form action="{{ route('admin.queue.cancel', $ticket) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">تأكيد الإلغاء</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>

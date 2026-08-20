@@ -5,8 +5,8 @@
                 <img alt="user-img" class="avatar avatar-xl brround" src="{{URL::asset('Dashboard/img/faces/default-avatar.png')}}"><span class="avatar-status profile-status bg-green"></span>
             </div>
             <div class="user-info">
-                <h4 class="font-weight-semibold mt-3 mb-0">{{ Auth::user()->name }}</h4>
-                <span class="mb-0 text-muted">{{ Auth::user()->email }}</span>
+                <h4 class="font-weight-semibold mt-3 mb-0">{{ optional(\App\Helpers\DashboardAuth::user())->name }}</h4>
+                <span class="mb-0 text-muted">{{ optional(\App\Helpers\DashboardAuth::user())->email }}</span>
             </div>
         </div>
     </div>

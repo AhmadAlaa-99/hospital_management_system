@@ -73,7 +73,7 @@
                                                        @endif
                                                    </td>
                                                </tr>
-                                               @include('Dashboard.Doctor.invoices.add_diagnosis')
+                                               @include('Dashboard.doctor.invoices.add_diagnosis')
                                            @endforeach
                                             </tbody>
                                         </table>

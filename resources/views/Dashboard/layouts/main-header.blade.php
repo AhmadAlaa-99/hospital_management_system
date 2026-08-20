@@ -236,32 +236,19 @@
                                     <img alt="user" src="{{ URL::asset('Dashboard/img/faces/default-avatar.png') }}" class="hms-user-avatar">
                                 </div>
                                 <div class="mr-3 my-auto">
-                                    <h6>{{auth()->user()->name}}</h6><span>{{auth()->user()->email}}</span>
+                                    @php $dashboardUser = \App\Helpers\DashboardAuth::user(); @endphp
+                                    <h6>{{ $dashboardUser->name ?? '' }}</h6><span>{{ $dashboardUser->email ?? '' }}</span>
                                 </div>
                             </div>
                         </div>
                         <a class="dropdown-item" href="{{ route('profile.show') }}"><i class="bx bx-user-circle"></i>الملف الشخصي</a>
                         <a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bx bx-cog"></i>تعديل الملف الشخصي</a>
-                        @if(auth('web')->check())
-                            <form method="POST" action="{{ route('logout.user') }}">
-                                @elseif(auth('admin')->check())
-                                    <form method="POST" action="{{ route('logout.admin') }}">
-                                        @elseif(auth('doctor')->check())
-                                            <form method="POST" action="{{ route('logout.doctor') }}">
-                                                @elseif(auth('ray_employee')->check())
-                                                    <form method="POST" action="{{ route('logout.ray_employee') }}">
-                                                        @elseif(auth('laboratorie_employee')->check())
-                                                            <form method="POST"
-                                                                  action="{{ route('logout.laboratorie_employee') }}">
-                                                                @else
-                                                                    <form method="POST"
-                                                                          action="{{ route('logout.patient') }}">
-                                                                        @endif
-                                                                        @csrf
-                                                                        <a class="dropdown-item" href="#"
-                                                                           onclick="event.preventDefault();
-                                        this.closest('form').submit();"><i class="bx bx-log-out"></i>تسجيل الخروج</a>
-                                                                    </form>
+                        <form method="POST" action="{{ route(\App\Helpers\DashboardAuth::logoutRouteName()) }}" class="mb-0">
+                            @csrf
+                            <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-right">
+                                <i class="bx bx-log-out"></i> تسجيل الخروج
+                            </button>
+                        </form>
 
                     </div>
                 </div>
@@ -286,7 +273,9 @@
 <script src="{{ asset('js/app.js') }}"></script>
 <script>
     if (typeof Echo !== 'undefined') {
-        Echo.private('create-invoice.{{ auth()->user()->id }}').listen('.create-invoice', (data) => {
+        @php $echoUser = \App\Helpers\DashboardAuth::user(); @endphp
+        @if($echoUser)
+        Echo.private('create-invoice.{{ $echoUser->id }}').listen('.create-invoice', (data) => {
             var notificationsWrapper = $('.dropdown-notifications');
             var notifications = notificationsWrapper.find('h4.notification-label');
             var new_message = notificationsWrapper.find('.new_message');
@@ -296,6 +285,7 @@
             var current = parseInt(countEl.text()) || 0;
             countEl.text(current + 1);
         });
+        @endif
     }
 </script>
 @endif

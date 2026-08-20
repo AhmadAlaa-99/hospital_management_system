@@ -75,7 +75,7 @@
                                                        @endif
                                                    </td>
 
-                                                   <td>{{\App\Models\Diagnostic::where(['invoice_id' => $invoice->id])->first()->review_date}}</td>
+                                                   <td>{{ optional(\App\Models\Diagnostic::where('invoice_id', $invoice->id)->first())->review_date ?? '—' }}</td>
                                                    <td>
                                                        <div class="dropdown">
                                                            <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-outline-primary btn-sm" data-toggle="dropdown" type="button">{{trans('doctors.Processes')}}<i class="fas fa-caret-down mr-1"></i></button>
@@ -89,7 +89,7 @@
                                                        </div>
                                                    </td>
                                                </tr>
-                                               @include('Dashboard.Doctor.invoices.add_diagnosis')
+                                               @include('Dashboard.doctor.invoices.add_diagnosis')
                                            @endforeach
                                             </tbody>
                                         </table>

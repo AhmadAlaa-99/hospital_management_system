@@ -4,6 +4,14 @@
 <script src="{{URL::asset('Dashboard/plugins/jquery/jquery.min.js')}}"></script>
 <!-- Bootstrap Bundle js -->
 <script src="{{URL::asset('Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script>
+(function ($) {
+    var token = $('meta[name="csrf-token"]').attr('content');
+    if (token) {
+        $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': token } });
+    }
+})(jQuery);
+</script>
 @livewireScripts
 <script src="{{URL::asset('Dashboard/js/livewire-dashboard.js')}}"></script>
 <!-- Ionicons js -->

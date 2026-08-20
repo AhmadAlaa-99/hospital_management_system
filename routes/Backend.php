@@ -165,11 +165,11 @@ Route::group(
 
         //############################# single_invoices route ##########################################
 
-        Route::view('group_invoices','livewire.Group_invoices.index')->name('group_invoices');
+        Route::view('group_invoices','livewire.group_invoices.index')->name('group_invoices');
 
         Route::get('group_Print_single_invoices/{invoice}', function (\App\Models\Invoice $invoice) {
             $invoice->load(['Group', 'Patient', 'Doctor', 'Section']);
-            return view('livewire.Group_invoices.print', compact('invoice'));
+            return view('livewire.group_invoices.print', compact('invoice'));
         })->name('group_Print_single_invoices');
 
         //############################# end single_invoices route ######################################

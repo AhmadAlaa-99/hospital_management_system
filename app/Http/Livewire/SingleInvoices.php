@@ -35,7 +35,8 @@ class SingleInvoices extends Component
 
     public function mount()
     {
-        $this->username = auth()->user()->name;
+        $user = \App\Helpers\DashboardAuth::user();
+        $this->username = $user ? $user->name : '';
     }
 
     public function render()
