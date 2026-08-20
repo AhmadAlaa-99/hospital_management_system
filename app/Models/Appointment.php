@@ -22,4 +22,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(Section::class,'section_id');
     }
+
+    public function queueTickets()
+    {
+        return $this->hasMany(QueueTicket::class);
+    }
 }

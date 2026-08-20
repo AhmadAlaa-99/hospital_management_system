@@ -57,7 +57,7 @@ class QueueTicketSeeder extends Seeder
             }
 
             foreach ($scenarios[$index % count($scenarios)] as $data) {
-                $ticket = $queue->issueTicket([
+                $ticket = $queue->issueWalkInTicket([
                     'section_id' => $section->id,
                     'doctor_id' => $doctor->id,
                     'patient_name' => $data['name'],

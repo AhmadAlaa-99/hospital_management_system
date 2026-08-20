@@ -6,6 +6,7 @@ use App\Events\QueueUpdated;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\DoctorSchedule;
+use App\Models\Patient;
 use App\Models\QueueTicket;
 use App\Models\Section;
 use Carbon\Carbon;
@@ -19,6 +20,10 @@ class QueueService
 
     public function issueTicket(array $data): QueueTicket
     {
+        if (empty($data['appointment_id'])) {
+            throw new \RuntimeException('يجب ربط رقم الانتظار بموعد مسجّل في النظام');
+        }
+
         $sectionId = (int) $data['section_id'];
         $doctorId = !empty($data['doctor_id']) ? (int) $data['doctor_id'] : null;
         $today = today()->toDateString();
@@ -99,7 +104,10 @@ class QueueService
                 'section_id' => $appointment->section_id,
                 'doctor_id' => $appointment->doctor_id,
                 'appointment_id' => $appointment->id,
-                'patient_id' => optional(\App\Models\Patient::where('email', $appointment->email)->first())->id,
+                'patient_id' => $this->resolvePatientId([
+                    'email' => $appointment->email,
+                    'phone' => $appointment->phone,
+                ], $appointment),
                 'patient_name' => $appointment->name,
                 'phone' => $appointment->phone,
                 'priority' => 'normal',
@@ -107,6 +115,85 @@ class QueueService
 
             return ['ticket' => $ticket, 'created' => true];
         });
+    }
+
+    /**
+     * مريض بدون موعد مسبق: إنشاء موعد مؤكد لليوم ثم إصدار رقم انتظار.
+     */
+    public function issueWalkInTicket(array $data): QueueTicket
+    {
+        return DB::transaction(function () use ($data) {
+            $appointment = $this->createWalkInAppointment($data);
+
+            return $this->issueTicket([
+                'section_id' => $appointment->section_id,
+                'doctor_id' => $appointment->doctor_id,
+                'appointment_id' => $appointment->id,
+                'patient_id' => $this->resolvePatientId($data, $appointment),
+                'patient_name' => $appointment->name,
+                'phone' => $appointment->phone,
+                'priority' => $data['priority'] ?? 'normal',
+            ]);
+        });
+    }
+
+    protected function createWalkInAppointment(array $data): Appointment
+    {
+        $sectionId = (int) $data['section_id'];
+        $doctorId = (int) $data['doctor_id'];
+
+        if (!$doctorId) {
+            throw new \RuntimeException('يجب اختيار الطبيب لإنشاء موعد للمريض الجديد');
+        }
+
+        $this->validateDoctorSection($sectionId, $doctorId);
+
+        $patientId = $this->resolvePatientId($data);
+        $email = $data['email'] ?? null;
+
+        if (!$email && $patientId) {
+            $email = optional(Patient::find($patientId))->email;
+        }
+
+        if (!$email) {
+            $email = 'walkin+' . uniqid('', true) . '@hms.local';
+        }
+
+        return Appointment::create([
+            'name' => $data['patient_name'],
+            'email' => $email,
+            'phone' => $data['phone'] ?? '',
+            'doctor_id' => $doctorId,
+            'section_id' => $sectionId,
+            'type' => 'مؤكد',
+            'appointment' => now()->format('Y-m-d H:i:s'),
+            'notes' => 'موعد استقبال — مريض بدون حجز مسبق',
+        ]);
+    }
+
+    protected function resolvePatientId(array $data, ?Appointment $appointment = null): ?int
+    {
+        if (!empty($data['patient_id'])) {
+            return (int) $data['patient_id'];
+        }
+
+        $phone = $data['phone'] ?? optional($appointment)->phone;
+        if ($phone) {
+            $patient = Patient::where('Phone', $phone)->orWhere('phone', $phone)->first();
+            if ($patient) {
+                return (int) $patient->id;
+            }
+        }
+
+        $email = $data['email'] ?? optional($appointment)->email;
+        if ($email && !str_contains($email, '@hms.local')) {
+            $patient = Patient::where('email', $email)->first();
+            if ($patient) {
+                return (int) $patient->id;
+            }
+        }
+
+        return null;
     }
 
     public function callNext(int $sectionId, ?int $doctorId = null): ?QueueTicket
@@ -185,6 +272,12 @@ class QueueService
             'status' => 'completed',
             'completed_at' => now(),
         ]);
+
+        if ($ticket->appointment_id) {
+            Appointment::whereKey($ticket->appointment_id)
+                ->where('type', 'مؤكد')
+                ->update(['type' => 'منتهي']);
+        }
 
         $this->broadcastUpdate($ticket->section_id, $ticket->doctor_id);
 
