@@ -24,11 +24,22 @@
 							<h4 class="content-title mb-0 my-auto">الكشوفات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ الفواتير</span>
 						</div>
 					</div>
+                    <button type="button" class="btn btn-primary btn-sm btn-open-doctor-invoice-modal">
+                        <i class="fas fa-plus ml-1"></i> إضافة فاتورة
+                    </button>
 				</div>
 				<!-- breadcrumb -->
 @endsection
 @section('content')
 @include('Dashboard.messages_alert')
+
+@include('Dashboard.partials.help-box', [
+    'title' => 'الكشوفات والفواتير',
+    'body' => '• اضغط <strong>إضافة فاتورة</strong> — خدمة مفردة أو مجموعة خدمات (مثل الأدمن).<br>
+    • <strong>بدء الكشف</strong> من قائمة الانتظار ينشئ كشفاً افتراضياً.<br>
+    • من <strong>العمليات ▼</strong>: تشخيص، مراجعة، تحويل أشعة/مختبر.'
+])
+
 				<!-- row -->
                     <!-- row opened -->
                     <div class="row row-sm">
@@ -108,6 +119,8 @@
 			<!-- Container closed -->
 
 		<!-- main-content closed -->
+
+@include('Dashboard.doctor.invoices.add_invoice_modal')
 @endsection
 @section('js')
 
@@ -125,6 +138,7 @@
     <script src="{{URL::asset('dashboard/plugins/spectrum-colorpicker/spectrum.js')}}"></script>
     <!-- Internal Select2.min js -->
     <script src="{{URL::asset('dashboard/plugins/select2/js/select2.min.js')}}"></script>
+    @include('Dashboard.doctor.invoices.add_invoice_modal_scripts')
     <!--Internal Ion.rangeSlider.min js -->
     <script src="{{URL::asset('dashboard/plugins/ion-rangeslider/js/ion.rangeSlider.min.js')}}"></script>
     <!--Internal  jquery-simple-datetimepicker js -->

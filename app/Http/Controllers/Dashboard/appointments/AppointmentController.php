@@ -145,6 +145,8 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $appointment->update(['type' => 'منتهي']);
 
+        app(\App\Services\ConsultationInvoiceService::class)->ensureForAppointment($appointment);
+
         NotificationService::notifyPatientByEmail(
             $appointment->email,
             'تم انهاء موعدك بتاريخ ' . ($appointment->appointment ?: now()->toDateString())

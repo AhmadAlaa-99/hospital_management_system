@@ -268,7 +268,7 @@
     </div>
 </div>
 
-@if(config('broadcasting.default') && config('broadcasting.default') !== 'null')
+@if(config('broadcasting.default') === 'pusher' && config('broadcasting.connections.pusher.key'))
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 <script>

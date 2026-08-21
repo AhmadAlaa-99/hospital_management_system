@@ -5,6 +5,7 @@ use App\Interfaces\doctor_dashboard\InvoicesRepositoryInterface;
 use App\Models\Invoice;
 use App\Models\Laboratorie;
 use App\Models\Ray;
+use App\Support\DoctorInvoiceFormData;
 use Illuminate\Support\Facades\Auth;
 
 class InvoicesRepository implements InvoicesRepositoryInterface
@@ -17,12 +18,15 @@ class InvoicesRepository implements InvoicesRepositoryInterface
     // قائمة الكشوفات تحت الاجراء
     public function index()
     {
+        $doctor = Auth::guard('doctor')->user();
         $invoices = Invoice::with(['Patient', 'Service', 'Group'])
             ->where('doctor_id', $this->doctorId())
             ->where('invoice_status', 1)
             ->get();
 
-        return view('Dashboard.doctor.invoices.index', compact('invoices'));
+        $invoiceForm = DoctorInvoiceFormData::forDoctor($doctor);
+
+        return view('Dashboard.doctor.invoices.index', compact('invoices') + $invoiceForm);
     }
 
     // قائمة المراجعات

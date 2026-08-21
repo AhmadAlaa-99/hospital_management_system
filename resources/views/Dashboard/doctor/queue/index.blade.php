@@ -1,5 +1,8 @@
 @extends('Dashboard.layouts.master')
 @section('title') قائمة انتظار العيادة @endsection
+@section('css')
+    <link href="{{ URL::asset('Dashboard/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+@endsection
 @section('page-header')
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
@@ -14,6 +17,13 @@
 @endsection
 @section('content')
 @include('Dashboard.messages_alert')
+
+@include('Dashboard.partials.help-box', [
+    'title' => 'الكشف والموعد',
+    'body' => '• <strong>بدء الكشف:</strong> كشف «كشف» تلقائي في قائمة الكشوفات.<br>
+    • <strong>إضافة فاتورة:</strong> خدمة مفردة أو مجموعة خدمات من نافذة سريعة.<br>
+    • <strong>إنهاء:</strong> إغلاق الزيارة وتحديث الموعد إلى «منتهي».'
+])
 
 @if($errors->any())
     <div class="alert alert-danger">{{ $errors->first() }}</div>
@@ -71,8 +81,18 @@
                             @if($ticket->status === 'called')
                                 <form action="{{ route('doctor.queue.recall', $ticket) }}" method="POST" class="d-inline">@csrf<button class="btn btn-sm btn-warning">إعادة نداء</button></form>
                                 <form action="{{ route('doctor.queue.serving', $ticket) }}" method="POST" class="d-inline">@csrf<button class="btn btn-sm btn-info">بدء الكشف</button></form>
+                                @if($ticket->patient_id)
+                                    <button type="button" class="btn btn-sm btn-outline-primary btn-open-doctor-invoice-modal"
+                                            data-patient-id="{{ $ticket->patient_id }}"
+                                            data-appointment-id="{{ $ticket->appointment_id }}">إضافة فاتورة</button>
+                                @endif
                                 <form action="{{ route('doctor.queue.no-show', $ticket) }}" method="POST" class="d-inline">@csrf<button class="btn btn-sm btn-secondary">لم يحضر</button></form>
                             @elseif($ticket->status === 'serving')
+                                @if($ticket->patient_id)
+                                    <button type="button" class="btn btn-sm btn-primary btn-open-doctor-invoice-modal"
+                                            data-patient-id="{{ $ticket->patient_id }}"
+                                            data-appointment-id="{{ $ticket->appointment_id }}">إضافة فاتورة</button>
+                                @endif
                                 <form action="{{ route('doctor.queue.complete', $ticket) }}" method="POST" class="d-inline">@csrf<button class="btn btn-sm btn-success">إنهاء</button></form>
                             @elseif($ticket->status === 'waiting')
                                 <span class="text-muted">—</span>
@@ -87,8 +107,12 @@
         </div>
     </div>
 </div>
+
+@include('Dashboard.doctor.invoices.add_invoice_modal')
 @endsection
 @section('js')
+<script src="{{ URL::asset('Dashboard/plugins/select2/js/select2.min.js') }}"></script>
+@include('Dashboard.doctor.invoices.add_invoice_modal_scripts')
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
 (function () {

@@ -142,31 +142,46 @@
 
                 {{-- 3) مريض جديد — حساب + موعد + رقم --}}
                 <div class="tab-pane fade" id="pane-new" role="tabpanel">
-                    <p class="text-muted small mb-3">مريض غير موجود في النظام — يُنشأ حساب (كالتسجيل من الموقع) ثم موعد مؤكد ورقم انتظار. كلمة المرور الافتراضية = رقم الهاتف.</p>
-                    <form action="{{ route('admin.queue.store') }}" method="POST">
+                    <p class="text-muted small mb-3">مريض غير موجود في النظام — نفس بيانات التسجيل من الموقع، ثم موعد مؤكد ورقم انتظار.</p>
+                    <form action="{{ route('admin.queue.store') }}" method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" name="flow" value="new">
                         <input type="hidden" name="section_id" value="{{ $sectionId }}">
                         <div class="form-group">
-                            <label>اسم المريض <span class="text-danger">*</span></label>
-                            <input type="text" name="patient_name" class="form-control" value="{{ old('patient_name') }}" required>
+                            <label>الاسم الكامل <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required placeholder="الاسم">
+                            @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-group">
                             <label>البريد الإلكتروني <span class="text-danger">*</span></label>
-                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required placeholder="patient@example.com">
+                            @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-group">
-                            <label>الهاتف <span class="text-danger">*</span></label>
-                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" required>
+                            <label>رقم الهاتف <span class="text-danger">*</span></label>
+                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" required placeholder="09xxxxxxxx">
+                            @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
+                        <div class="form-group">
+                            <label>كلمة المرور <span class="text-danger">*</span></label>
+                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required minlength="6" placeholder="6 أحرف على الأقل" autocomplete="new-password">
+                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="form-group">
+                            <label>تأكيد كلمة المرور <span class="text-danger">*</span></label>
+                            <input type="password" name="password_confirmation" class="form-control" required minlength="6" autocomplete="new-password">
+                        </div>
+                        <hr class="my-3">
+                        <p class="text-muted small mb-2">بيانات الموعد والانتظار</p>
                         <div class="form-group">
                             <label>الطبيب <span class="text-danger">*</span></label>
-                            <select name="doctor_id" class="form-control" required>
+                            <select name="doctor_id" class="form-control @error('doctor_id') is-invalid @enderror" required>
                                 <option value="">— اختر الطبيب —</option>
                                 @foreach($doctors->where('section_id', $sectionId) as $doc)
                                     <option value="{{ $doc->id }}" {{ old('doctor_id', $doctorId) == $doc->id ? 'selected' : '' }}>{{ $doc->name }}</option>
                                 @endforeach
                             </select>
+                            @error('doctor_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-group">
                             <label>الأولوية</label>

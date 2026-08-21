@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard_Doctor;
 use App\Http\Controllers\Controller;
 use App\Models\QueueTicket;
 use App\Services\QueueService;
+use App\Support\DoctorInvoiceFormData;
 use Illuminate\Http\Request;
 
 class QueueController extends Controller
@@ -22,7 +23,9 @@ class QueueController extends Controller
 
         $display = $queue->getDisplayData($doctor->section_id, $doctor->id);
 
-        return view('Dashboard.doctor.queue.index', compact('tickets', 'display', 'doctor'));
+        $invoiceForm = DoctorInvoiceFormData::forDoctor($doctor);
+
+        return view('Dashboard.doctor.queue.index', compact('tickets', 'display', 'doctor') + $invoiceForm);
     }
 
     public function callNext(QueueService $queue)
@@ -55,6 +58,7 @@ class QueueController extends Controller
         $this->authorizeDoctorTicket($ticket);
         try {
             $queue->markServing($ticket);
+            session()->flash('add', 'تم بدء الكشف — ظهر الكشف في قائمة الكشوفات');
         } catch (\RuntimeException $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

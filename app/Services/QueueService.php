@@ -239,14 +239,14 @@ class QueueService
 
         $patient = new Patient();
         $patient->email = $data['email'];
-        $patient->password = Hash::make($data['phone']);
+        $patient->password = Hash::make($data['password']);
         $patient->Phone = $data['phone'];
         $patient->Gender = 1;
         $patient->Date_Birth = now()->subYears(25)->toDateString();
         $patient->Blood_Group = 'O+';
         $patient->save();
 
-        $patient->name = $data['patient_name'];
+        $patient->name = $data['name'] ?? $data['patient_name'] ?? '';
         $patient->Address = 'سوريا';
         $patient->save();
 
@@ -394,6 +394,17 @@ class QueueService
             'serving_at' => now(),
         ]);
 
+        if ($ticket->appointment_id) {
+            $appointment = Appointment::find($ticket->appointment_id);
+            if ($appointment) {
+                app(ConsultationInvoiceService::class)->ensureForAppointment(
+                    $appointment,
+                    notifyDoctor: true,
+                    fallbackPatientId: $ticket->patient_id
+                );
+            }
+        }
+
         $this->broadcastUpdate($ticket->section_id, $ticket->doctor_id);
 
         return $ticket->fresh();
@@ -409,9 +420,17 @@ class QueueService
         ]);
 
         if ($ticket->appointment_id) {
-            Appointment::whereKey($ticket->appointment_id)
-                ->where('type', 'مؤكد')
-                ->update(['type' => 'منتهي']);
+            $appointment = Appointment::find($ticket->appointment_id);
+            if ($appointment) {
+                if ($appointment->type === 'مؤكد') {
+                    $appointment->update(['type' => 'منتهي']);
+                }
+                app(ConsultationInvoiceService::class)->ensureForAppointment(
+                    $appointment,
+                    notifyDoctor: false,
+                    fallbackPatientId: $ticket->patient_id
+                );
+            }
         }
 
         $this->broadcastUpdate($ticket->section_id, $ticket->doctor_id);

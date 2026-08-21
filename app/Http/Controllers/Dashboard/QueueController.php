@@ -87,10 +87,23 @@ class QueueController extends Controller
                 $data = $request->validate([
                     'section_id' => 'required|exists:sections,id',
                     'doctor_id' => 'required|exists:doctors,id',
-                    'patient_name' => 'required|string|min:2|max:100',
+                    'name' => 'required|string|min:2|max:100',
                     'email' => 'required|email|unique:patients,email',
                     'phone' => 'required|string|min:8|max:20|unique:patients,Phone',
+                    'password' => 'required|string|min:6|confirmed',
                     'priority' => 'nullable|in:normal,urgent,elderly',
+                ], [
+                    'name.required' => 'يرجى إدخال الاسم الكامل.',
+                    'name.min' => 'الاسم يجب أن يكون حرفين على الأقل.',
+                    'email.required' => 'يرجى إدخال البريد الإلكتروني.',
+                    'email.email' => 'صيغة البريد الإلكتروني غير صحيحة.',
+                    'email.unique' => 'هذا البريد مسجّل مسبقاً — استخدم تبويب «مريض مسجّل».',
+                    'phone.required' => 'يرجى إدخال رقم الهاتف.',
+                    'phone.min' => 'رقم الهاتف قصير جداً.',
+                    'phone.unique' => 'رقم الهاتف مسجّل مسبقاً — استخدم تبويب «مريض مسجّل».',
+                    'password.required' => 'يرجى إدخال كلمة المرور.',
+                    'password.min' => 'كلمة المرور يجب أن تكون 6 أحرف على الأقل.',
+                    'password.confirmed' => 'تأكيد كلمة المرور غير مطابق.',
                 ]);
 
                 $ticket = $queue->registerPatientAndIssue($data);

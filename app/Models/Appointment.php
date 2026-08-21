@@ -27,4 +27,14 @@ class Appointment extends Model
     {
         return $this->hasMany(QueueTicket::class);
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

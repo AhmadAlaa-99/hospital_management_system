@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class FundAccount extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }
