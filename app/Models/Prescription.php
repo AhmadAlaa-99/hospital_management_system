@@ -8,10 +8,26 @@ class Prescription extends Model
 {
     protected $fillable = [
         'diagnostic_id', 'medicine_name', 'dosage', 'frequency', 'duration_days', 'instructions',
+        'is_dispensed', 'dispensed_at', 'medicine_id',
+    ];
+
+    protected $casts = [
+        'is_dispensed' => 'boolean',
+        'dispensed_at' => 'datetime',
     ];
 
     public function diagnostic()
     {
         return $this->belongsTo(Diagnostic::class);
+    }
+
+    public function medicineStock()
+    {
+        return $this->belongsTo(Medicine::class, 'medicine_id');
+    }
+
+    public function dispensing()
+    {
+        return $this->hasOne(PharmacyDispensing::class);
     }
 }

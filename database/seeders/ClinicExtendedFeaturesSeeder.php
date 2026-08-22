@@ -18,6 +18,7 @@ use App\Models\Patient;
 use App\Models\PatientApiToken;
 use App\Models\PatientPackageUsage;
 use App\Models\PharmacyDispensing;
+use App\Models\PharmacyInvoice;
 use App\Models\Prescription;
 use App\Models\Referral;
 use App\Models\Section;
@@ -56,13 +57,14 @@ class ClinicExtendedFeaturesSeeder extends Seeder
 
     protected function clearTables(): void
     {
+        DB::table('pharmacy_dispensings')->delete();
+        DB::table('pharmacy_invoices')->delete();
         DB::table('sham_cash_payments')->delete();
+        DB::table('medicines')->delete();
         DB::table('activity_logs')->delete();
         DB::table('patient_api_tokens')->delete();
         DB::table('external_records')->delete();
         DB::table('patient_package_usages')->delete();
-        DB::table('pharmacy_dispensings')->delete();
-        DB::table('medicines')->delete();
         DB::table('ambulance_request_timelines')->delete();
         DB::table('ambulance_requests')->delete();
         DB::table('medical_certificates')->delete();
@@ -428,6 +430,13 @@ class ClinicExtendedFeaturesSeeder extends Seeder
 
     protected function seedMedicinesAndDispensings(): void
     {
+        // إعادة ضبط حالة الوصفات لعرض دورة كشف → وصفة → صرف
+        DB::table('prescriptions')->update([
+            'is_dispensed' => false,
+            'dispensed_at' => null,
+            'medicine_id' => null,
+        ]);
+
         $medicines = [
             ['name' => 'باراسيتامول 500', 'generic_name' => 'Paracetamol', 'quantity' => 200, 'unit_price' => 2.50, 'expiry_date' => now()->addYear(), 'min_stock_level' => 30],
             ['name' => 'أموكسيسيلين 500', 'generic_name' => 'Amoxicillin', 'quantity' => 80, 'unit_price' => 8.00, 'expiry_date' => now()->addMonths(8), 'min_stock_level' => 20],
@@ -441,42 +450,69 @@ class ClinicExtendedFeaturesSeeder extends Seeder
             Medicine::create(array_merge($data, ['is_active' => true]));
         }
 
-        $patient = Patient::first();
-        $prescription = Prescription::first();
-        $diagnostic = optional($prescription)->diagnostic_id ? Diagnostic::find($prescription->diagnostic_id) : Diagnostic::first();
+        $diagnostic = Diagnostic::with(['prescriptions', 'patient', 'Doctor'])
+            ->whereHas('prescriptions')
+            ->first();
+
+        if (!$diagnostic) {
+            return;
+        }
+
         $paracetamol = Medicine::where('name', 'like', '%باراسيتامول%')->first();
         $amoxicillin = Medicine::where('name', 'like', '%أموكسيسيلين%')->first();
+        $prescriptions = $diagnostic->prescriptions->take(2);
 
-        if ($patient && $paracetamol) {
+        if ($prescriptions->isEmpty() || !$paracetamol) {
+            return;
+        }
+
+        $invoice = PharmacyInvoice::create([
+            'invoice_number' => PharmacyInvoice::generateNumber(),
+            'patient_id' => $diagnostic->patient_id,
+            'diagnostic_id' => $diagnostic->id,
+            'doctor_id' => $diagnostic->doctor_id,
+            'dispensed_by' => 1,
+            'dispensed_by_type' => 'admin',
+            'notes' => 'صرف تجريبي — إغلاق دورة كشف → وصفة → صرف',
+            'issued_at' => now()->subDays(2),
+        ]);
+
+        $subtotal = 0;
+
+        foreach ($prescriptions as $index => $prescription) {
+            $medicine = $index === 0 ? $paracetamol : ($amoxicillin ?? $paracetamol);
+            $qty = 2;
+            $lineTotal = $medicine->unit_price * $qty;
+
             PharmacyDispensing::create([
-                'patient_id' => $patient->id,
-                'diagnostic_id' => optional($diagnostic)->id,
-                'prescription_id' => optional($prescription)->id,
-                'medicine_id' => $paracetamol->id,
-                'quantity_dispensed' => 2,
-                'unit_price' => $paracetamol->unit_price,
-                'total_price' => $paracetamol->unit_price * 2,
+                'pharmacy_invoice_id' => $invoice->id,
+                'patient_id' => $diagnostic->patient_id,
+                'diagnostic_id' => $diagnostic->id,
+                'prescription_id' => $prescription->id,
+                'medicine_id' => $medicine->id,
+                'quantity_dispensed' => $qty,
+                'unit_price' => $medicine->unit_price,
+                'total_price' => $lineTotal,
                 'dispensed_by' => 1,
                 'dispensed_by_type' => 'admin',
                 'dispensed_at' => now()->subDays(2),
             ]);
-            $paracetamol->decrement('quantity', 2);
+
+            $medicine->decrement('quantity', $qty);
+
+            $prescription->update([
+                'is_dispensed' => true,
+                'dispensed_at' => now()->subDays(2),
+                'medicine_id' => $medicine->id,
+            ]);
+
+            $subtotal += $lineTotal;
         }
 
-        if ($patient && $amoxicillin) {
-            PharmacyDispensing::create([
-                'patient_id' => $patient->id,
-                'diagnostic_id' => optional($diagnostic)->id,
-                'medicine_id' => $amoxicillin->id,
-                'quantity_dispensed' => 1,
-                'unit_price' => $amoxicillin->unit_price,
-                'total_price' => $amoxicillin->unit_price,
-                'dispensed_by' => 1,
-                'dispensed_by_type' => 'admin',
-                'dispensed_at' => now()->subDay(),
-            ]);
-            $amoxicillin->decrement('quantity', 1);
-        }
+        $invoice->update([
+            'subtotal' => $subtotal,
+            'total_amount' => $subtotal,
+        ]);
     }
 
     protected function seedPatientPackageUsages(): void

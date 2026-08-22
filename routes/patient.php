@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard_Patient\DoctorRatingController;
 use App\Http\Controllers\Dashboard_Patient\ExternalRecordController;
 use App\Http\Controllers\Dashboard_Patient\FollowUpPlanController as PatientFollowUpController;
 use App\Http\Controllers\Dashboard_Patient\PatientController;
+use App\Http\Controllers\Dashboard_Patient\PharmacyInvoiceController;
 use App\Http\Controllers\Dashboard_Patient\ShamCashPaymentController;
 use App\Http\Controllers\Dashboard_Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Livewire\Chat\Createchat;
@@ -59,6 +60,8 @@ Route::group(
         Route::post('external-records', [ExternalRecordController::class, 'store'])->name('patient.external-records.store');
         Route::get('external-records/{externalRecord}/download', [ExternalRecordController::class, 'download'])->name('patient.external-records.download');
         Route::delete('external-records/{externalRecord}', [ExternalRecordController::class, 'destroy'])->name('patient.external-records.destroy');
+        Route::get('pharmacy-invoices', [PharmacyInvoiceController::class, 'index'])->name('patient.pharmacy.index');
+        Route::get('pharmacy-invoices/{pharmacyInvoice}', [PharmacyInvoiceController::class, 'show'])->name('patient.pharmacy.show');
         //############################# end patients route ######################################
 
         //############################# Chat route ##########################################

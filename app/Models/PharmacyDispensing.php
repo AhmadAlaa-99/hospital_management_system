@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PharmacyDispensing extends Model
 {
     protected $fillable = [
-        'patient_id', 'diagnostic_id', 'prescription_id', 'medicine_id',
+        'pharmacy_invoice_id', 'patient_id', 'diagnostic_id', 'prescription_id', 'medicine_id',
         'quantity_dispensed', 'unit_price', 'total_price', 'dispensed_by', 'dispensed_by_type', 'dispensed_at',
     ];
 
@@ -21,4 +21,5 @@ class PharmacyDispensing extends Model
     public function diagnostic() { return $this->belongsTo(Diagnostic::class); }
     public function prescription() { return $this->belongsTo(Prescription::class); }
     public function medicine() { return $this->belongsTo(Medicine::class); }
+    public function pharmacyInvoice() { return $this->belongsTo(PharmacyInvoice::class); }
 }

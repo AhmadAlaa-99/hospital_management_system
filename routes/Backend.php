@@ -215,10 +215,16 @@ Route::group(
         Route::get('referrals', [AdminReferralController::class, 'index'])->name('admin.referrals.index');
 
         Route::get('pharmacy', [PharmacyController::class, 'index'])->name('pharmacy.index');
+        Route::get('pharmacy/invoices', [PharmacyController::class, 'invoices'])->name('pharmacy.invoices');
+        Route::get('pharmacy/invoices/{pharmacyInvoice}', [PharmacyController::class, 'showInvoice'])->name('pharmacy.invoices.show');
+        Route::get('pharmacy/invoices/{pharmacyInvoice}/pdf', [PharmacyController::class, 'printInvoice'])->name('pharmacy.invoices.pdf');
+        Route::get('pharmacy/dispense-prescription/{diagnostic}', [PharmacyController::class, 'dispenseFromPrescription'])->name('pharmacy.dispense-prescription');
+        Route::post('pharmacy/dispense-prescription/{diagnostic}', [PharmacyController::class, 'processPrescriptionDispense'])->name('pharmacy.dispense-prescription.store');
         Route::post('pharmacy/medicines', [PharmacyController::class, 'storeMedicine'])->name('pharmacy.medicines.store');
         Route::put('pharmacy/medicines/{medicine}', [PharmacyController::class, 'updateMedicine'])->name('pharmacy.medicines.update');
         Route::get('pharmacy/dispense', [PharmacyController::class, 'dispenseForm'])->name('pharmacy.dispense');
         Route::post('pharmacy/dispense', [PharmacyController::class, 'dispense'])->name('pharmacy.dispense.store');
+        Route::get('pharmacy/patient/{patient}/prescriptions', [PharmacyController::class, 'prescriptionsForPatient'])->name('pharmacy.patient.prescriptions');
 
         Route::get('health-packages', [HealthPackageController::class, 'index'])->name('health-packages.index');
         Route::put('health-packages/{group}', [HealthPackageController::class, 'update'])->name('health-packages.update');

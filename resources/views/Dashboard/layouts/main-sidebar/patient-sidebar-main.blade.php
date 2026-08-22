@@ -35,6 +35,7 @@
                 <li><a class="slide-item" href="{{route('patient.appointments')}}">مواعيدي</a></li>
                 <li><a class="slide-item" href="{{ route('patient.follow-ups.index') }}">متابعاتي</a></li>
                 <li><a class="slide-item" href="{{ route('patient.external-records.index') }}">ملفاتي الطبية</a></li>
+                <li><a class="slide-item" href="{{ route('patient.pharmacy.index') }}">فواتير الصيدلية</a></li>
                 <li><a class="slide-item" href="{{ route('patient.medical-record.pdf', auth()->id()) }}">تصدير السجل PDF</a></li>
             </ul>
         </li>
