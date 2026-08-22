@@ -2,6 +2,9 @@
 
 
 use App\Http\Controllers\Dashboard_Doctor\DiagnosticController;
+use App\Http\Controllers\Dashboard_Doctor\FollowUpPlanController;
+use App\Http\Controllers\Dashboard_Doctor\MedicalCertificateController;
+use App\Http\Controllers\Dashboard_Doctor\ReferralController;
 use App\Http\Controllers\Dashboard_Doctor\LaboratorieController;
 use App\Http\Controllers\Dashboard_Doctor\RayController;
 use App\Http\Controllers\Dashboard_Doctor\PatientDetailsController;
@@ -106,6 +109,23 @@ Route::group(
             Route::post('queue/{ticket}/serving', [DoctorQueueController::class, 'serving'])->name('doctor.queue.serving');
             Route::post('queue/{ticket}/complete', [DoctorQueueController::class, 'complete'])->name('doctor.queue.complete');
             Route::post('queue/{ticket}/no-show', [DoctorQueueController::class, 'noShow'])->name('doctor.queue.no-show');
+
+            Route::get('referrals', [ReferralController::class, 'index'])->name('doctor.referrals.index');
+            Route::get('referrals/create', [ReferralController::class, 'create'])->name('doctor.referrals.create');
+            Route::post('referrals', [ReferralController::class, 'store'])->name('doctor.referrals.store');
+            Route::post('referrals/{referral}/accept', [ReferralController::class, 'accept'])->name('doctor.referrals.accept');
+            Route::post('referrals/{referral}/complete', [ReferralController::class, 'complete'])->name('doctor.referrals.complete');
+            Route::post('referrals/{referral}/reject', [ReferralController::class, 'reject'])->name('doctor.referrals.reject');
+
+            Route::get('follow-ups', [FollowUpPlanController::class, 'index'])->name('doctor.follow-ups.index');
+            Route::post('follow-ups', [FollowUpPlanController::class, 'store'])->name('doctor.follow-ups.store');
+            Route::post('follow-ups/{followUp}/complete', [FollowUpPlanController::class, 'complete'])->name('doctor.follow-ups.complete');
+            Route::post('follow-ups/{followUp}/appointment', [FollowUpPlanController::class, 'createAppointment'])->name('doctor.follow-ups.appointment');
+
+            Route::get('certificates', [MedicalCertificateController::class, 'index'])->name('doctor.certificates.index');
+            Route::get('certificates/create', [MedicalCertificateController::class, 'create'])->name('doctor.certificates.create');
+            Route::post('certificates', [MedicalCertificateController::class, 'store'])->name('doctor.certificates.store');
+            Route::get('certificates/{certificate}/pdf', [MedicalCertificateController::class, 'pdf'])->name('doctor.certificates.pdf');
 
             //############################# Chat route ##########################################
             Route::get('list/patients',Createchat::class)->name('list.patients');

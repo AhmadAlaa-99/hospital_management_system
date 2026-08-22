@@ -3,6 +3,10 @@
 use App\Events\MyEvent;
 use App\Http\Controllers\Dashboard\AmbulanceController;
 use App\Http\Controllers\Dashboard\AmbulanceRequestController;
+use App\Http\Controllers\Dashboard\ActivityLogController;
+use App\Http\Controllers\Dashboard\HealthPackageController;
+use App\Http\Controllers\Dashboard\PharmacyController;
+use App\Http\Controllers\Dashboard\ReferralController as AdminReferralController;
 use App\Http\Controllers\Dashboard\BlogController;
 use App\Http\Controllers\Dashboard\DoctorScheduleController;
 use App\Http\Controllers\Dashboard\InsuranceClaimController;
@@ -202,8 +206,24 @@ Route::group(
 
         Route::get('ambulance-requests', [AmbulanceRequestController::class, 'index'])->name('ambulance-requests.index');
         Route::post('ambulance-requests/{ambulanceRequest}/dispatch', [AmbulanceRequestController::class, 'assignAmbulance'])->name('ambulance-requests.dispatch');
+        Route::post('ambulance-requests/{ambulanceRequest}/advance', [AmbulanceRequestController::class, 'advanceStatus'])->name('ambulance-requests.advance');
+        Route::post('ambulance-requests/{ambulanceRequest}/transfer-clinic', [AmbulanceRequestController::class, 'transferToClinic'])->name('ambulance-requests.transfer-clinic');
         Route::post('ambulance-requests/{ambulanceRequest}/complete', [AmbulanceRequestController::class, 'complete'])->name('ambulance-requests.complete');
         Route::post('ambulance-requests/{ambulanceRequest}/cancel', [AmbulanceRequestController::class, 'cancel'])->name('ambulance-requests.cancel');
+
+        Route::get('referrals', [AdminReferralController::class, 'index'])->name('admin.referrals.index');
+
+        Route::get('pharmacy', [PharmacyController::class, 'index'])->name('pharmacy.index');
+        Route::post('pharmacy/medicines', [PharmacyController::class, 'storeMedicine'])->name('pharmacy.medicines.store');
+        Route::put('pharmacy/medicines/{medicine}', [PharmacyController::class, 'updateMedicine'])->name('pharmacy.medicines.update');
+        Route::get('pharmacy/dispense', [PharmacyController::class, 'dispenseForm'])->name('pharmacy.dispense');
+        Route::post('pharmacy/dispense', [PharmacyController::class, 'dispense'])->name('pharmacy.dispense.store');
+
+        Route::get('health-packages', [HealthPackageController::class, 'index'])->name('health-packages.index');
+        Route::put('health-packages/{group}', [HealthPackageController::class, 'update'])->name('health-packages.update');
+        Route::post('health-packages/activate', [HealthPackageController::class, 'activateForPatient'])->name('health-packages.activate');
+
+        Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
 
         Route::get('doctor-schedules', [DoctorScheduleController::class, 'index'])->name('doctor-schedules.index');
         Route::post('doctor-schedules', [DoctorScheduleController::class, 'store'])->name('doctor-schedules.store');

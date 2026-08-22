@@ -29,6 +29,22 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
 
             $this->savePrescriptions($diagnosis, $request);
 
+            if ($request->filled('follow_up_date')) {
+                $plan = \App\Models\FollowUpPlan::create([
+                    'patient_id' => $request->patient_id,
+                    'doctor_id' => $request->doctor_id,
+                    'section_id' => optional(\App\Models\Doctor::find($request->doctor_id))->section_id,
+                    'diagnostic_id' => $diagnosis->id,
+                    'follow_up_date' => $request->follow_up_date,
+                    'notes' => $request->follow_up_notes,
+                    'status' => 'scheduled',
+                ]);
+                \App\Services\AuditLogService::log('follow_up_created', $plan);
+                if ($request->boolean('create_follow_up_appointment')) {
+                    \App\Services\FollowUpService::createAppointmentForPlan($plan);
+                }
+            }
+
             DB::commit();
             session()->flash('add');
             return redirect()->back();

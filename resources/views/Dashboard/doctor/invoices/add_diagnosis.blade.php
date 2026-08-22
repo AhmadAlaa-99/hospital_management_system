@@ -34,6 +34,23 @@
                     <label>ملاحظات أدوية (اختياري)</label>
                     <textarea class="form-control" name="medicine" rows="2" placeholder="ملاحظات عامة"></textarea>
                 </div>
+
+                <hr>
+                <h6>خطة متابعة (اختياري)</h6>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>تاريخ المتابعة</label>
+                        <input type="date" name="follow_up_date" class="form-control" min="{{ date('Y-m-d') }}">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>ملاحظات المتابعة</label>
+                        <input type="text" name="follow_up_notes" class="form-control" placeholder="مثال: مراجعة بعد أسبوعين">
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="create_follow_up_appointment" value="1" class="form-check-input" id="fua-{{ $invoice->id }}">
+                    <label class="form-check-label" for="fua-{{ $invoice->id }}">إنشاء موعد متابعة تلقائياً</label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>

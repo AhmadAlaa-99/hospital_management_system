@@ -11,7 +11,7 @@ class Ambulance extends Model
     use Translatable;
     use HasFactory;
     public $translatedAttributes = ['driver_name','notes'];
-    public $fillable= ['car_number','car_model','car_year_made','driver_license_number','driver_phone','is_available','car_type'];
+    public $fillable= ['car_number','car_model','car_year_made','driver_license_number','driver_phone','is_available','car_type','paramedic_name','coverage_area','last_maintenance_date'];
 
     public function scopeAvailableForDispatch($query)
     {

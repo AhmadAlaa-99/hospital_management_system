@@ -33,7 +33,7 @@ class ExtendedFeaturesSeeder extends Seeder
         $this->seedPrescriptions();
         $this->seedInsuranceClaims();
         $this->seedDoctorRatings();
-        $this->seedAmbulanceRequests();
+        // طلبات الإسعاف تُزرع في ClinicExtendedFeaturesSeeder (triage + timeline)
     }
 
     protected function assignPatientInsurance(): void

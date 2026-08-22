@@ -13,7 +13,15 @@
                             <div class="col-md-6 form-group"><input type="text" name="patient_name" placeholder="الاسم" required></div>
                             <div class="col-md-6 form-group"><input type="tel" name="phone" placeholder="الهاتف" required></div>
                             <div class="col-12 form-group"><textarea name="address" placeholder="العنوان بالتفصيل" required rows="2"></textarea></div>
-                            <div class="col-12 form-group"><textarea name="notes" placeholder="ملاحظات (اختياري)" rows="2"></textarea></div>
+                            <div class="col-md-6 form-group">
+                                <label>مستوى الأولوية (فرز)</label>
+                                <select name="triage_level" class="form-control" required>
+                                    <option value="critical">🔴 حرج — حالة خطيرة</option>
+                                    <option value="urgent">🟠 عاجل</option>
+                                    <option value="normal" selected>🟢 عادي</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group"><textarea name="notes" placeholder="ملاحظات (اختياري)" rows="2"></textarea></div>
                             <div class="col-12">
                                 <button type="submit" class="theme-btn btn-style-two hms-ambulance-submit">
                                     <span class="txt"><i class="fas fa-ambulance"></i> طلب إسعاف فوري</span>

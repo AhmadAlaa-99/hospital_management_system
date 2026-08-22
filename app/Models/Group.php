@@ -12,7 +12,7 @@ class Group extends Model
     use HasFactory;
     public $translatedAttributes = ['name','notes'];
     public $translationForeignKey = 'Group_id';
-    public $fillable= ['Total_before_discount','discount_value','Total_after_discount','tax_rate','Total_with_tax'];
+    public $fillable= ['Total_before_discount','discount_value','Total_after_discount','tax_rate','Total_with_tax','is_health_package','package_type','validity_days'];
     //public $guarded=[];
 
     public function service_group()

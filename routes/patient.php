@@ -6,6 +6,8 @@ use App\Http\Controllers\Dashboard_Doctor\LaboratorieController;
 use App\Http\Controllers\Dashboard_Doctor\RayController;
 use App\Http\Controllers\Dashboard_Doctor\PatientDetailsController;
 use App\Http\Controllers\Dashboard_Patient\DoctorRatingController;
+use App\Http\Controllers\Dashboard_Patient\ExternalRecordController;
+use App\Http\Controllers\Dashboard_Patient\FollowUpPlanController as PatientFollowUpController;
 use App\Http\Controllers\Dashboard_Patient\PatientController;
 use App\Http\Controllers\Dashboard_Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Livewire\Chat\Createchat;
@@ -49,6 +51,11 @@ Route::group(
         Route::get('rate-appointment/{appointment}', [DoctorRatingController::class, 'create'])->name('patient.rate.create');
         Route::post('rate-appointment/{appointment}', [DoctorRatingController::class, 'store'])->name('patient.rate.store');
         Route::get('medical-record/pdf/{patientId}', [\App\Http\Controllers\MedicalRecordPdfController::class, 'export'])->name('patient.medical-record.pdf');
+        Route::get('follow-ups', [PatientFollowUpController::class, 'index'])->name('patient.follow-ups.index');
+        Route::get('external-records', [ExternalRecordController::class, 'index'])->name('patient.external-records.index');
+        Route::post('external-records', [ExternalRecordController::class, 'store'])->name('patient.external-records.store');
+        Route::get('external-records/{externalRecord}/download', [ExternalRecordController::class, 'download'])->name('patient.external-records.download');
+        Route::delete('external-records/{externalRecord}', [ExternalRecordController::class, 'destroy'])->name('patient.external-records.destroy');
         //############################# end patients route ######################################
 
         //############################# Chat route ##########################################

@@ -13,6 +13,11 @@
     <div class="col-md-3"><div class="card p-3"><small>مواعيد مؤكدة</small><h3>{{ $stats['confirmed_appointments'] }}</h3></div></div>
     <div class="col-md-3"><div class="card p-3"><small>متوسط تقييم الأطباء</small><h3>{{ $stats['avg_doctor_rating'] }} / 5</h3></div></div>
 </div>
+<div class="row row-sm mb-4">
+    <div class="col-md-3"><div class="card p-3"><small>مواعيد مرفوضة (No-Show)</small><h3>{{ $stats['no_show_count'] }}</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><small>استشارات عن بُعد</small><h3>{{ $stats['telemedicine_count'] }}</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><small>مواعيد إسعاف/طوارئ</small><h3>{{ $stats['emergency_appointments'] }}</h3></div></div>
+</div>
 <div class="row row-sm">
     <div class="col-lg-6"><div class="card"><div class="card-body"><h5>المرضى الجدد (6 أشهر)</h5><canvas id="patientsChart" height="200"></canvas></div></div></div>
     <div class="col-lg-6"><div class="card"><div class="card-body"><h5>الإيرادات الشهرية</h5><canvas id="revenueChart" height="200"></canvas></div></div></div>
@@ -33,6 +38,28 @@
                     </tr>
                 @endforeach
                 </tbody>
+            </table>
+        </div></div>
+    </div>
+</div>
+<div class="row row-sm mt-3">
+    <div class="col-lg-6">
+        <div class="card hms-table-card"><div class="card-body">
+            <h5>أكثر التشخيصات</h5>
+            <table class="table table-sm">
+                @foreach($topDiagnoses as $d)
+                    <tr><td>{{ \Illuminate\Support\Str::limit($d->diagnosis, 50) }}</td><td>{{ $d->total }}</td></tr>
+                @endforeach
+            </table>
+        </div></div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card hms-table-card"><div class="card-body">
+            <h5>متوسط انتظار العيادات (دقيقة)</h5>
+            <table class="table table-sm">
+                @foreach($sectionWaitStats as $s)
+                    <tr><td>{{ $s['name'] }}</td><td>{{ $s['avg_wait_minutes'] }}</td></tr>
+                @endforeach
             </table>
         </div></div>
     </div>

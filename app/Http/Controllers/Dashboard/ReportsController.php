@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Diagnostic;
 use App\Models\DoctorRating;
 use App\Models\FundAccount;
 use App\Models\InsuranceClaim;
 use App\Models\Invoice;
 use App\Models\Patient;
+use App\Models\QueueTicket;
 use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -53,10 +55,39 @@ class ReportsController extends Controller
             'confirmed_appointments' => Appointment::where('type', 'مؤكد')->count(),
             'pending_claims' => InsuranceClaim::where('status', 'pending')->count(),
             'avg_doctor_rating' => round(DoctorRating::avg('rating') ?: 0, 1),
+            'no_show_count' => Appointment::where('type', 'مرفوض')->count(),
+            'telemedicine_count' => Appointment::where('consultation_type', 'telemedicine')->count(),
+            'emergency_appointments' => Appointment::where('is_emergency', true)->count(),
         ];
 
+        $topDiagnoses = Diagnostic::select('diagnosis', DB::raw('count(*) as total'))
+            ->whereNotNull('diagnosis')
+            ->groupBy('diagnosis')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        $sectionWaitStats = Section::with('translations')->get()->map(function ($section) {
+            $doctorIds = $section->doctors()->pluck('id');
+            $avgWait = QueueTicket::whereIn('doctor_id', $doctorIds)
+                ->whereNotNull('called_at')
+                ->whereNotNull('created_at')
+                ->get()
+                ->avg(function ($ticket) {
+                    return $ticket->called_at && $ticket->created_at
+                        ? $ticket->created_at->diffInMinutes($ticket->called_at)
+                        : null;
+                });
+
+            return [
+                'name' => $section->name,
+                'avg_wait_minutes' => round($avgWait ?: 0, 1),
+            ];
+        });
+
         return view('Dashboard.Reports.index', compact(
-            'patientsByMonth', 'revenueByMonth', 'sectionPerformance', 'stats', 'months'
+            'patientsByMonth', 'revenueByMonth', 'sectionPerformance', 'stats', 'months',
+            'topDiagnoses', 'sectionWaitStats'
         ));
     }
 }

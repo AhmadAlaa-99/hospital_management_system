@@ -26,6 +26,9 @@ class AmbulanceInsuranceSeeder extends Seeder
                 'is_available' => 1,
                 'car_type' => 1,
                 'driver_name' => 'سائق أحمد',
+                'paramedic_name' => 'مسعف خالد',
+                'coverage_area' => 'دمشق — المزة',
+                'last_maintenance_date' => now()->subMonths(2)->toDateString(),
                 'notes' => 'سيارة إسعاف مجهزة بالكامل',
             ],
             [
@@ -37,6 +40,9 @@ class AmbulanceInsuranceSeeder extends Seeder
                 'is_available' => 1,
                 'car_type' => 1,
                 'driver_name' => 'سائق محمود',
+                'paramedic_name' => 'مسعفة سمر',
+                'coverage_area' => 'دمشق — كفر سوسة',
+                'last_maintenance_date' => now()->subMonths(4)->toDateString(),
                 'notes' => 'جاهزة للطوارئ',
             ],
             [
@@ -48,6 +54,9 @@ class AmbulanceInsuranceSeeder extends Seeder
                 'is_available' => 0,
                 'car_type' => 2,
                 'driver_name' => 'سائق سامر',
+                'paramedic_name' => 'مسعف نادر',
+                'coverage_area' => 'ريف دمشق',
+                'last_maintenance_date' => now()->subMonth()->toDateString(),
                 'notes' => 'تحت الصيانة',
             ],
         ];
@@ -61,6 +70,9 @@ class AmbulanceInsuranceSeeder extends Seeder
             $ambulance->driver_phone = $data['driver_phone'];
             $ambulance->is_available = $data['is_available'];
             $ambulance->car_type = $data['car_type'];
+            $ambulance->paramedic_name = $data['paramedic_name'] ?? null;
+            $ambulance->coverage_area = $data['coverage_area'] ?? null;
+            $ambulance->last_maintenance_date = $data['last_maintenance_date'] ?? null;
             $ambulance->save();
 
             $ambulance->driver_name = $data['driver_name'];

@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('appointments:send-reminders')->hourly();
         $schedule->command('reviews:send-reminders')->hourly();
+        $schedule->command('followups:send-reminders')->hourly();
     }
 
     /**

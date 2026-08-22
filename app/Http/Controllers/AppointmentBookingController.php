@@ -74,6 +74,8 @@ class AppointmentBookingController extends Controller
             'notes' => 'nullable|string|max:500',
             'preferred_date' => 'required|date|after_or_equal:today',
             'preferred_time' => 'required|date_format:H:i',
+            'consultation_type' => 'nullable|in:in_person,telemedicine',
+            'meeting_url' => 'nullable|url|max:500',
         ], [
             'section_id.required' => 'يرجى اختيار القسم',
             'doctor_id.required' => 'يرجى اختيار الدكتور',
@@ -125,6 +127,8 @@ class AppointmentBookingController extends Controller
             'preferred_date' => $data['preferred_date'] ?? null,
             'preferred_time' => $data['preferred_time'] ?? null,
             'type' => 'غير مؤكد',
+            'consultation_type' => $data['consultation_type'] ?? 'in_person',
+            'meeting_url' => $data['meeting_url'] ?? null,
         ]);
 
         NotificationService::notifyDoctor(

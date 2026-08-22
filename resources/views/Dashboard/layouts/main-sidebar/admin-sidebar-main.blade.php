@@ -147,7 +147,26 @@
                 <li><a class="slide-item" href="{{ route('insurance-claims.index') }}">مطالبات التأمين</a></li>
                 <li><a class="slide-item" href="{{ route('insurance-claims.report') }}">تقرير التأمين</a></li>
                 <li><a class="slide-item" href="{{ route('ambulance-requests.index') }}">طلبات الإسعاف</a></li>
+                <li><a class="slide-item" href="{{ route('admin.referrals.index') }}">التحويلات بين التخصصات</a></li>
             </ul>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#">
+                <i class="fas fa-pills side-menu__icon hms-side-fa"></i>
+                <span class="side-menu__label">صيدلية وباقات</span><i class="angle fe fe-chevron-down"></i>
+            </a>
+            <ul class="slide-menu">
+                <li><a class="slide-item" href="{{ route('pharmacy.index') }}">صيدلية العيادة</a></li>
+                <li><a class="slide-item" href="{{ route('health-packages.index') }}">باقات الفحص</a></li>
+            </ul>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('activity-logs.index') }}">
+                <i class="fas fa-history side-menu__icon hms-side-fa"></i>
+                <span class="side-menu__label">سجل النشاط</span>
+            </a>
         </li>
 
         <li class="slide">

@@ -33,6 +33,8 @@
                 <li><a class="slide-item" href="{{route('rays.patient')}}">الاشعة</a></li>
                 <li><a class="slide-item" href="{{route('payments.patient')}}">المدفوعات</a></li>
                 <li><a class="slide-item" href="{{route('patient.appointments')}}">مواعيدي</a></li>
+                <li><a class="slide-item" href="{{ route('patient.follow-ups.index') }}">متابعاتي</a></li>
+                <li><a class="slide-item" href="{{ route('patient.external-records.index') }}">ملفاتي الطبية</a></li>
                 <li><a class="slide-item" href="{{ route('patient.medical-record.pdf', auth()->id()) }}">تصدير السجل PDF</a></li>
             </ul>
         </li>

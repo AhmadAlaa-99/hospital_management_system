@@ -1,19 +1,19 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PatientApiController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+Route::prefix('patient')->group(function () {
+    Route::post('login', [PatientApiController::class, 'login']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::middleware('patient.api')->group(function () {
+        Route::get('appointments', [PatientApiController::class, 'appointments']);
+        Route::get('lab-results', [PatientApiController::class, 'labResults']);
+        Route::get('ray-results', [PatientApiController::class, 'rayResults']);
+        Route::get('prescriptions', [PatientApiController::class, 'prescriptions']);
+        Route::get('follow-ups', [PatientApiController::class, 'followUps']);
+        Route::get('queue/{ticketNumber}', [PatientApiController::class, 'queuePosition']);
+        Route::post('ambulance', [PatientApiController::class, 'requestAmbulance']);
+        Route::get('ambulance/{id}', [PatientApiController::class, 'ambulanceStatus']);
+    });
 });
