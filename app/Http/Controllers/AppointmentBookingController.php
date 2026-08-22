@@ -118,6 +118,7 @@ class AppointmentBookingController extends Controller
         }
 
         Appointment::create([
+            'patient_id' => $patient->id,
             'doctor_id' => $data['doctor_id'],
             'section_id' => $data['section_id'],
             'name' => $data['name'],

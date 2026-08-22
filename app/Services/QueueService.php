@@ -237,20 +237,13 @@ class QueueService
             throw new \RuntimeException('رقم الهاتف مسجّل مسبقاً — استخدم تبويب «مريض مسجّل»');
         }
 
-        $patient = new Patient();
-        $patient->email = $data['email'];
-        $patient->password = Hash::make($data['password']);
-        $patient->Phone = $data['phone'];
-        $patient->Gender = 1;
-        $patient->Date_Birth = now()->subYears(25)->toDateString();
-        $patient->Blood_Group = 'O+';
-        $patient->save();
-
-        $patient->name = $data['name'] ?? $data['patient_name'] ?? '';
-        $patient->Address = 'سوريا';
-        $patient->save();
-
-        return $patient;
+        return app(PatientRegistrationService::class)->register([
+            'name' => $data['name'] ?? $data['patient_name'] ?? '',
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'password' => $data['password'],
+            'address' => $data['address'] ?? 'سوريا',
+        ]);
     }
 
     protected function createConfirmedAppointment(array $data): Appointment

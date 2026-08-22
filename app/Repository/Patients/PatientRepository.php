@@ -16,7 +16,7 @@ class PatientRepository implements PatientRepositoryInterface
 {
    public function index()
    {
-       $Patients = Patient::all();
+       $Patients = Patient::with('translations')->latest('id')->get();
        return view('Dashboard.Patients.index',compact('Patients'));
    }
 

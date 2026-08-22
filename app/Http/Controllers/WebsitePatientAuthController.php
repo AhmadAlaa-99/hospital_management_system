@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Services\PatientRegistrationService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class WebsitePatientAuthController extends Controller
@@ -41,7 +41,7 @@ class WebsitePatientAuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+    public function register(Request $request, PatientRegistrationService $registration)
     {
         try {
             $data = $request->validate([
@@ -63,18 +63,7 @@ class WebsitePatientAuthController extends Controller
                 'password.confirmed' => 'تأكيد كلمة المرور غير مطابق.',
             ]);
 
-            $patient = new Patient();
-            $patient->email = $data['email'];
-            $patient->password = Hash::make($data['password']);
-            $patient->Phone = $data['phone'];
-            $patient->Gender = 1;
-            $patient->Date_Birth = now()->subYears(25)->toDateString();
-            $patient->Blood_Group = 'O+';
-            $patient->save();
-
-            $patient->name = $data['name'];
-            $patient->Address = 'سوريا';
-            $patient->save();
+            $patient = $registration->register($data);
 
             Auth::guard('patient')->login($patient);
             $request->session()->regenerate();
