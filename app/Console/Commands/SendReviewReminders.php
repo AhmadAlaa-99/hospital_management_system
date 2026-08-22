@@ -25,7 +25,7 @@ class SendReviewReminders extends Command
             ->where('review_reminder_sent', false)
             ->whereBetween('review_date', [$from, $to])
             ->whereHas('invoice', fn ($q) => $q->where('invoice_status', 2))
-            ->with(['patient', 'doctor', 'invoice'])
+            ->with(['patient', 'Doctor', 'invoice'])
             ->get();
 
         foreach ($diagnostics as $diagnostic) {
@@ -35,7 +35,7 @@ class SendReviewReminders extends Command
             }
 
             $patientName = $patient->name ?? 'المريض';
-            $doctorName = optional($diagnostic->doctor)->name;
+            $doctorName = optional($diagnostic->Doctor)->name;
             $reviewDate = Carbon::parse($diagnostic->review_date)->format('Y-m-d H:i');
 
             $message = 'تذكير: موعد مراجعتك ' . $reviewDate;
