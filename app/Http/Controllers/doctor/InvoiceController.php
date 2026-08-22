@@ -43,18 +43,25 @@ class InvoiceController extends Controller
         $doctor = auth('doctor')->user();
 
         $data = $request->validate([
-            'invoice_type' => 'required|in:1,2',
             'patient_id' => 'required|exists:patients,id',
-            'Service_id' => 'required_if:invoice_type,1|nullable|exists:Services,id',
-            'Group_id' => 'required_if:invoice_type,2|nullable|exists:groups,id',
+            'Service_ids' => 'nullable|array',
+            'Service_ids.*' => 'exists:Services,id',
+            'Group_ids' => 'nullable|array',
+            'Group_ids.*' => 'exists:groups,id',
             'type' => 'required|in:1,2',
             'appointment_id' => 'nullable|exists:appointments,id',
+            'return_to' => 'nullable|in:queue,invoices',
         ], [
             'patient_id.required' => 'يرجى اختيار المريض.',
-            'Service_id.required_if' => 'يرجى اختيار الخدمة.',
-            'Group_id.required_if' => 'يرجى اختيار مجموعة الخدمات.',
             'type.required' => 'يرجى اختيار نوع الدفع.',
         ]);
+
+        $serviceIds = array_values(array_unique(array_filter($data['Service_ids'] ?? [])));
+        $groupIds = array_values(array_unique(array_filter($data['Group_ids'] ?? [])));
+
+        if (empty($serviceIds) && empty($groupIds)) {
+            return back()->withErrors(['error' => 'يرجى اختيار خدمة مفردة أو مجموعة خدمات واحدة على الأقل.'])->withInput();
+        }
 
         if (!empty($data['appointment_id'])) {
             $appointment = Appointment::findOrFail($data['appointment_id']);
@@ -76,16 +83,26 @@ class InvoiceController extends Controller
             'invoice_status' => 1,
         ];
 
-        if ((int) $data['invoice_type'] === 2) {
-            $billing->createGroupInvoice(array_merge($payload, [
-                'Group_id' => $data['Group_id'],
-            ]));
-            session()->flash('add', 'تم إنشاء فاتورة مجموعة الخدمات وستظهر في قائمة الكشوفات.');
-        } else {
+        $createdCount = 0;
+
+        foreach ($serviceIds as $serviceId) {
             $billing->createServiceInvoice(array_merge($payload, [
-                'Service_id' => $data['Service_id'],
+                'Service_id' => $serviceId,
             ]));
-            session()->flash('add', 'تم إنشاء فاتورة الخدمة وستظهر في قائمة الكشوفات.');
+            $createdCount++;
+        }
+
+        foreach ($groupIds as $groupId) {
+            $billing->createGroupInvoice(array_merge($payload, [
+                'Group_id' => $groupId,
+            ]));
+            $createdCount++;
+        }
+
+        session()->flash('add', 'تم إنشاء ' . $createdCount . ' فاتورة وستظهر في قائمة الكشوفات.');
+
+        if (($data['return_to'] ?? 'invoices') === 'queue') {
+            return redirect()->route('doctor.queue.index');
         }
 
         return redirect()->route('invoices.index');

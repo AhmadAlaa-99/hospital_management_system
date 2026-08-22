@@ -6,6 +6,7 @@ use App\Interfaces\doctor_dashboard\DiagnosisRepositoryInterface;
 use App\Models\Diagnostic;
 use App\Models\Invoice;
 use App\Models\Prescription;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DiagnosisRepository implements DiagnosisRepositoryInterface
@@ -53,7 +54,8 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
             $this->invoice_status($request->invoice_id,2);
             $diagnosis = new Diagnostic();
             $diagnosis->date = date('Y-m-d');
-            $diagnosis->review_date = date('Y-m-d H:i:s');
+            $diagnosis->review_date = Carbon::parse($request->review_date)->setTime(9, 0, 0);
+            $diagnosis->review_reminder_sent = false;
             $diagnosis->diagnosis = $request->diagnosis;
             $diagnosis->medicine = $request->medicine;
             $diagnosis->invoice_id = $request->invoice_id;

@@ -12,7 +12,7 @@
     $current = $data['current'];
     $statusLabels = \App\Models\QueueTicket::$statusLabels;
     $priorityLabels = \App\Models\QueueTicket::$priorityLabels;
-    $hospitalName = optional(\App\Models\SiteSetting::current())->hospital_name ?? 'مستشفى الشام التخصصي';
+    $hospitalName = optional(\App\Models\SiteSetting::current())->hospital_name ?? 'مستشفى الشام التخصصي للعيادات الشاملة التخصصية';
     $activeSectionId = $scope === 'doctor' ? ($sectionId ?? $scopeId) : $scopeId;
     $currentParts = $current ? $queueService->parseTicketDisplay($current->ticket_number) : ['code' => '', 'number' => '—'];
     $sectionLabel = $queueService->sectionTicketLabel($activeSectionId);

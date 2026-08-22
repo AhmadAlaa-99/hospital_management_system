@@ -27,9 +27,11 @@
                 </div>
 
 
-                <div class="form-group" style="position:relative;">
+                <div class="form-group">
                     <label>تاريخ المراجعة</label>
-                    <input class="form-control" id="review_date" name="review_date" type="date" required>
+                    <input class="form-control review-date-input" name="review_date" type="date"
+                           min="{{ date('Y-m-d') }}" required>
+                    <small class="text-muted">يُرسل تذكير تلقائي للمريض قبل الموعد بـ 24 ساعة (بريد + SMS إن وُجد).</small>
                 </div>
 
 

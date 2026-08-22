@@ -150,11 +150,4 @@
     <!-- Internal form-elements js -->
     <script src="{{URL::asset('dashboard/js/form-elements.js')}}"></script>
 
-
-    <script>
-        $('#review_date').datetimepicker({
-
-        })
-    </script>
-
 @endsection

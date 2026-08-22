@@ -1,5 +1,5 @@
 <div class="modal fade" id="doctorAddInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="doctorAddInvoiceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="doctorAddInvoiceModalLabel">إضافة فاتورة</h5>
@@ -7,23 +7,10 @@
             </div>
             <form action="{{ route('invoices.store') }}" method="POST" id="doctor-invoice-form">
                 @csrf
-                <input type="hidden" name="invoice_type" id="doctor_invoice_type" value="1">
+                <input type="hidden" name="return_to" id="doctor_invoice_return_to" value="invoices">
                 <input type="hidden" name="appointment_id" id="doctor_invoice_appointment_id" value="">
 
                 <div class="modal-body">
-                    <ul class="nav nav-tabs mb-3" id="doctorInvoiceTypeTabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="single-tab" data-toggle="tab" href="#doctor-invoice-single" role="tab" data-invoice-type="1">
-                                <i class="fas fa-file-medical ml-1"></i> خدمة مفردة
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="group-tab" data-toggle="tab" href="#doctor-invoice-group" role="tab" data-invoice-type="2">
-                                <i class="fas fa-layer-group ml-1"></i> مجموعة خدمات
-                            </a>
-                        </li>
-                    </ul>
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -53,83 +40,51 @@
                         </div>
                     </div>
 
-                    <div class="tab-content" id="doctorInvoiceTypeContent">
-                        <div class="tab-pane fade show active" id="doctor-invoice-single" role="tabpanel">
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center mb-0">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th>الخدمة</th>
-                                        <th>السعر</th>
-                                        <th>الخصم</th>
-                                        <th>الضريبة %</th>
-                                        <th>قيمة الضريبة</th>
-                                        <th>الإجمالي</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <select name="Service_id" id="doctor_invoice_service_id" class="form-control">
-                                                <option value="">— اختر الخدمة —</option>
-                                                @foreach($services as $service)
-                                                    <option value="{{ $service->id }}" data-price="{{ $service->price }}">
-                                                        {{ $service->name }} — {{ number_format($service->price, 2) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td><input type="text" id="doctor_single_price" class="form-control" readonly value="0.00"></td>
-                                        <td><input type="text" id="doctor_single_discount" class="form-control" readonly value="0.00"></td>
-                                        <td><input type="text" id="doctor_single_tax_rate" class="form-control" value="17" readonly></td>
-                                        <td><input type="text" id="doctor_single_tax_value" class="form-control" readonly value="0.00"></td>
-                                        <td><input type="text" id="doctor_single_total" class="form-control" readonly value="0.00"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border mb-3">
+                                <div class="card-header py-2 bg-light">
+                                    <i class="fas fa-file-medical ml-1"></i> خدمات مفردة
+                                    <small class="text-muted">(يمكن اختيار أكثر من خدمة)</small>
+                                </div>
+                                <div class="card-body py-3">
+                                    <select name="Service_ids[]" id="doctor_invoice_service_ids" class="form-control doctor-invoice-multi-select" multiple>
+                                        @foreach($services as $service)
+                                            <option value="{{ $service->id }}" data-price="{{ $service->price }}">
+                                                {{ $service->name }} — {{ number_format($service->price, 2) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted d-block mt-2">كل خدمة تُنشئ فاتورة مستقلة — الخصم والضريبة تُحسب تلقائياً.</small>
+                                </div>
                             </div>
-                            <small class="text-muted d-block mt-2">الخصم والضريبة تُحسب تلقائياً عند الحفظ (تأمين المريض إن وُجد).</small>
                         </div>
+                        <div class="col-md-6">
+                            <div class="card border mb-3">
+                                <div class="card-header py-2 bg-light">
+                                    <i class="fas fa-layer-group ml-1"></i> مجموعات خدمات
+                                    <small class="text-muted">(يمكن اختيار أكثر من مجموعة)</small>
+                                </div>
+                                <div class="card-body py-3">
+                                    <select name="Group_ids[]" id="doctor_invoice_group_ids" class="form-control doctor-invoice-multi-select" multiple>
+                                        @foreach($groups as $group)
+                                            <option value="{{ $group->id }}"
+                                                    data-price="{{ $group->Total_before_discount }}"
+                                                    data-discount="{{ $group->discount_value }}"
+                                                    data-tax-rate="{{ $group->tax_rate }}"
+                                                    data-total="{{ $group->Total_with_tax }}">
+                                                {{ $group->name }} — {{ number_format($group->Total_with_tax, 2) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted d-block mt-2">كل مجموعة تُنشئ فاتورة مستقلة بأسعار المجموعة المعرفة من الإدارة.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="tab-pane fade" id="doctor-invoice-group" role="tabpanel">
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center mb-0">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th>مجموعة الخدمات</th>
-                                        <th>السعر</th>
-                                        <th>الخصم</th>
-                                        <th>الضريبة %</th>
-                                        <th>قيمة الضريبة</th>
-                                        <th>الإجمالي</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <select name="Group_id" id="doctor_invoice_group_id" class="form-control" disabled>
-                                                <option value="">— اختر المجموعة —</option>
-                                                @foreach($groups as $group)
-                                                    <option value="{{ $group->id }}"
-                                                            data-price="{{ $group->Total_before_discount }}"
-                                                            data-discount="{{ $group->discount_value }}"
-                                                            data-tax-rate="{{ $group->tax_rate }}">
-                                                        {{ $group->name }} — {{ number_format($group->Total_with_tax, 2) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td><input type="text" id="doctor_group_price" class="form-control" readonly value="0.00"></td>
-                                        <td><input type="text" id="doctor_group_discount" class="form-control" readonly value="0.00"></td>
-                                        <td><input type="text" id="doctor_group_tax_rate" class="form-control" readonly value="0"></td>
-                                        <td><input type="text" id="doctor_group_tax_value" class="form-control" readonly value="0.00"></td>
-                                        <td><input type="text" id="doctor_group_total" class="form-control" readonly value="0.00"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <small class="text-muted d-block mt-2">مجموعة الخدمات المعرّفة من الإدارة — أسعار وخصومات المجموعة تُطبَّق تلقائياً.</small>
-                        </div>
+                    <div class="alert alert-info small mb-0" id="doctor-invoice-preview">
+                        <strong>ملخص:</strong> <span id="doctor-invoice-preview-text">لم يُختر أي خدمة أو مجموعة بعد.</span>
                     </div>
 
                     @if(isset($todayTickets) && $todayTickets->count())
@@ -149,7 +104,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary btn-hms-primary">حفظ الفاتورة</button>
+                    <button type="submit" class="btn btn-primary btn-hms-primary">حفظ الفاتورة/الفواتير</button>
                 </div>
             </form>
         </div>

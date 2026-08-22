@@ -25,7 +25,7 @@ class CreateBlogsAndSiteSettingsTables extends Migration
 
         Schema::create('site_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('hospital_name')->default('مستشفى الشام التخصصي');
+            $table->string('hospital_name')->default('مستشفى الشام التخصصي للعيادات الشاملة التخصصية');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('phone')->nullable();

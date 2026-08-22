@@ -13,7 +13,7 @@ class BlogSiteSettingSeeder extends Seeder
     {
         SiteSetting::query()->delete();
         SiteSetting::create([
-            'hospital_name' => 'مستشفى الشام التخصصي',
+            'hospital_name' => 'مستشفى الشام التخصصي للعيادات الشاملة التخصصية',
             'address' => 'شارع أبو رمانة، مقابل حديقة الجلاء',
             'city' => 'دمشق، الجمهورية العربية السورية',
             'phone' => '+963 11 334 2200',
@@ -25,8 +25,8 @@ class BlogSiteSettingSeeder extends Seeder
             'instagram' => 'https://instagram.com',
             'linkedin' => 'https://linkedin.com',
             'whatsapp' => '+963933456789',
-            'about' => 'مستشفى الشام التخصصي مؤسسة طبية سورية تقدم خدمات التشخيص والعلاج والرعاية الشاملة للمرضى في دمشق وريفها.',
-            'copyright' => 'مستشفى الشام التخصصي © جميع الحقوق محفوظة',
+            'about' => 'مستشفى عيادات تخصصية خاصة يضم عيادات شاملة تخصصية وقسم إسعاف للحالات البسيطة — لا يُعد مستشفى عاماً شاملاً للحالات الحرجة أو الجراحية الكبرى.',
+            'copyright' => 'مستشفى الشام التخصصي للعيادات الشاملة التخصصية © جميع الحقوق محفوظة',
         ]);
 
         Blog::query()->delete();
