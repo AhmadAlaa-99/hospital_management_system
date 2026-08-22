@@ -25,7 +25,30 @@ class Invoice extends Model
         'total_with_tax',
         'type',
         'invoice_status',
+        'payment_status',
     ];
+
+    public static $paymentStatusLabels = [
+        'unpaid' => 'غير مدفوعة',
+        'pending_review' => 'جاري مراجعة الدفع',
+        'paid' => 'مدفوعة',
+        'rejected' => 'مرفوض — أعد رفع الإيصال',
+    ];
+
+    public function shamCashPayments()
+    {
+        return $this->hasMany(ShamCashPayment::class);
+    }
+
+    public function latestShamCashPayment()
+    {
+        return $this->hasOne(ShamCashPayment::class)->latestOfMany();
+    }
+
+    public function canPayViaShamCash(): bool
+    {
+        return in_array($this->payment_status, ['unpaid', 'rejected'], true);
+    }
 
     public function Group()
     {

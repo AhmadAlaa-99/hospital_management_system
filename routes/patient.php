@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard_Patient\DoctorRatingController;
 use App\Http\Controllers\Dashboard_Patient\ExternalRecordController;
 use App\Http\Controllers\Dashboard_Patient\FollowUpPlanController as PatientFollowUpController;
 use App\Http\Controllers\Dashboard_Patient\PatientController;
+use App\Http\Controllers\Dashboard_Patient\ShamCashPaymentController;
 use App\Http\Controllers\Dashboard_Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Livewire\Chat\Createchat;
 use App\Http\Livewire\Chat\Main;
@@ -42,6 +43,8 @@ Route::group(
 
         //############################# patients route ##########################################
         Route::get('invoices', [PatientController::class,'invoices'])->name('invoices.patient');
+        Route::get('invoices/{invoice}/pay-sham-cash', [ShamCashPaymentController::class, 'show'])->name('patient.sham-cash.show');
+        Route::post('invoices/{invoice}/pay-sham-cash', [ShamCashPaymentController::class, 'store'])->name('patient.sham-cash.store');
         Route::get('laboratories', [PatientController::class,'laboratories'])->name('laboratories.patient');
         Route::get('view_laboratories/{id}', [PatientController::class,'viewLaboratories'])->name('laboratories.view');
         Route::get('rays', [PatientController::class,'rays'])->name('rays.patient');

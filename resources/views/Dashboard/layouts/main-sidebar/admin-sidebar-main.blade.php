@@ -184,6 +184,17 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('sham-cash-payments.index') }}">
+                <i class="fas fa-mobile-alt side-menu__icon hms-side-fa"></i>
+                <span class="side-menu__label">مدفوعات شام كاش</span>
+                @php $pendingSham = \App\Models\ShamCashPayment::where('status', 'pending_review')->count(); @endphp
+                @if($pendingSham > 0)
+                    <span class="badge badge-warning mr-auto">{{ $pendingSham }}</span>
+                @endif
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="{{ route('site-settings.edit') }}">
                 <i class="fas fa-cog side-menu__icon hms-side-fa"></i>
                 <span class="side-menu__label">إعدادات الموقع</span>

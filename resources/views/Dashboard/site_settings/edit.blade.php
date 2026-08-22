@@ -22,7 +22,7 @@
             <div class="card hms-form-card">
                 <div class="card-header"><h5 class="mb-0">بيانات المستشفى (تظهر في الفوتر)</h5></div>
                 <div class="card-body">
-                    <form action="{{ route('site-settings.update') }}" method="POST" class="hms-form-box">
+                    <form action="{{ route('site-settings.update') }}" method="POST" class="hms-form-box" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
@@ -85,6 +85,41 @@
                             </div>
                         </div>
                         <button class="btn btn-primary btn-hms-primary" type="submit">حفظ الإعدادات</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-10 mt-3">
+            <div class="card hms-form-card">
+                <div class="card-header"><h5 class="mb-0">إعدادات الدفع — شام كاش</h5></div>
+                <div class="card-body">
+                    <form action="{{ route('site-settings.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="sham_cash_section" value="1">
+                        <div class="form-check mb-3">
+                            <input type="checkbox" name="sham_cash_enabled" value="1" class="form-check-input" id="shamCashEnabled" {{ $setting->sham_cash_enabled ? 'checked' : '' }}>
+                            <label class="form-check-label" for="shamCashEnabled">تفعيل الدفع عبر شام كاش للمرضى</label>
+                        </div>
+                        <div class="form-group">
+                            <label>عنوان المحفظة (Sham Cash Wallet)</label>
+                            <input type="text" name="sham_cash_wallet" class="form-control" value="{{ old('sham_cash_wallet', $setting->sham_cash_wallet) }}" placeholder="مثال: 09xxxxxxxx">
+                        </div>
+                        <div class="form-group">
+                            <label>QR Code للدفع</label>
+                            @if($setting->sham_cash_qr_path)
+                                <div class="mb-2">
+                                    <img src="{{ asset('storage/' . $setting->sham_cash_qr_path) }}" alt="QR" style="max-width:150px;border:1px solid #ddd;padding:4px;">
+                                </div>
+                            @endif
+                            <input type="file" name="sham_cash_qr" class="form-control" accept="image/*">
+                            <small class="text-muted">ارفع صورة QR من تطبيق شام كاش</small>
+                        </div>
+                        <div class="form-group">
+                            <label>تعليمات الدفع للمريض</label>
+                            <textarea name="sham_cash_instructions" class="form-control" rows="3" placeholder="مثال: ادفع المبلغ ثم ارفع screenshot الإيصال">{{ old('sham_cash_instructions', $setting->sham_cash_instructions) }}</textarea>
+                        </div>
+                        <button class="btn btn-success" type="submit">حفظ إعدادات شام كاش</button>
                     </form>
                 </div>
             </div>

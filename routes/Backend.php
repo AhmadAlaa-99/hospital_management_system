@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\ActivityLogController;
 use App\Http\Controllers\Dashboard\HealthPackageController;
 use App\Http\Controllers\Dashboard\PharmacyController;
 use App\Http\Controllers\Dashboard\ReferralController as AdminReferralController;
+use App\Http\Controllers\Dashboard\ShamCashPaymentController;
 use App\Http\Controllers\Dashboard\BlogController;
 use App\Http\Controllers\Dashboard\DoctorScheduleController;
 use App\Http\Controllers\Dashboard\InsuranceClaimController;
@@ -224,6 +225,12 @@ Route::group(
         Route::post('health-packages/activate', [HealthPackageController::class, 'activateForPatient'])->name('health-packages.activate');
 
         Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+
+        Route::get('sham-cash-payments', [ShamCashPaymentController::class, 'index'])->name('sham-cash-payments.index');
+        Route::get('sham-cash-payments/{shamCashPayment}', [ShamCashPaymentController::class, 'show'])->name('sham-cash-payments.show');
+        Route::post('sham-cash-payments/{shamCashPayment}/approve', [ShamCashPaymentController::class, 'approve'])->name('sham-cash-payments.approve');
+        Route::post('sham-cash-payments/{shamCashPayment}/reject', [ShamCashPaymentController::class, 'reject'])->name('sham-cash-payments.reject');
+        Route::get('sham-cash-payments/{shamCashPayment}/receipt', [ShamCashPaymentController::class, 'receipt'])->name('sham-cash-payments.receipt');
 
         Route::get('doctor-schedules', [DoctorScheduleController::class, 'index'])->name('doctor-schedules.index');
         Route::post('doctor-schedules', [DoctorScheduleController::class, 'store'])->name('doctor-schedules.store');

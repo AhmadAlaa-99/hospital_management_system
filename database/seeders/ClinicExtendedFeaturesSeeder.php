@@ -21,6 +21,9 @@ use App\Models\PharmacyDispensing;
 use App\Models\Prescription;
 use App\Models\Referral;
 use App\Models\Section;
+use App\Models\ShamCashPayment;
+use App\Models\SiteSetting;
+use App\Models\Invoice;
 use App\Services\AmbulanceWorkflowService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -47,11 +50,13 @@ class ClinicExtendedFeaturesSeeder extends Seeder
         $this->seedPatientPackageUsages();
         $this->seedExternalRecords();
         $this->seedPatientApiTokens();
+        $this->seedShamCashDemo();
         $this->seedActivityLogs();
     }
 
     protected function clearTables(): void
     {
+        DB::table('sham_cash_payments')->delete();
         DB::table('activity_logs')->delete();
         DB::table('patient_api_tokens')->delete();
         DB::table('external_records')->delete();
@@ -557,6 +562,84 @@ class ClinicExtendedFeaturesSeeder extends Seeder
         // للاختبار: POST /api/patient/login أو استخدم Bearer بعد login
     }
 
+    protected function seedShamCashDemo(): void
+    {
+        $setting = SiteSetting::current();
+        Storage::disk('public')->makeDirectory('sham-cash');
+
+        $qrPath = 'sham-cash/demo-qr-placeholder.txt';
+        if (!Storage::disk('public')->exists($qrPath)) {
+            Storage::disk('public')->put($qrPath, 'Demo QR placeholder — replace with real QR image in admin settings.');
+        }
+
+        $setting->update([
+            'sham_cash_enabled' => true,
+            'sham_cash_wallet' => '0999123456',
+            'sham_cash_instructions' => "1. افتح تطبيق شام كاش\n2. امسح QR أو انسخ عنوان المحفظة\n3. ادفع المبلغ بالضبط\n4. ارفع screenshot الإيصال",
+        ]);
+
+        $patient = Patient::first();
+        $invoices = Invoice::take(4)->get();
+        if ($invoices->isEmpty() || !$patient) {
+            return;
+        }
+
+        // فاتورة بانتظار مراجعة الدفع
+        $pendingInvoice = $invoices[0];
+        $pendingInvoice->update(['payment_status' => 'pending_review']);
+        $receiptPath = 'sham-cash/receipts/demo-receipt-pending.txt';
+        Storage::disk('public')->put($receiptPath, 'Demo payment receipt — pending review');
+        ShamCashPayment::create([
+            'invoice_id' => $pendingInvoice->id,
+            'patient_id' => $pendingInvoice->patient_id,
+            'amount' => $pendingInvoice->total_with_tax,
+            'status' => 'pending_review',
+            'receipt_path' => $receiptPath,
+            'transaction_reference' => 'SC-DEMO-001',
+            'patient_notes' => 'دفعت عبر شام كاش — يرجى المراجعة',
+        ]);
+
+        // فاتورة مدفوعة (معتمدة)
+        if ($invoices->count() > 1) {
+            $paidInvoice = $invoices[1];
+            $paidInvoice->update(['payment_status' => 'paid']);
+            ShamCashPayment::create([
+                'invoice_id' => $paidInvoice->id,
+                'patient_id' => $paidInvoice->patient_id,
+                'amount' => $paidInvoice->total_with_tax,
+                'status' => 'approved',
+                'receipt_path' => 'sham-cash/receipts/demo-receipt-approved.txt',
+                'transaction_reference' => 'SC-DEMO-002',
+                'reviewed_by' => 1,
+                'reviewed_at' => now()->subDay(),
+            ]);
+            Storage::disk('public')->put('sham-cash/receipts/demo-receipt-approved.txt', 'Approved demo receipt');
+        }
+
+        // فاتورة مرفوضة
+        if ($invoices->count() > 2) {
+            $rejectedInvoice = $invoices[2];
+            $rejectedInvoice->update(['payment_status' => 'rejected']);
+            ShamCashPayment::create([
+                'invoice_id' => $rejectedInvoice->id,
+                'patient_id' => $rejectedInvoice->patient_id,
+                'amount' => $rejectedInvoice->total_with_tax,
+                'status' => 'rejected',
+                'receipt_path' => 'sham-cash/receipts/demo-receipt-rejected.txt',
+                'transaction_reference' => 'SC-DEMO-003',
+                'admin_notes' => 'المبلغ غير مطابق — يرجى إعادة الدفع',
+                'reviewed_by' => 1,
+                'reviewed_at' => now()->subHours(5),
+            ]);
+            Storage::disk('public')->put('sham-cash/receipts/demo-receipt-rejected.txt', 'Rejected demo receipt');
+        }
+
+        // فاتورة غير مدفوعة (للتجربة)
+        if ($invoices->count() > 3) {
+            $invoices[3]->update(['payment_status' => 'unpaid']);
+        }
+    }
+
     protected function seedActivityLogs(): void
     {
         $logs = [
@@ -569,7 +652,8 @@ class ClinicExtendedFeaturesSeeder extends Seeder
             ['action' => 'pharmacy_dispensed', 'user_type' => 'admin', 'user_id' => 1],
             ['action' => 'medicine_created', 'user_type' => 'admin', 'user_id' => 1],
             ['action' => 'external_record_uploaded', 'user_type' => 'patient', 'user_id' => 1],
-            ['action' => 'ambulance_request_created', 'user_type' => null, 'user_id' => null],
+            ['action' => 'sham_cash_payment_submitted', 'user_type' => 'patient', 'user_id' => 1],
+            ['action' => 'sham_cash_payment_approved', 'user_type' => 'admin', 'user_id' => 1],
         ];
 
         foreach ($logs as $index => $data) {
