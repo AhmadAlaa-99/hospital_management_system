@@ -29,7 +29,7 @@
                             <div class="col-md-6 form-group">
                                 <label>اسم المستشفى</label>
                                 <input type="text" name="hospital_name" class="form-control" value="{{ old('hospital_name', $setting->hospital_name) }}" required>
-                                <small class="text-muted">مثال: مستشفى الشام التخصصي للعيادات الشاملة التخصصية — يوضّح أن المنشأة عيادات تخصصية وليست مستشفى عاماً شاملاً.</small>
+                                <small class="text-muted">مثال: مستشفى الشام التخصصي للعيادات الشاملة التخصصية</small>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>المدينة</label>
