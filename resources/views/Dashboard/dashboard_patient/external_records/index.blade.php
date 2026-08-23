@@ -5,11 +5,11 @@
 <div class="card hms-table-card mb-3"><div class="card-header">رفع ملف طبي سابق</div><div class="card-body">
     <form action="{{ route('patient.external-records.store') }}" method="POST" enctype="multipart/form-data">@csrf
         <div class="row">
-            <div class="col-md-4"><input name="title" class="form-control" placeholder="عنوان الملف" required></div>
+            <div class="col-md-4"><input name="title" class="form-control" placeholder="عنوان الملف" required value="{{ old('title') }}"></div>
             <div class="col-md-3">
                 <select name="type" class="form-control" required>
                     @foreach(\App\Models\ExternalRecord::$typeLabels as $k => $v)
-                        <option value="{{ $k }}">{{ $v }}</option>
+                        <option value="{{ $k }}" {{ old('type', 'lab') === $k ? 'selected' : '' }}>{{ $v }}</option>
                     @endforeach
                 </select>
             </div>

@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\ExternalRecord;
 use App\Helpers\FriendlyError;
 use App\Services\AuditLogService;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ExternalRecordController extends Controller
 {
+    /** @var string Disk for patient uploads (storage/app/...) */
+    protected string $uploadDisk = 'local';
+
     public function index()
     {
         $records = ExternalRecord::where('patient_id', Auth::guard('patient')->id())
@@ -38,14 +42,10 @@ class ExternalRecordController extends Controller
         $patientId = Auth::guard('patient')->id();
 
         try {
-            $disk = Storage::disk('public');
             $directory = 'external-records/' . $patientId;
+            $this->ensureUploadDirectory($directory);
 
-            if (!$disk->exists($directory)) {
-                $disk->makeDirectory($directory);
-            }
-
-            $path = $request->file('file')->store($directory, 'public');
+            $path = $request->file('file')->store($directory, $this->uploadDisk);
 
             $record = ExternalRecord::create([
                 'patient_id' => $patientId,
@@ -78,11 +78,13 @@ class ExternalRecordController extends Controller
             abort(403);
         }
 
-        if (!Storage::disk('public')->exists($externalRecord->file_path)) {
+        $resolved = $this->resolveStoredFile($externalRecord->file_path);
+
+        if (!$resolved) {
             return back()->withErrors(['error' => 'الملف غير موجود على الخادم.']);
         }
 
-        return Storage::disk('public')->download($externalRecord->file_path, $externalRecord->title);
+        return $resolved['disk']->download($resolved['path'], $this->downloadFilename($externalRecord));
     }
 
     public function destroy(ExternalRecord $externalRecord)
@@ -91,13 +93,51 @@ class ExternalRecordController extends Controller
             abort(403);
         }
 
-        if (Storage::disk('public')->exists($externalRecord->file_path)) {
-            Storage::disk('public')->delete($externalRecord->file_path);
+        $resolved = $this->resolveStoredFile($externalRecord->file_path);
+
+        if ($resolved) {
+            $resolved['disk']->delete($resolved['path']);
         }
 
         $externalRecord->delete();
 
         session()->flash('delete');
         return back();
+    }
+
+    protected function ensureUploadDirectory(string $directory): void
+    {
+        $disk = Storage::disk($this->uploadDisk);
+
+        if (!$disk->exists('external-records')) {
+            $disk->makeDirectory('external-records', 0755, true);
+        }
+
+        if (!$disk->exists($directory)) {
+            $disk->makeDirectory($directory, 0755, true);
+        }
+    }
+
+    /**
+     * @return array{disk: Filesystem, path: string}|null
+     */
+    protected function resolveStoredFile(string $filePath): ?array
+    {
+        foreach (['local', 'public'] as $diskName) {
+            $disk = Storage::disk($diskName);
+            if ($disk->exists($filePath)) {
+                return ['disk' => $disk, 'path' => $filePath];
+            }
+        }
+
+        return null;
+    }
+
+    protected function downloadFilename(ExternalRecord $record): string
+    {
+        $extension = pathinfo($record->file_path, PATHINFO_EXTENSION);
+        $base = preg_replace('/[^\p{L}\p{N}\-_]+/u', '-', $record->title) ?: 'medical-file';
+
+        return $extension ? ($base . '.' . $extension) : $base;
     }
 }

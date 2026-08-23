@@ -19,7 +19,11 @@ class FriendlyError
         }
 
         if (str_contains($raw, 'Permission denied') || str_contains($raw, 'fopen')) {
-            return 'تعذر حفظ الملف. تحقق من صلاحيات مجلد الصور على الخادم (public/Dashboard/img/doctors).';
+            return 'تعذر حفظ الملف. تحقق من صلاحيات مجلد storage على الخادم (chmod 775 storage).';
+        }
+
+        if (str_contains($raw, 'Impossible to create') || str_contains($raw, 'mkdir():')) {
+            return 'تعذر إنشاء مجلد الرفع على الخادم — نفّذ: chmod -R 775 storage && php artisan storage:link';
         }
 
         if (str_contains($raw, 'SQLSTATE') || str_contains($raw, 'Integrity constraint')) {
