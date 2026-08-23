@@ -130,6 +130,10 @@
                                     <h2 class="main-title">{{ trans('Dashboard/login_trans.Welcome') }}</h2>
                                     <p class="sub-title">{{ trans('Dashboard/login_trans.secure_note') }}</p>
 
+                                    @if (session('error'))
+                                        <div class="alert alert-warning">{{ session('error') }}</div>
+                                    @endif
+
                                     @if ($errors->any())
                                         <div class="alert alert-danger">
                                             <ul class="mb-0">

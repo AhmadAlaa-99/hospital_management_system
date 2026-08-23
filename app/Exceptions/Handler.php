@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\DashboardAuth;
 use App\Helpers\FriendlyError;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -27,11 +28,11 @@ class Handler extends ExceptionHandler
                 return response()->json(['message' => 'انتهت صلاحية الجلسة.'], 419);
             }
 
-            if ($request->is('logout*') || $request->routeIs('logout.*')) {
-                return redirect()->route('home');
+            if (DashboardAuth::isLogoutRequest($request)) {
+                return DashboardAuth::afterLogoutRedirect();
             }
 
-            return redirect()->route('home')
+            return redirect()->route('login')
                 ->with('error', 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.');
         });
 

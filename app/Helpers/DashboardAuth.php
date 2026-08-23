@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Request;
 
 class DashboardAuth
 {
@@ -49,5 +50,20 @@ class DashboardAuth
             default:
                 return 'logout.user';
         }
+    }
+
+    public static function isLogoutRequest(Request $request): bool
+    {
+        if ($request->routeIs('logout.*')) {
+            return true;
+        }
+
+        return (bool) preg_match('#(^|/)logout(/|$)#', $request->path());
+    }
+
+    public static function afterLogoutRedirect()
+    {
+        return redirect()->route('login')
+            ->with('error', 'تم تسجيل الخروج. يرجى تسجيل الدخول مجدداً.');
     }
 }
