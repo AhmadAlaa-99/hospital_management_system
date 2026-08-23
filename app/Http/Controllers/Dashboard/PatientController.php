@@ -59,8 +59,8 @@ class PatientController extends Controller
        return $this->Patient->destroy($request);
     }
 
-    public function resetPassword(Patient $patient)
+    public function resetPassword(Request $request, Patient $patient)
     {
-        return $this->Patient->resetPassword($patient);
+        return $this->Patient->resetPassword($patient, $request);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\FollowUpPlan;
 use App\Models\Patient;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class FollowUpService
 {
@@ -44,18 +45,30 @@ class FollowUpService
             return null;
         }
 
-        $appointment = Appointment::create([
+        $appointmentData = [
             'doctor_id' => $plan->doctor_id,
             'section_id' => $plan->section_id ?? $doctor->section_id,
             'name' => (string) ($patient->name ?: 'مريض'),
-            'email' => $patient->email,
-            'phone' => (string) ($patient->Phone ?? ''),
+            'email' => $patient->email ?: ('patient' . $patient->id . '@local.hms'),
+            'phone' => (string) ($patient->Phone ?: '0000000000'),
             'notes' => 'موعد متابعة: ' . ($plan->notes ?? ''),
-            'preferred_date' => $plan->follow_up_date,
-            'preferred_time' => '09:00:00',
             'type' => 'غير مؤكد',
-            'consultation_type' => 'in_person',
-        ]);
+        ];
+
+        if (Schema::hasColumn('appointments', 'patient_id')) {
+            $appointmentData['patient_id'] = $plan->patient_id;
+        }
+        if (Schema::hasColumn('appointments', 'preferred_date')) {
+            $appointmentData['preferred_date'] = $plan->follow_up_date;
+        }
+        if (Schema::hasColumn('appointments', 'preferred_time')) {
+            $appointmentData['preferred_time'] = '09:00:00';
+        }
+        if (Schema::hasColumn('appointments', 'consultation_type')) {
+            $appointmentData['consultation_type'] = 'in_person';
+        }
+
+        $appointment = Appointment::create($appointmentData);
 
         $plan->update(['appointment_id' => $appointment->id]);
 

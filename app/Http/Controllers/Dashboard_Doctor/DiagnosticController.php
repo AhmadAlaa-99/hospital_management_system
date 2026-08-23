@@ -28,6 +28,23 @@ class DiagnosticController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'diagnosis' => 'required|string|min:2',
+            'medicine' => 'nullable|string',
+            'follow_up_date' => 'nullable|date|after_or_equal:today',
+            'follow_up_notes' => 'nullable|string|max:500',
+            'medicines' => 'nullable|array',
+            'medicines.*.medicine_name' => 'nullable|string|max:255',
+            'medicines.*.duration_days' => 'nullable|integer|min:1|max:3650',
+        ], [
+            'diagnosis.required' => 'يرجى إدخال التشخيص.',
+            'diagnosis.min' => 'التشخيص قصير جداً.',
+            'follow_up_date.after_or_equal' => 'تاريخ المتابعة يجب أن يكون اليوم أو بعده.',
+        ]);
+
         return $this->Diagnosis->store($request);
     }
 

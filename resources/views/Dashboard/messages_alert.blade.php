@@ -1,4 +1,14 @@
 
+@if (session('password_reset'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        تم تعيين كلمة مرور جديدة للمريض
+        <strong>{{ session('password_reset_patient') }}</strong>:
+        <code dir="ltr" style="font-size:1.1em;padding:2px 8px;">{{ session('password_reset') }}</code>
+        <span class="d-block mt-1 text-muted small">انسخ الكلمة وسلّمها للمريض — لن تُعرض مرة أخرى.</span>
+    </div>
+@endif
+
 @if (session('error'))
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -93,16 +93,23 @@ class PatientRepository implements PatientRepositoryInterface
        return redirect()->back();
    }
 
-   public function resetPassword(Patient $patient)
+   public function resetPassword(Patient $patient, $request)
    {
-       if (empty($patient->Phone)) {
-           return redirect()->back()->withErrors(['error' => 'لا يوجد رقم هاتف للمريض — أضف رقم الهاتف أولاً.']);
-       }
+       $request->validate([
+           'password' => 'required|string|min:8|max:64',
+       ], [
+           'password.required' => 'يرجى إدخال كلمة المرور الجديدة.',
+           'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.',
+       ]);
 
-       $patient->Password = Hash::make($patient->Phone);
+       $plainPassword = $request->password;
+       $patient->Password = Hash::make($plainPassword);
        $patient->save();
 
        session()->flash('edit');
-       return redirect()->back()->with('password_reset', 'تمت إعادة تعيين كلمة المرور إلى رقم الهاتف: ' . $patient->Phone);
+
+       return redirect()->back()
+           ->with('password_reset', $plainPassword)
+           ->with('password_reset_patient', $patient->name);
    }
 }

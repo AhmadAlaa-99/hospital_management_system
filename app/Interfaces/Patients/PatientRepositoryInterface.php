@@ -21,6 +21,6 @@ interface PatientRepositoryInterface
     public function update($request);
     // Deleted Patients
     public function destroy($request);
-    // Reset patient password to phone number
-    public function resetPassword(Patient $patient);
+    // Reset patient password (admin sets new password)
+    public function resetPassword(Patient $patient, $request);
 }
