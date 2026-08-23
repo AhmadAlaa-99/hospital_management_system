@@ -31,6 +31,27 @@
                 <textarea wire:model.defer="notes" name="notes" class="form-control" rows="3"></textarea>
             </div>
 
+            <div class="card border mb-3">
+                <div class="card-body py-3">
+                    <div class="custom-control custom-checkbox mb-2">
+                        <input type="checkbox" class="custom-control-input" id="is_health_package" wire:model="is_health_package">
+                        <label class="custom-control-label" for="is_health_package">باقة فحص (Health Package)</label>
+                    </div>
+                    @if($is_health_package)
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>نوع الباقة</label>
+                                <input type="text" wire:model.defer="package_type" class="form-control" placeholder="مثال: فحص شامل">
+                            </div>
+                            <div class="col-md-6">
+                                <label>صلاحية الباقة (يوم)</label>
+                                <input type="number" wire:model.defer="validity_days" class="form-control" min="1" max="365">
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             <div class="card mt-4 hms-form-card">
                 <div class="card-header">
                     <div class="col-md-12">

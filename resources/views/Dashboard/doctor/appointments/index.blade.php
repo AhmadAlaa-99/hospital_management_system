@@ -26,6 +26,7 @@
                                 <th>الهاتف</th>
                                 <th>القسم</th>
                                 <th>موعد الزيارة</th>
+                                <th>نوع الاستشارة</th>
                                 <th>الحالة</th>
                                 <th>ملاحظات</th>
                             </tr>
@@ -40,6 +41,16 @@
                                     <td>{{ optional($appointment->section)->name }}</td>
                                     <td>{{ $appointment->appointment ?: '-' }}</td>
                                     <td>
+                                        @if($appointment->consultation_type === 'telemedicine')
+                                            <span class="badge badge-info">عن بُعد</span>
+                                            @if($appointment->meeting_url)
+                                                <br><a href="{{ $appointment->meeting_url }}" target="_blank" class="small">رابط الاجتماع</a>
+                                            @endif
+                                        @else
+                                            <span class="badge badge-secondary">حضوري</span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         @if($appointment->type === 'مؤكد')
                                             <span class="hms-badge hms-badge-success">مؤكد</span>
                                         @else
@@ -49,7 +60,7 @@
                                     <td>{{ $appointment->notes }}</td>
                                 </tr>
                             @empty
-                                <tr><td colspan="8" class="text-center">لا توجد مواعيد</td></tr>
+                                <tr><td colspan="9" class="text-center">لا توجد مواعيد</td></tr>
                             @endforelse
                             </tbody>
                         </table>

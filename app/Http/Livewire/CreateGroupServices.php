@@ -15,6 +15,9 @@ class CreateGroupServices extends Component
     public $taxes = 17;
     public $name_group;
     public $notes;
+    public $is_health_package = false;
+    public $package_type = '';
+    public $validity_days = 90;
     public $ServiceSaved = false;
     public $ServiceUpdated = false;
     public $show_table = true;
@@ -146,6 +149,9 @@ class CreateGroupServices extends Component
             $Groups->Total_after_discount = $total - ((is_numeric($this->discount_value) ? $this->discount_value : 0));
             $Groups->tax_rate = $this->taxes;
             $Groups->Total_with_tax = $Groups->Total_after_discount * (1 + (is_numeric($this->taxes) ? $this->taxes : 0) / 100);
+            $Groups->is_health_package = (bool) $this->is_health_package;
+            $Groups->package_type = $this->is_health_package ? ($this->package_type ?: null) : null;
+            $Groups->validity_days = $this->is_health_package ? max(1, (int) $this->validity_days) : 90;
             $Groups->save();
 
             $Groups->name = $this->name_group;
@@ -188,6 +194,9 @@ class CreateGroupServices extends Component
         $this->ServiceUpdated = false;
         $this->catchError = null;
         $this->reset('GroupsItems', 'name_group', 'notes', 'group_id');
+        $this->is_health_package = false;
+        $this->package_type = '';
+        $this->validity_days = 90;
         $this->discount_value = 0;
         $this->taxes = 17;
     }
@@ -212,6 +221,9 @@ class CreateGroupServices extends Component
         $this->notes = $group->notes;
         $this->discount_value = intval($group->discount_value);
         $this->taxes = $group->tax_rate ?: 17;
+        $this->is_health_package = (bool) $group->is_health_package;
+        $this->package_type = $group->package_type ?? '';
+        $this->validity_days = $group->validity_days ?? 90;
         $this->ServiceSaved = false;
         $this->ServiceUpdated = false;
 

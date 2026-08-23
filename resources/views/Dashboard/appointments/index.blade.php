@@ -40,6 +40,7 @@
                                 <th>الهاتف</th>
                                 <th>التاريخ المفضل</th>
                                 <th>الوقت المفضل</th>
+                                <th>نوع الاستشارة</th>
                                 <th>ملاحظات</th>
                                 <th>العمليات</th>
                             </tr>
@@ -55,6 +56,13 @@
                                     <td>{{$appointment->phone}}</td>
                                     <td>{{ $appointment->preferred_date ? \Carbon\Carbon::parse($appointment->preferred_date)->format('Y-m-d') : '—' }}</td>
                                     <td>{{ $appointment->preferred_time ? substr((string) $appointment->preferred_time, 0, 5) : '—' }}</td>
+                                    <td>
+                                        @if($appointment->consultation_type === 'telemedicine')
+                                            <span class="badge badge-info">عن بُعد</span>
+                                        @else
+                                            <span class="badge badge-secondary">حضوري</span>
+                                        @endif
+                                    </td>
                                     <td>{{$appointment->notes}}</td>
                                     <td>
                                         <button class="btn btn-sm btn-success" data-toggle="modal"

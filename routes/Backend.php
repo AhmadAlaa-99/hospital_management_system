@@ -125,6 +125,8 @@ Route::group(
         Route::post('patient-testimonials/{rating}/reject', [PatientTestimonialController::class, 'reject'])->name('patient-testimonials.reject');
         Route::post('patient-testimonials/{rating}/unpublish', [PatientTestimonialController::class, 'unpublish'])->name('patient-testimonials.unpublish');
 
+        Route::post('Patients/{patient}/reset-password', [PatientController::class, 'resetPassword'])->name('Patients.reset-password');
+
         Route::resource('Patients', PatientController::class);
 
         //############################# end Patients route ######################################
@@ -229,6 +231,7 @@ Route::group(
         Route::get('health-packages', [HealthPackageController::class, 'index'])->name('health-packages.index');
         Route::put('health-packages/{group}', [HealthPackageController::class, 'update'])->name('health-packages.update');
         Route::post('health-packages/activate', [HealthPackageController::class, 'activateForPatient'])->name('health-packages.activate');
+        Route::post('health-packages/mark', [HealthPackageController::class, 'markPackage'])->name('health-packages.mark');
 
         Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
 

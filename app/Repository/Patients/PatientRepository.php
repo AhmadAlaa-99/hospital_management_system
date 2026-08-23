@@ -92,4 +92,17 @@ class PatientRepository implements PatientRepositoryInterface
        session()->flash('delete');
        return redirect()->back();
    }
+
+   public function resetPassword(Patient $patient)
+   {
+       if (empty($patient->Phone)) {
+           return redirect()->back()->withErrors(['error' => 'لا يوجد رقم هاتف للمريض — أضف رقم الهاتف أولاً.']);
+       }
+
+       $patient->Password = Hash::make($patient->Phone);
+       $patient->save();
+
+       session()->flash('edit');
+       return redirect()->back()->with('password_reset', 'تمت إعادة تعيين كلمة المرور إلى رقم الهاتف: ' . $patient->Phone);
+   }
 }

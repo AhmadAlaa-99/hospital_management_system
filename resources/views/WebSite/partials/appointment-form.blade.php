@@ -58,6 +58,20 @@
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label><i class="fas fa-video"></i> نوع الاستشارة</label>
+                <select name="consultation_type" id="consultationType" class="form-select" {{ $loggedInPatient ? '' : 'disabled' }}>
+                    <option value="in_person">حضوري — في العيادة</option>
+                    <option value="telemedicine">عن بُعد — استشارة فيديو</option>
+                </select>
+                <small class="text-muted d-block mt-1">عند اختيار «عن بُعد» يُنشأ رابط الاجتماع تلقائياً.</small>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group d-none" id="meetingUrlGroup">
+                <label for="meetingUrl"><i class="fas fa-link"></i> رابط الاجتماع (اختياري)</label>
+                <input type="url" name="meeting_url" id="meetingUrl" class="form-control" placeholder="يُترك فارغاً للإنشاء التلقائي" {{ $loggedInPatient ? '' : 'disabled' }}>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                 <textarea name="notes" id="appointmentNotes" placeholder="ملاحظات" {{ $loggedInPatient ? '' : 'disabled' }}>{{ old('notes') }}</textarea>
                 <span class="text-danger d-block hms-field-error" data-error-for="notes"></span>
             </div>
@@ -262,6 +276,14 @@ window.hmsPatientLoggedIn = @json((bool) $loggedInPatient);
             });
         }
     });
+
+    function toggleMeetingUrlField() {
+        var isRemote = $('#consultationType').val() === 'telemedicine';
+        $('#meetingUrlGroup').toggleClass('d-none', !isRemote);
+    }
+
+    $('#consultationType').on('change', toggleMeetingUrlField);
+    toggleMeetingUrlField();
 
     @if(session('appointment_success'))
         openModal();

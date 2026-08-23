@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Twilio\Rest\Client;
 
 class AppointmentController extends Controller
@@ -67,10 +68,16 @@ class AppointmentController extends Controller
                 return $slotError;
             }
 
-            $locked->update([
+            $updates = [
                 'type' => 'مؤكد',
                 'appointment' => $request->appointment,
-            ]);
+            ];
+
+            if ($locked->consultation_type === 'telemedicine' && empty($locked->meeting_url)) {
+                $updates['meeting_url'] = 'https://meet.jit.si/hms-appt-' . $locked->id . '-' . Str::lower(Str::random(6));
+            }
+
+            $locked->update($updates);
 
             return null;
         });

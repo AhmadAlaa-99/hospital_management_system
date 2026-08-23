@@ -63,6 +63,7 @@
                                                 <td>
                                                     <div class="hms-actions">
                                                     <a href="{{route('Patients.edit',$Patient->id)}}" class="hms-action-btn hms-action-btn--edit" title="تعديل"><i class="fas fa-edit"></i></a>
+                                                    <button type="button" class="hms-action-btn hms-action-btn--edit" style="background:#f59e0b;border-color:#f59e0b;color:#fff" data-toggle="modal" data-target="#ResetPassword{{$Patient->id}}" title="إعادة تعيين كلمة المرور"><i class="fas fa-key"></i></button>
                                                     <button type="button" class="hms-action-btn hms-action-btn--delete" data-toggle="modal" data-target="#Deleted{{$Patient->id}}" title="حذف"><i class="fas fa-trash"></i></button>
                                                     </div>
                                                     <a href="{{route('Patients.show',$Patient->id)}}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
@@ -70,6 +71,7 @@
                                                 </td>
 											</tr>
                                            @include('Dashboard.Patients.Deleted')
+                                           @include('Dashboard.Patients.ResetPassword')
                                         @endforeach
 										</tbody>
 									</table>

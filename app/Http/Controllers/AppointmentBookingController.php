@@ -8,6 +8,7 @@ use App\Services\AppointmentScheduleService;
 use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AppointmentBookingController extends Controller
@@ -117,6 +118,12 @@ class AppointmentBookingController extends Controller
             ]);
         }
 
+        $consultationType = $data['consultation_type'] ?? 'in_person';
+        $meetingUrl = $data['meeting_url'] ?? null;
+        if ($consultationType === 'telemedicine' && empty($meetingUrl)) {
+            $meetingUrl = 'https://meet.jit.si/hms-' . Str::lower(Str::random(10));
+        }
+
         Appointment::create([
             'patient_id' => $patient->id,
             'doctor_id' => $data['doctor_id'],
@@ -128,8 +135,8 @@ class AppointmentBookingController extends Controller
             'preferred_date' => $data['preferred_date'] ?? null,
             'preferred_time' => $data['preferred_time'] ?? null,
             'type' => 'غير مؤكد',
-            'consultation_type' => $data['consultation_type'] ?? 'in_person',
-            'meeting_url' => $data['meeting_url'] ?? null,
+            'consultation_type' => $consultationType,
+            'meeting_url' => $consultationType === 'telemedicine' ? $meetingUrl : null,
         ]);
 
         NotificationService::notifyDoctor(

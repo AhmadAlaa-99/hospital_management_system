@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
 use App\Interfaces\Patients\PatientRepositoryInterface;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -56,5 +57,10 @@ class PatientController extends Controller
     public function destroy(Request $request)
     {
        return $this->Patient->destroy($request);
+    }
+
+    public function resetPassword(Patient $patient)
+    {
+        return $this->Patient->resetPassword($patient);
     }
 }

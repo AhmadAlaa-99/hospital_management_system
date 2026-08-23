@@ -3,6 +3,7 @@
 
 namespace App\Interfaces\Patients;
 
+use App\Models\Patient;
 
 interface PatientRepositoryInterface
 {
@@ -20,4 +21,6 @@ interface PatientRepositoryInterface
     public function update($request);
     // Deleted Patients
     public function destroy($request);
+    // Reset patient password to phone number
+    public function resetPassword(Patient $patient);
 }
