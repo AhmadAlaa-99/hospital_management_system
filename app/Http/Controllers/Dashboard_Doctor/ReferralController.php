@@ -41,11 +41,14 @@ class ReferralController extends Controller
             ->get();
 
         $patientIds = Invoice::where('doctor_id', $doctorId)->distinct()->pluck('patient_id');
-        $patients = Patient::whereIn('id', $patientIds)->orderBy('name')->get();
 
-        if ($patients->isEmpty()) {
-            $patients = Patient::orderBy('name')->limit(300)->get();
+        if ($patientIds->isNotEmpty()) {
+            $patients = Patient::whereIn('id', $patientIds)->orderBy('id')->get();
+        } else {
+            $patients = Patient::orderBy('id')->limit(300)->get();
         }
+
+        $patients = $patients->sortBy(fn ($patient) => $patient->name ?? '')->values();
 
         return view('Dashboard.doctor.referrals.create', compact('doctors', 'patients'));
     }
