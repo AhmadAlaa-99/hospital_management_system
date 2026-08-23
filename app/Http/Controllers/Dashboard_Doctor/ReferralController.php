@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Dashboard_Doctor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
+use App\Models\Invoice;
+use App\Models\Patient;
 use App\Models\Referral;
+use App\Helpers\FriendlyError;
 use App\Services\AuditLogService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -31,9 +34,20 @@ class ReferralController extends Controller
 
     public function create()
     {
-        $doctors = Doctor::with('section')->where('id', '!=', Auth::guard('doctor')->id())->where('status', 1)->get();
+        $doctorId = Auth::guard('doctor')->id();
+        $doctors = Doctor::with('section')
+            ->where('id', '!=', $doctorId)
+            ->where('status', 1)
+            ->get();
 
-        return view('Dashboard.doctor.referrals.create', compact('doctors'));
+        $patientIds = Invoice::where('doctor_id', $doctorId)->distinct()->pluck('patient_id');
+        $patients = Patient::whereIn('id', $patientIds)->orderBy('name')->get();
+
+        if ($patients->isEmpty()) {
+            $patients = Patient::orderBy('name')->limit(300)->get();
+        }
+
+        return view('Dashboard.doctor.referrals.create', compact('doctors', 'patients'));
     }
 
     public function store(Request $request)
@@ -44,42 +58,63 @@ class ReferralController extends Controller
             'patient_id' => 'required|exists:patients,id',
             'to_doctor_id' => 'required|exists:doctors,id',
             'diagnostic_id' => 'nullable|exists:diagnostics,id',
-            'reason' => 'required|string|min:10|max:1000',
+            'reason' => 'required|string|min:3|max:1000',
             'notes' => 'nullable|string|max:500',
+        ], [
+            'patient_id.required' => 'يرجى اختيار المريض.',
+            'patient_id.exists' => 'المريض غير موجود.',
+            'to_doctor_id.required' => 'يرجى اختيار الطبيب المحوّل إليه.',
+            'to_doctor_id.exists' => 'الطبيب المختار غير موجود.',
+            'reason.required' => 'يرجى كتابة سبب التحويل.',
+            'reason.min' => 'سبب التحويل قصير جداً (3 أحرف على الأقل).',
         ]);
 
-        if ($data['to_doctor_id'] == $doctor->id) {
-            return back()->withErrors(['error' => 'لا يمكن التحويل لنفس الطبيب.']);
+        if ((int) $data['to_doctor_id'] === (int) $doctor->id) {
+            return back()->withInput()->withErrors(['error' => 'لا يمكن التحويل لنفس الطبيب.']);
+        }
+
+        if (!Doctor::where('id', $data['to_doctor_id'])->where('status', 1)->exists()) {
+            return back()->withInput()->withErrors(['error' => 'الطبيب المحوّل إليه غير متاح.']);
         }
 
         $toDoctor = Doctor::findOrFail($data['to_doctor_id']);
 
-        $referral = Referral::create([
-            'patient_id' => $data['patient_id'],
-            'from_doctor_id' => $doctor->id,
-            'to_doctor_id' => $data['to_doctor_id'],
-            'from_section_id' => $doctor->section_id,
-            'to_section_id' => $toDoctor->section_id,
-            'diagnostic_id' => $data['diagnostic_id'] ?? null,
-            'reason' => $data['reason'],
-            'notes' => $data['notes'] ?? null,
-            'status' => 'pending',
-        ]);
+        try {
+            $referral = Referral::create([
+                'patient_id' => $data['patient_id'],
+                'from_doctor_id' => $doctor->id,
+                'to_doctor_id' => $data['to_doctor_id'],
+                'from_section_id' => $doctor->section_id,
+                'to_section_id' => $toDoctor->section_id,
+                'diagnostic_id' => $data['diagnostic_id'] ?? null,
+                'reason' => $data['reason'],
+                'notes' => $data['notes'] ?? null,
+                'status' => 'pending',
+            ]);
 
-        AuditLogService::log('referral_created', $referral, null, $referral->toArray());
+            try {
+                AuditLogService::log('referral_created', $referral, null, $referral->toArray());
+                NotificationService::notifyDoctor(
+                    (int) $toDoctor->id,
+                    'تحويل جديد من د. ' . ($doctor->name ?? '') . ' — يرجى المراجعة'
+                );
+                NotificationService::notifyAdmin(
+                    'تحويل بين تخصصات: مريض #' . $data['patient_id'],
+                    route('admin.referrals.index')
+                );
+            } catch (\Throwable $e) {
+                report($e);
+            }
 
-        NotificationService::notifyDoctor(
-            (int) $toDoctor->id,
-            'تحويل جديد من د. ' . ($doctor->name ?? '') . ' — يرجى المراجعة'
-        );
+            session()->flash('add');
+            return redirect()->route('doctor.referrals.index');
+        } catch (\Throwable $e) {
+            report($e);
 
-        NotificationService::notifyAdmin(
-            'تحويل بين تخصصات: مريض #' . $data['patient_id'],
-            route('admin.referrals.index')
-        );
-
-        session()->flash('add');
-        return redirect()->route('doctor.referrals.index');
+            return back()->withInput()->withErrors([
+                'error' => FriendlyError::message($e->getMessage()),
+            ]);
+        }
     }
 
     public function accept(Referral $referral)

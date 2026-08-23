@@ -10,7 +10,8 @@ class AuditLogService
 {
     public static function log(string $action, ?Model $model = null, ?array $oldValues = null, ?array $newValues = null): ActivityLog
     {
-        $userId = auth()->id();
+        $user = \App\Helpers\DashboardAuth::user();
+        $userId = $user ? $user->getAuthIdentifier() : auth()->id();
         $userType = NotificationService::currentUserType();
 
         if ($userType === 'user' && !auth()->check()) {
