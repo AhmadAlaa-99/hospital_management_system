@@ -39,17 +39,31 @@ class HealthPackageController extends Controller
             'validity_days' => 'nullable|integer|min:1|max:365',
         ], [
             'group_id.required' => 'يرجى اختيار المجموعة.',
+            'group_id.exists' => 'المجموعة المختارة غير موجودة.',
         ]);
 
-        $group = Group::findOrFail($data['group_id']);
-        $group->update([
-            'is_health_package' => (bool) $data['is_health_package'],
-            'package_type' => $data['package_type'] ?? $group->package_type,
-            'validity_days' => $data['validity_days'] ?? $group->validity_days ?? 90,
-        ]);
+        try {
+            $group = Group::findOrFail($data['group_id']);
+            $group->update([
+                'is_health_package' => (bool) $data['is_health_package'],
+                'package_type' => $data['package_type'] ?? $group->package_type,
+                'validity_days' => $data['validity_days'] ?? $group->validity_days ?? 90,
+            ]);
 
-        session()->flash('edit');
-        return back();
+            $message = $data['is_health_package']
+                ? 'تم تعيين «' . $group->name . '» كباقة فحص بنجاح.'
+                : 'تم إلغاء «' . $group->name . '» من باقات الفحص.';
+
+            session()->flash('edit');
+
+            return back()->with('success', $message);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->withInput()->withErrors([
+                'error' => FriendlyError::message($e->getMessage()),
+            ]);
+        }
     }
 
     public function update(Request $request, Group $group)
@@ -103,7 +117,9 @@ class HealthPackageController extends Controller
             });
 
             session()->flash('add');
-            return back();
+            $patient = Patient::find($data['patient_id']);
+
+            return back()->with('success', 'تم تفعيل باقة «' . $group->name . '» للمريض «' . ($patient->name ?? '#'.$data['patient_id']) . '» بنجاح.');
         } catch (\Throwable $e) {
             report($e);
 

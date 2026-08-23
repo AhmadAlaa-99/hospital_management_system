@@ -10,26 +10,30 @@
             @csrf
             <div class="form-group col-md-4">
                 <label>مجموعة الخدمات</label>
-                <select name="group_id" class="form-control" required>
+                <select name="group_id" class="form-control @error('group_id') is-invalid @enderror" required>
                     <option value="">— اختر المجموعة —</option>
                     @foreach($allGroups as $grp)
-                        <option value="{{ $grp->id }}">{{ $grp->name }} ({{ $grp->service_group->count() }} خدمة)</option>
+                        <option value="{{ $grp->id }}" {{ (string) old('group_id') === (string) $grp->id ? 'selected' : '' }}>
+                            {{ $grp->name }} ({{ $grp->service_group->count() }} خدمة)
+                            @if($grp->is_health_package) — باقة @endif
+                        </option>
                     @endforeach
                 </select>
+                @error('group_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
             </div>
             <div class="form-group col-md-2">
                 <label>نوع الباقة</label>
-                <input type="text" name="package_type" class="form-control" placeholder="مثال: فحص شامل">
+                <input type="text" name="package_type" class="form-control" placeholder="مثال: فحص شامل" value="{{ old('package_type') }}">
             </div>
             <div class="form-group col-md-2">
                 <label>صلاحية (يوم)</label>
-                <input type="number" name="validity_days" class="form-control" value="90" min="1" max="365">
+                <input type="number" name="validity_days" class="form-control" value="{{ old('validity_days', 90) }}" min="1" max="365">
             </div>
             <div class="form-group col-md-2">
                 <label>باقة فحص؟</label>
                 <select name="is_health_package" class="form-control" required>
-                    <option value="1">نعم — باقة فحص</option>
-                    <option value="0">لا — مجموعة عادية</option>
+                    <option value="1" {{ old('is_health_package', '1') === '1' ? 'selected' : '' }}>نعم — باقة فحص</option>
+                    <option value="0" {{ old('is_health_package') === '0' ? 'selected' : '' }}>لا — مجموعة عادية</option>
                 </select>
             </div>
             <div class="form-group col-md-2">
@@ -50,24 +54,26 @@
                 @csrf
                 <div class="form-group col-md-5">
                     <label>المريض</label>
-                    <select name="patient_id" class="form-control" required>
+                    <select name="patient_id" class="form-control @error('patient_id') is-invalid @enderror" required>
                         <option value="">— اختر المريض —</option>
                         @foreach($patients as $patient)
-                            <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
+                            <option value="{{ $patient->id }}" {{ (string) old('patient_id') === (string) $patient->id ? 'selected' : '' }}>
                                 {{ $patient->name }} — #{{ $patient->id }}
                             </option>
                         @endforeach
                     </select>
+                    @error('patient_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group col-md-5">
                     <label>الباقة</label>
-                    <select name="group_id" class="form-control" required>
+                    <select name="group_id" class="form-control @error('group_id') is-invalid @enderror" required>
                         @foreach($packages as $pkg)
-                            <option value="{{ $pkg->id }}" {{ old('group_id') == $pkg->id ? 'selected' : '' }}>
+                            <option value="{{ $pkg->id }}" {{ (string) old('group_id') === (string) $pkg->id ? 'selected' : '' }}>
                                 {{ $pkg->name }} — {{ $pkg->validity_days ?? 90 }} يوم ({{ $pkg->service_group->count() }} خدمة)
                             </option>
                         @endforeach
                     </select>
+                    @error('group_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group col-md-2">
                     <button class="btn btn-success btn-block">تفعيل</button>
@@ -78,7 +84,7 @@
 </div>
 
 <div class="card hms-table-card mb-3">
-    <div class="card-header">باقات الفحص المعرفة</div>
+    <div class="card-header">باقات الفحص المعرفة <span class="badge badge-primary">{{ $packages->count() }}</span></div>
     <div class="card-body">
         <table class="table hms-table">
             <thead><tr><th>الباقة</th><th>النوع</th><th>الصلاحية</th><th>الخدمات</th></tr></thead>
@@ -91,7 +97,7 @@
                     <td>{{ $pkg->service_group->count() }} خدمة</td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="text-muted text-center">لا توجد باقات بعد</td></tr>
+                <tr><td colspan="4" class="text-muted text-center">لا توجد باقات بعد — استخدم النموذج أعلاه.</td></tr>
             @endforelse
             </tbody>
         </table>

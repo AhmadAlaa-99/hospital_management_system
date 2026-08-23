@@ -1,4 +1,11 @@
 
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{ session('success') }}
+    </div>
+@endif
+
 @if (session('password_reset'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -26,37 +33,52 @@
     </div>
 @endif
     @if (session()->has('add'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ session('success') ?? trans('Dashboard/messages.add') }}
+        </div>
         <script>
             window.onload = function() {
-                notif({
-                    msg: "{{ trans('Dashboard/messages.add') }}",
-                    type: "success"
-                });
+                if (typeof notif === 'function') {
+                    notif({
+                        msg: "{{ session('success') ?? trans('Dashboard/messages.add') }}",
+                        type: "success"
+                    });
+                }
             }
-
         </script>
     @endif
 
     @if (session()->has('edit'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ session('success') ?? trans('Dashboard/messages.edit') }}
+        </div>
         <script>
             window.onload = function() {
-                notif({
-                    msg: "{{ trans('Dashboard/messages.edit') }}",
-                    type: "success"
-                });
+                if (typeof notif === 'function') {
+                    notif({
+                        msg: "{{ session('success') ?? trans('Dashboard/messages.edit') }}",
+                        type: "success"
+                    });
+                }
             }
-
         </script>
     @endif
 
     @if (session()->has('delete'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ trans('Dashboard/messages.delete') }}
+        </div>
         <script>
             window.onload = function() {
-                notif({
-                    msg: "{{ trans('Dashboard/messages.delete') }}",
-                    type: "success"
-                });
+                if (typeof notif === 'function') {
+                    notif({
+                        msg: "{{ trans('Dashboard/messages.delete') }}",
+                        type: "success"
+                    });
+                }
             }
-
         </script>
     @endif
