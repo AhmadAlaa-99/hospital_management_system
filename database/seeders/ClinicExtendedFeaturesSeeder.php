@@ -15,7 +15,6 @@ use App\Models\Group;
 use App\Models\MedicalCertificate;
 use App\Models\Medicine;
 use App\Models\Patient;
-use App\Models\PatientApiToken;
 use App\Models\PatientPackageUsage;
 use App\Models\PharmacyDispensing;
 use App\Models\PharmacyInvoice;
@@ -33,7 +32,7 @@ use Illuminate\Support\Str;
 
 /**
  * بيانات تجريبية شاملة للميزات الجديدة:
- * تحويلات، متابعة، شهادات، إسعاف (triage + timeline)، صيدلية، باقات، ملفات، API، سجل نشاط.
+ * تحويلات، متابعة، شهادات، إسعاف (triage + timeline)، صيدلية، باقات، ملفات، سجل نشاط.
  */
 class ClinicExtendedFeaturesSeeder extends Seeder
 {
@@ -50,7 +49,6 @@ class ClinicExtendedFeaturesSeeder extends Seeder
         $this->seedMedicinesAndDispensings();
         $this->seedPatientPackageUsages();
         $this->seedExternalRecords();
-        $this->seedPatientApiTokens();
         $this->seedShamCashDemo();
         $this->seedActivityLogs();
     }
@@ -62,7 +60,6 @@ class ClinicExtendedFeaturesSeeder extends Seeder
         DB::table('sham_cash_payments')->delete();
         DB::table('medicines')->delete();
         DB::table('activity_logs')->delete();
-        DB::table('patient_api_tokens')->delete();
         DB::table('external_records')->delete();
         DB::table('patient_package_usages')->delete();
         DB::table('ambulance_request_timelines')->delete();
@@ -580,22 +577,6 @@ class ClinicExtendedFeaturesSeeder extends Seeder
                 'notes' => 'ملف تجريبي للعرض',
             ]);
         }
-    }
-
-    protected function seedPatientApiTokens(): void
-    {
-        $demoToken = 'hms-demo-patient-api-token-2026';
-
-        PatientApiToken::create([
-            'patient_id' => Patient::where('email', 'patient@yahoo.com')->value('id') ?? Patient::first()->id,
-            'token' => hash('sha256', $demoToken),
-            'name' => 'demo-mobile',
-            'last_used_at' => now()->subHours(2),
-            'expires_at' => now()->addYear(),
-        ]);
-
-        // Token ثابت للعرض: hms-demo-patient-api-token-2026 (يُخزّن م hashed)
-        // للاختبار: POST /api/patient/login أو استخدم Bearer بعد login
     }
 
     protected function seedShamCashDemo(): void

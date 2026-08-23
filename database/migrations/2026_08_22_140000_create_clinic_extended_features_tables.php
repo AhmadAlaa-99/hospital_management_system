@@ -106,16 +106,6 @@ return new class extends Migration
             $table->index(['model_type', 'model_id']);
         });
 
-        Schema::create('patient_api_tokens', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
-            $table->string('token', 80)->unique();
-            $table->string('name')->default('mobile');
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('patient_package_usages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
@@ -198,7 +188,6 @@ return new class extends Migration
 
         Schema::dropIfExists('ambulance_request_timelines');
         Schema::dropIfExists('patient_package_usages');
-        Schema::dropIfExists('patient_api_tokens');
         Schema::dropIfExists('activity_logs');
         Schema::dropIfExists('pharmacy_dispensings');
         Schema::dropIfExists('medicines');
