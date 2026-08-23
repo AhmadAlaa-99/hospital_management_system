@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\Invoice;
 use App\Models\Patient;
 use App\Models\PatientAccount;
+use App\Services\ConsultationInvoiceService;
 use App\Services\InsuranceClaimService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -21,6 +22,7 @@ class GroupInvoices extends Component
     public $updateMode = false;
     public $group_invoice_id;
     public $Group_id;
+    public $Group_ids = [];
     public $catchError;
     public $price = 0;
     public $patient_id,$doctor_id,$section_id,$type;
@@ -59,6 +61,7 @@ class GroupInvoices extends Component
     protected function resetFormState()
     {
         $this->Group_id = null;
+        $this->Group_ids = [];
         $this->group_invoice_id = null;
         $this->patient_id = null;
         $this->doctor_id = null;
@@ -74,6 +77,11 @@ class GroupInvoices extends Component
         $this->insurance_note = '';
     }
 
+
+    public function updatedDoctorId($value)
+    {
+        $this->get_section();
+    }
 
     public function get_section()
     {
@@ -134,6 +142,61 @@ class GroupInvoices extends Component
 
     public function store()
     {
+        $this->catchError = null;
+        $this->InvoiceSaved = false;
+        $this->InvoiceUpdated = false;
+
+        if (!$this->patient_id || !$this->doctor_id || !$this->type) {
+            $this->catchError = 'يرجى تعبئة جميع الحقول المطلوبة (المريض، الطبيب، نوع الفاتورة).';
+            return;
+        }
+
+        $sectionId = is_numeric($this->section_id)
+            ? (int) $this->section_id
+            : optional(DB::table('section_translations')->where('name', $this->section_name ?: $this->section_id)->first())->section_id;
+
+        if (!$sectionId) {
+            $this->catchError = 'تعذر تحديد القسم. اختر الطبيب مرة أخرى.';
+            return;
+        }
+
+        if (!$this->updateMode) {
+            $groupIds = array_values(array_unique(array_filter($this->Group_ids ?? [])));
+            if (empty($groupIds)) {
+                $this->catchError = 'يرجى اختيار مجموعة خدمات واحدة على الأقل.';
+                return;
+            }
+
+            try {
+                $billing = app(ConsultationInvoiceService::class);
+                $payload = [
+                    'patient_id' => $this->patient_id,
+                    'doctor_id' => $this->doctor_id,
+                    'section_id' => $sectionId,
+                    'type' => $this->type,
+                    'invoice_status' => 1,
+                ];
+
+                foreach ($groupIds as $groupId) {
+                    $billing->createGroupInvoice(array_merge($payload, [
+                        'Group_id' => $groupId,
+                    ]), true);
+                }
+
+                $this->InvoiceSaved = true;
+                $this->show_table = true;
+                $this->rest();
+            } catch (\Exception $e) {
+                $this->catchError = \App\Helpers\FriendlyError::message($e->getMessage());
+            }
+
+            return;
+        }
+
+        if (!$this->Group_id) {
+            $this->catchError = 'يرجى اختيار مجموعة الخدمات.';
+            return;
+        }
 
         // في حالة كانت الفاتورة نقدي
         if($this->type == 1){
@@ -172,41 +235,6 @@ class GroupInvoices extends Component
                     $this->InvoiceUpdated =true;
                     $this->show_table =true;
 
-                }
-
-                // في حالة الاضافة
-                else{
-
-                    $group_invoices = new Invoice();
-                    $group_invoices->invoice_type = 2;
-                    $group_invoices->invoice_date = date('Y-m-d');
-                    $group_invoices->patient_id = $this->patient_id;
-                    $group_invoices->doctor_id = $this->doctor_id;
-                    $group_invoices->section_id = is_numeric($this->section_id)
-                        ? (int) $this->section_id
-                        : optional(DB::table('section_translations')->where('name', $this->section_name ?: $this->section_id)->first())->section_id;
-                    $group_invoices->Group_id = $this->Group_id;
-                    $group_invoices->price = $this->price;
-                    $group_invoices->discount_value = $this->discount_value;
-                    $group_invoices->tax_rate = $this->tax_rate;
-                    // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
-                    $group_invoices->tax_value = ($this->price - $this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
-                    // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
-                    $group_invoices->total_with_tax = $group_invoices->price -  $group_invoices->discount_value + $group_invoices->tax_value;
-                    $group_invoices->type = $this->type;
-                    $group_invoices->save();
-
-                    InsuranceClaimService::createFromInvoice($group_invoices);
-
-                    $fund_accounts = new FundAccount();
-                    $fund_accounts->date = date('Y-m-d');
-                    $fund_accounts->invoice_id = $group_invoices->id;
-                    $fund_accounts->Debit = $group_invoices->total_with_tax;
-                    $fund_accounts->credit = 0.00;
-                    $fund_accounts->save();
-                    $this->InvoiceSaved =true;
-                    $this->show_table =true;
-                    $this->rest();
                 }
 
             }
@@ -258,45 +286,7 @@ class GroupInvoices extends Component
                     $patient_accounts->save();
                     $this->InvoiceUpdated =true;
                     $this->show_table =true;
-                    $this->rest();
 
-                }
-
-                // في حالة الاضافة
-                else{
-
-
-                    $group_invoices = new Invoice();
-                    $group_invoices->invoice_type = 2;
-                    $group_invoices->invoice_date = date('Y-m-d');
-                    $group_invoices->patient_id = $this->patient_id;
-                    $group_invoices->doctor_id = $this->doctor_id;
-                    $group_invoices->section_id = is_numeric($this->section_id)
-                        ? (int) $this->section_id
-                        : optional(DB::table('section_translations')->where('name', $this->section_name ?: $this->section_id)->first())->section_id;
-                    $group_invoices->Group_id = $this->Group_id;
-                    $group_invoices->price = $this->price;
-                    $group_invoices->discount_value = $this->discount_value;
-                    $group_invoices->tax_rate = $this->tax_rate;
-                    // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
-                    $group_invoices->tax_value = ($this->price -$this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
-                    // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
-                    $group_invoices->total_with_tax = $group_invoices->price -  $group_invoices->discount_value + $group_invoices->tax_value;
-                    $group_invoices->type = $this->type;
-                    $group_invoices->save();
-
-                    InsuranceClaimService::createFromInvoice($group_invoices);
-
-                    $patient_accounts = new PatientAccount();
-                    $patient_accounts->date = date('Y-m-d');
-                    $patient_accounts->invoice_id = $group_invoices->id;
-                    $patient_accounts->patient_id = $group_invoices->patient_id;
-                    $patient_accounts->Debit = $group_invoices->total_with_tax;
-                    $patient_accounts->credit = 0.00;
-                    $patient_accounts->save();
-                    $this->InvoiceSaved =true;
-                    $this->show_table =true;
-                    $this->rest();
                 }
 
             }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Events\CreateInvoice;
 use App\Models\Doctor;
 use App\Models\FundAccount;
 use App\Models\Invoice;
 use App\Models\Patient;
 use App\Models\PatientAccount;
 use App\Models\Service;
+use App\Services\ConsultationInvoiceService;
 use App\Services\InsuranceClaimService;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -29,6 +29,7 @@ class SingleInvoices extends Component
     public $section_name; // display name
     public $type;
     public $Service_id;
+    public $Service_ids = [];
     public $single_invoice_id;
     public $catchError;
     public $insurance_note = '';
@@ -75,9 +76,15 @@ class SingleInvoices extends Component
             'type', 'Service_id', 'single_invoice_id', 'catchError', 'InvoiceSaved', 'InvoiceUpdated',
             'insurance_note',
         ]);
+        $this->Service_ids = [];
         $this->discount_value = 0;
         $this->tax_rate = 17;
         $this->updateMode = false;
+    }
+
+    public function updatedDoctorId($value)
+    {
+        $this->get_section();
     }
 
     public function print($id)
@@ -184,8 +191,8 @@ class SingleInvoices extends Component
         $this->InvoiceSaved = false;
         $this->InvoiceUpdated = false;
 
-        if (!$this->patient_id || !$this->doctor_id || !$this->Service_id || !$this->type) {
-            $this->catchError = 'يرجى تعبئة جميع الحقول المطلوبة (المريض، الطبيب، الخدمة، نوع الفاتورة).';
+        if (!$this->patient_id || !$this->doctor_id || !$this->type) {
+            $this->catchError = 'يرجى تعبئة جميع الحقول المطلوبة (المريض، الطبيب، نوع الفاتورة).';
             return;
         }
 
@@ -195,14 +202,47 @@ class SingleInvoices extends Component
             return;
         }
 
+        if (!$this->updateMode) {
+            $serviceIds = array_values(array_unique(array_filter($this->Service_ids ?? [])));
+            if (empty($serviceIds)) {
+                $this->catchError = 'يرجى اختيار خدمة واحدة على الأقل.';
+                return;
+            }
+
+            try {
+                $billing = app(ConsultationInvoiceService::class);
+                $payload = [
+                    'patient_id' => $this->patient_id,
+                    'doctor_id' => $this->doctor_id,
+                    'section_id' => $sectionId,
+                    'type' => $this->type,
+                    'invoice_status' => 1,
+                ];
+
+                foreach ($serviceIds as $serviceId) {
+                    $billing->createServiceInvoice(array_merge($payload, [
+                        'Service_id' => $serviceId,
+                    ]), true);
+                }
+
+                $this->InvoiceSaved = true;
+                $this->show_table = true;
+                $this->resetForm();
+            } catch (\Exception $e) {
+                $this->catchError = \App\Helpers\FriendlyError::message($e->getMessage());
+            }
+
+            return;
+        }
+
+        if (!$this->Service_id) {
+            $this->catchError = 'يرجى اختيار الخدمة.';
+            return;
+        }
+
         DB::beginTransaction();
         try {
-            if ($this->updateMode) {
-                $invoice = Invoice::findOrFail($this->single_invoice_id);
-            } else {
-                $invoice = new Invoice();
-                $invoice->invoice_status = 1;
-            }
+            $invoice = Invoice::findOrFail($this->single_invoice_id);
 
             $invoice->invoice_type = 1;
             $invoice->invoice_date = date('Y-m-d');
@@ -242,22 +282,7 @@ class SingleInvoices extends Component
                 FundAccount::where('invoice_id', $invoice->id)->delete();
             }
 
-            if (!$this->updateMode) {
-                $patient = Patient::find($this->patient_id);
-                \App\Services\NotificationService::notifyDoctor(
-                    (int) $this->doctor_id,
-                    'كشف جديد : ' . optional($patient)->name
-                );
-
-                event(new CreateInvoice([
-                    'patient' => $this->patient_id,
-                    'invoice_id' => $invoice->id,
-                    'doctor_id' => $this->doctor_id,
-                ]));
-                $this->InvoiceSaved = true;
-            } else {
-                $this->InvoiceUpdated = true;
-            }
+            $this->InvoiceUpdated = true;
 
             DB::commit();
             $this->show_table = true;

@@ -6,6 +6,7 @@ use App\Helpers\FriendlyError;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -21,6 +22,19 @@ class Handler extends ExceptionHandler
 
     public function register()
     {
+        $this->renderable(function (TokenMismatchException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'انتهت صلاحية الجلسة.'], 419);
+            }
+
+            if ($request->is('logout*') || $request->routeIs('logout.*')) {
+                return redirect()->route('home');
+            }
+
+            return redirect()->route('home')
+                ->with('error', 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.');
+        });
+
         $this->renderable(function (Throwable $e, Request $request) {
             if ($request->expectsJson() || config('app.debug')) {
                 return null;

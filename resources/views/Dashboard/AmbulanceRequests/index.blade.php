@@ -20,6 +20,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>رقم السجل</th>
                     <th>الاسم</th>
                     <th>الفرز</th>
                     <th>الحالة</th>
@@ -31,6 +32,7 @@
                 <tbody>
                 @forelse($requests as $req)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $req->id }}</td>
                         <td>
                             {{ $req->patient_name }}<br>

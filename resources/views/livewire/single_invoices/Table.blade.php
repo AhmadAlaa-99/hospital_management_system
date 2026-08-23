@@ -9,6 +9,7 @@
         <thead>
         <tr>
             <th>#</th>
+            <th>رقم السجل</th>
             <th>اسم الخدمة</th>
             <th>اسم المريض</th>
             <th>تاريخ الفاتورة</th>
@@ -27,6 +28,7 @@
         @foreach ($single_invoices as $single_invoice)
             <tr wire:key="invoice-row-{{ $single_invoice->id }}">
                 <td>{{ $loop->iteration }}</td>
+                <td>{{ $single_invoice->id }}</td>
                 <td>{{ optional($single_invoice->Service)->name }}</td>
                 <td>{{ optional($single_invoice->Patient)->name }}</td>
                 <td>{{ $single_invoice->invoice_date }}</td>

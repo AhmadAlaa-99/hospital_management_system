@@ -6,6 +6,7 @@
         <thead>
         <tr>
             <th>#</th>
+            <th>رقم السجل</th>
             <th>اسم الخدمة</th>
             <th>اسم المريض</th>
             <th>تاريخ الفاتورة</th>
@@ -24,6 +25,7 @@
         @foreach ($group_invoices as $group_invoice)
             <tr wire:key="ginvoice-row-{{ $group_invoice->id }}">
                 <td>{{ $loop->iteration }}</td>
+                <td>{{ $group_invoice->id }}</td>
                 <td>{{ optional($group_invoice->Group)->name }}</td>
                 <td>{{ optional($group_invoice->Patient)->name }}</td>
                 <td>{{ $group_invoice->invoice_date }}</td>

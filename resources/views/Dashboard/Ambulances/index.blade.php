@@ -31,11 +31,15 @@
 										<thead>
 											<tr>
 												<th>#</th>
+												<th>رقم السجل</th>
 												<th >رقم السيارة</th>
 												<th >موديل السيارة</th>
 												<th>سنة الصنع</th>
 												<th>نوع السيارة</th>
-												<th >اسم السائق</th>
+                                                <th >اسم السائق</th>
+                                                <th>اسم المسعف</th>
+                                                <th>منطقة التغطية</th>
+                                                <th>تاريخ الصيانة</th>
                                                 <th >رقم الرخصة</th>
                                                 <th >رقم الهاتف</th>
                                                 <th >حالة السيارة</th>
@@ -47,11 +51,15 @@
                                         @foreach($ambulances as $ambulance)
 											<tr>
                                                 <td>{{$loop->iteration}}</td>
+                                                <td>{{$ambulance->id}}</td>
                                                 <td>{{$ambulance->car_number}}</td>
                                                 <td>{{$ambulance->car_model}}</td>
                                                 <td>{{$ambulance->car_year_made}}</td>
                                                 <td>{{$ambulance->car_type == 1 ? 'مملكوكة' :'ايجار'}}</td>
                                                 <td>{{$ambulance->driver_name}}</td>
+                                                <td>{{$ambulance->paramedic_name ?: '—'}}</td>
+                                                <td>{{$ambulance->coverage_area ?: '—'}}</td>
+                                                <td>{{$ambulance->last_maintenance_date ?: '—'}}</td>
                                                 <td>{{$ambulance->driver_license_number}}</td>
                                                 <td>{{$ambulance->driver_phone}}</td>
                                                 <td>{{$ambulance->is_available == 1 ? 'مفعلة':'غير مفعلة'}}</td>

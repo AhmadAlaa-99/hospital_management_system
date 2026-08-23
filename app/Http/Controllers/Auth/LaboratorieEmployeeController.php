@@ -21,7 +21,7 @@ class LaboratorieEmployeeController extends Controller
 
     public function destroy(Request $request)
     {
-        Auth::guard('ray_employee')->logout();
+        Auth::guard('laboratorie_employee')->logout();
 
         $request->session()->invalidate();
 

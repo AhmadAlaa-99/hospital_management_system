@@ -39,6 +39,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
+                                <th>رقم السجل</th>
                                 <th><input name="select_all" id="example-select-all" type="checkbox"/></th>
                                 <th>{{trans('doctors.name')}}</th>
                                 <th>{{trans('doctors.img')}}</th>
@@ -55,6 +56,7 @@
                             @foreach($doctors as $doctor)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $doctor->id }}</td>
                                     <td>
                                         <input type="checkbox" name="delete_select" value="{{$doctor->id}}" class="delete_select">
                                     </td>

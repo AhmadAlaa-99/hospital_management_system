@@ -28,6 +28,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>رقم السجل</th>
                     <th>المريض</th>
                     <th>شركة التأمين</th>
                     <th>الإجمالي</th>
@@ -40,6 +41,7 @@
                 <tbody>
                 @foreach($claims as $claim)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $claim->id }}</td>
                         <td>{{ optional($claim->patient)->name }}</td>
                         <td>{{ optional($claim->insurance)->name }}</td>

@@ -26,6 +26,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>رقم السجل</th>
                             <th>تاريخ الفاتورة</th>
                             <th>اسم الدكتور</th>
                             <th>اسم الخدمة</th>
@@ -37,6 +38,7 @@
                         <tbody>
                         @foreach($invoices as $invoice)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $invoice->id }}</td>
                                 <td>{{ $invoice->invoice_date }}</td>
                                 <td>{{ optional($invoice->Doctor)->name ?? '—' }}</td>

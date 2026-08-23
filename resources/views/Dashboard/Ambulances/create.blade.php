@@ -77,6 +77,23 @@
                     <br>
 
                     <div class="row">
+                        <div class="col-4">
+                            <label>اسم المسعف</label>
+                            <input type="text" name="paramedic_name" value="{{old('paramedic_name')}}" class="form-control @error('paramedic_name') is-invalid @enderror">
+                        </div>
+                        <div class="col-4">
+                            <label>منطقة التغطية</label>
+                            <input type="text" name="coverage_area" value="{{old('coverage_area')}}" class="form-control @error('coverage_area') is-invalid @enderror" placeholder="مثال: دمشق — المزة">
+                        </div>
+                        <div class="col-4">
+                            <label>تاريخ آخر صيانة</label>
+                            <input type="date" name="last_maintenance_date" value="{{old('last_maintenance_date')}}" class="form-control @error('last_maintenance_date') is-invalid @enderror">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row">
                         <div class="col">
                             <label>ملاحظات</label>
                             <textarea rows="5" cols="10" class="form-control" name="notes"></textarea>

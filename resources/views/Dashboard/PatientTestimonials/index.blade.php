@@ -30,6 +30,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>رقم السجل</th>
                     <th>المريض</th>
                     <th>الطبيب</th>
                     <th>التقييم</th>
@@ -41,6 +42,7 @@
                 <tbody>
                 @forelse($testimonials as $item)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->id }}</td>
                         <td>{{ optional($item->patient)->name }}</td>
                         <td>{{ optional($item->doctor)->name }}</td>

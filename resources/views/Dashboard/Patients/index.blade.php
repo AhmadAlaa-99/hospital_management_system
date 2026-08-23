@@ -31,6 +31,7 @@
 										<thead>
 											<tr>
 												<th>#</th>
+												<th>رقم السجل</th>
 												<th>اسم المريض</th>
 												<th >البريد الالكتروني</th>
 												<th>تاريخ الميلاد</th>
@@ -45,6 +46,7 @@
                                         @foreach($Patients as $Patient)
 											<tr>
                                                 <td>{{$loop->iteration}}</td>
+                                                <td>{{$Patient->id}}</td>
                                                 <td><a href="{{route('Patients.show',$Patient->id)}}">{{$Patient->name}}</a></td>
                                                 <td>{{$Patient->email}}</td>
                                                 <td>{{$Patient->Date_Birth}}</td>

@@ -31,6 +31,9 @@ class StoreAmbulanceRequest extends FormRequest
             'driver_name' => 'required|unique:ambulance_translations,driver_name,'.$this->id.',ambulance_id',
             'driver_license_number' =>'required|numeric',
             'driver_phone' =>'required|numeric',
+            'paramedic_name' => 'nullable|string|max:255',
+            'coverage_area' => 'nullable|string|max:255',
+            'last_maintenance_date' => 'nullable|date',
         ];
     }
 

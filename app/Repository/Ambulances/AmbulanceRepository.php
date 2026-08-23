@@ -29,6 +29,9 @@ class AmbulanceRepository implements AmbulanceRepositoryInterface
        $ambulances->car_year_made = $request->car_year_made;
        $ambulances->driver_license_number = $request->driver_license_number;
        $ambulances->driver_phone = $request->driver_phone;
+       $ambulances->paramedic_name = $request->paramedic_name;
+       $ambulances->coverage_area = $request->coverage_area;
+       $ambulances->last_maintenance_date = $request->last_maintenance_date ?: null;
        $ambulances->is_available = 1;
        $ambulances->car_type = $request->car_type;
        $ambulances->save();

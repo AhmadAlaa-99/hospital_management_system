@@ -2,12 +2,9 @@
 namespace App\Repository\Doctors;
 
 use App\Interfaces\Doctors\DoctorRepositoryInterface;
-use App\Models\Appointment;
 use App\Models\Doctor;
-use App\Models\Image;
 use App\Models\Section;
 use App\Traits\UploadTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 

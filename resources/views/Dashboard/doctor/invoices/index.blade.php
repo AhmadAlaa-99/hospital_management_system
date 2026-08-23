@@ -51,6 +51,7 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>رقم السجل</th>
                                                 <th>تاريخ الفاتورة</th>
                                                 <th>اسم الخدمة</th>
                                                 <th>اسم المريض</th>
@@ -67,6 +68,7 @@
                                            @foreach($invoices as $invoice)
                                                <tr>
                                                    <td>{{ $loop->iteration}}</td>
+                                                   <td>{{ $invoice->id }}</td>
                                                    <td>{{ $invoice->invoice_date }}</td>
                                                    <td>{{ $invoice->Service->name ?? $invoice->Group->name }}</td>
                                                    <td><a href="{{route('patient_details',$invoice->patient_id)}}">{{ $invoice->Patient->name }}</a></td>

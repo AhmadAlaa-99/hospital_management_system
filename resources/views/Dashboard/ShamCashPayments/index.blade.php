@@ -22,6 +22,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>رقم السجل</th>
                     <th>الفاتورة</th>
                     <th>المريض</th>
                     <th>المبلغ</th>
@@ -33,6 +34,7 @@
                 <tbody>
                 @forelse($payments as $payment)
                     <tr class="{{ $payment->status === 'pending_review' ? 'table-warning' : '' }}">
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $payment->id }}</td>
                         <td>#{{ $payment->invoice_id }}</td>
                         <td>{{ optional($payment->patient)->name ?? '#'.$payment->patient_id }}</td>

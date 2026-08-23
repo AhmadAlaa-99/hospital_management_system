@@ -3,10 +3,11 @@
 @section('content')
 <div class="card hms-table-card"><div class="card-body">
     <table class="table hms-table">
-        <thead><tr><th>#</th><th>المريض</th><th>من</th><th>إلى</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+        <thead><tr><th>#</th><th>رقم السجل</th><th>المريض</th><th>من</th><th>إلى</th><th>الحالة</th><th>التاريخ</th></tr></thead>
         <tbody>
         @foreach($referrals as $ref)
             <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $ref->id }}</td>
                 <td>#{{ $ref->patient_id }}</td>
                 <td>{{ optional($ref->fromDoctor)->name }} ({{ optional($ref->fromSection)->name }})</td>
