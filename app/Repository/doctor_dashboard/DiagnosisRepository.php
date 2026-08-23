@@ -28,7 +28,7 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
             $diagnosis = new Diagnostic();
             $diagnosis->date = date('Y-m-d');
             $diagnosis->diagnosis = $request->diagnosis;
-            $diagnosis->medicine = $request->input('medicine', '');
+            $diagnosis->medicine = $this->medicineNotes($request);
             $diagnosis->invoice_id = $request->invoice_id;
             $diagnosis->patient_id = $request->patient_id;
             $diagnosis->doctor_id = $request->doctor_id;
@@ -74,7 +74,7 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
                 $diagnosis->review_reminder_sent = false;
             }
             $diagnosis->diagnosis = $request->diagnosis;
-            $diagnosis->medicine = $request->input('medicine', '');
+            $diagnosis->medicine = $this->medicineNotes($request);
             $diagnosis->invoice_id = $request->invoice_id;
             $diagnosis->patient_id = $request->patient_id;
             $diagnosis->doctor_id = $request->doctor_id;
@@ -171,6 +171,12 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    protected function medicineNotes($request): string
+    {
+        // ConvertEmptyStringsToNull turns an empty textarea into null; DB column is NOT NULL.
+        return (string) ($request->input('medicine') ?? '');
     }
 
     protected function nullableString($value): ?string
