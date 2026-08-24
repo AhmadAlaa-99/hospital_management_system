@@ -108,6 +108,26 @@ html, body {
     animation: pulse-dot 1.5s infinite;
 }
 
+.queue-sound-btn {
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.08);
+    color: var(--q-text);
+    border-radius: 8px;
+    padding: .35rem .55rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.queue-sound-btn:hover {
+    background: rgba(0,180,216,.2);
+    border-color: var(--q-accent);
+}
+
+.queue-sound-btn.muted {
+    opacity: .65;
+}
+
 @keyframes pulse-dot {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: .5; transform: scale(1.3); }

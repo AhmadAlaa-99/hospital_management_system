@@ -29,6 +29,7 @@
         </div>
         <div class="queue-meta">
             <div class="queue-live"><span class="queue-live-dot"></span> تحديث مباشر</div>
+            <button type="button" class="queue-sound-btn" id="sound-toggle" title="تفعيل/كتم صوت النداء">🔊</button>
             <span class="queue-badge"><span id="waiting-count">{{ $data['waiting_count'] }}</span> بالانتظار</span>
             <div class="queue-clock" id="clock"></div>
         </div>
@@ -127,6 +128,10 @@
     const pusherKey = @json(config('broadcasting.connections.pusher.key'));
     const pollMs = 3000;
     let lastNumber = document.getElementById('current-number').textContent.trim();
+    let lastAnnounceKey = '';
+    let skipNextAnnounce = true;
+    let soundEnabled = localStorage.getItem('queueDisplaySound') !== 'off';
+    let speechReady = false;
     let pusher = null;
     let subscribedChannels = [];
 
@@ -200,6 +205,98 @@
         }).join('');
     }
 
+    function updateSoundButton() {
+        const btn = document.getElementById('sound-toggle');
+        if (!btn) return;
+        btn.textContent = soundEnabled ? '🔊' : '🔇';
+        btn.classList.toggle('muted', !soundEnabled);
+    }
+
+    function playCallChime() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = 880;
+            gain.gain.value = 0.08;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.25);
+        } catch (e) {}
+    }
+
+    function speakArabic(text) {
+        if (!soundEnabled || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ar-SA';
+        utter.rate = 0.92;
+        utter.pitch = 1;
+        const voices = window.speechSynthesis.getVoices();
+        const arVoice = voices.find(function (v) {
+            return v.lang && (v.lang.indexOf('ar') === 0);
+        });
+        if (arVoice) utter.voice = arVoice;
+        window.speechSynthesis.speak(utter);
+    }
+
+    function announceCurrent(current) {
+        if (!current || !['called', 'serving'].includes(current.status)) return;
+        if (skipNextAnnounce) return;
+
+        const key = String(current.id) + '|' + (current.called_at || current.ticket_number || '');
+        if (key === lastAnnounceKey) return;
+        lastAnnounceKey = key;
+
+        const parts = ticketParts(current);
+        const ticketLabel = parts.code
+            ? parts.code + ' ' + parts.number
+            : (current.ticket_number || parts.number);
+        const section = current.section_label || '';
+        const doctor = current.doctor ? current.doctor.name : '';
+        let msg = 'المريض ' + (current.patient_name || '') + '، رقم ' + ticketLabel;
+        if (doctor) {
+            msg += '، يرجى التوجه إلى عيادة الدكتور ' + doctor;
+        } else if (section) {
+            msg += '، يرجى التوجه إلى قسم ' + section;
+        } else {
+            msg += '، يرجى التوجه إلى العيادة';
+        }
+
+        playCallChime();
+        setTimeout(function () { speakArabic(msg); }, 350);
+    }
+
+    function initSpeech() {
+        if (!window.speechSynthesis) return;
+        speechSynthesis.getVoices();
+        speechReady = true;
+    }
+
+    if (window.speechSynthesis) {
+        initSpeech();
+        window.speechSynthesis.onvoiceschanged = initSpeech;
+    }
+
+    updateSoundButton();
+    document.getElementById('sound-toggle').addEventListener('click', function () {
+        soundEnabled = !soundEnabled;
+        localStorage.setItem('queueDisplaySound', soundEnabled ? 'on' : 'off');
+        updateSoundButton();
+        if (soundEnabled) {
+            speakArabic('تم تفعيل صوت النداء');
+        } else {
+            window.speechSynthesis.cancel();
+        }
+    });
+
+    document.body.addEventListener('click', function enableAudioOnce() {
+        if (window.speechSynthesis && !speechReady) initSpeech();
+        document.body.removeEventListener('click', enableAudioOnce);
+    }, { once: true });
+
     function render(payload) {
         if (!payload) return;
 
@@ -214,6 +311,12 @@
             void numEl.offsetWidth;
             numEl.classList.add('flash');
             lastNumber = parts.number;
+        }
+
+        if (current) {
+            announceCurrent(current);
+        } else {
+            lastAnnounceKey = '';
         }
 
         codeEl.textContent = parts.code;
@@ -234,6 +337,7 @@
         panel.classList.toggle('empty', !current);
         renderWaiting(payload.waiting);
         renderRecent(payload.recent);
+        skipNextAnnounce = false;
     }
 
     function fetchData() {
@@ -276,6 +380,8 @@
         document.getElementById('current-section-label').textContent = lbl;
         document.getElementById('sidebar-section-label').textContent = lbl;
         lastNumber = '';
+        lastAnnounceKey = '';
+        skipNextAnnounce = true;
         subscribePusher();
         fetchData();
         history.replaceState(null, '', sectionsMeta.find(function (s) { return s.id === sectionId; })?.url || location.href);

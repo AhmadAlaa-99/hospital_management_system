@@ -730,6 +730,7 @@ class QueueService
             'priority' => $ticket->priority,
             'priority_label' => QueueTicket::$priorityLabels[$ticket->priority] ?? $ticket->priority,
             'estimated_wait_minutes' => $ticket->estimated_wait_minutes,
+            'called_at' => $ticket->called_at ? $ticket->called_at->toIso8601String() : null,
             'doctor' => $ticket->doctor ? ['id' => $ticket->doctor->id, 'name' => $ticket->doctor->name] : null,
         ];
     }
