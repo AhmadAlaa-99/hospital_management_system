@@ -11,4 +11,32 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/docs
+/docs/
+
+# IDE
+.idea/
+
+# Graduation / local documentation (not application code)
+*.docx
+*.pptx
+/DOC-*.docx
+/Hospital_Management_System_Graduation_Presentation*.pptx
+/Template_for_PPT_Presentation*.pptx
+/*_extract.txt
+/*-extract.txt
+/docs-run.log
+/ppt_inspect.txt
+/ppt_review_extract.txt
+/verify-ppt.txt
+/s[0-9]*.txt
+/نظام ادارة مستشفى.pdf
+/scripts/build_graduation_presentation.py
+/scripts/__pycache__/
+/استمارة_*.md
+/توثيق_*.md
+/متطلبات_*.md
+/مخططات_*.md
+/دليل_*.html
+/تطوير*.docx
+/آلية*.pdf
+/~$*.docx
