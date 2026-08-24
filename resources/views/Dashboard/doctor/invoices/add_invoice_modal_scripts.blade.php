@@ -13,27 +13,27 @@
         return subtotal + taxValue;
     }
 
-    function calcGroupTotal($opt) {
-        var total = parseFloat($opt.data('total') || 0);
+    function calcGroupTotal($el) {
+        var total = parseFloat($el.data('total') || 0);
         if (total > 0) {
             return total;
         }
-        var price = parseFloat($opt.data('price') || 0);
-        var discount = parseFloat($opt.data('discount') || 0);
-        var taxRate = parseFloat($opt.data('tax-rate') || 0);
+        var price = parseFloat($el.data('price') || 0);
+        var discount = parseFloat($el.data('discount') || 0);
+        var taxRate = parseFloat($el.data('tax-rate') || 0);
         var subtotal = price - discount;
         return subtotal + (subtotal * (taxRate / 100));
     }
 
     function updatePreview() {
-        var serviceCount = ($('#doctor_invoice_service_ids').val() || []).length;
-        var groupCount = ($('#doctor_invoice_group_ids').val() || []).length;
+        var serviceCount = $('.doctor-service-cb:checked').length;
+        var groupCount = $('.doctor-group-cb:checked').length;
         var grandTotal = 0;
 
-        $('#doctor_invoice_service_ids option:selected').each(function () {
+        $('.doctor-service-cb:checked').each(function () {
             grandTotal += calcSingleTotal(parseFloat($(this).data('price') || 0));
         });
-        $('#doctor_invoice_group_ids option:selected').each(function () {
+        $('.doctor-group-cb:checked').each(function () {
             grandTotal += calcGroupTotal($(this));
         });
 
@@ -51,15 +51,25 @@
         $('#doctor-invoice-preview-text').text(text);
     }
 
+    function checkService(serviceId) {
+        if (!serviceId) {
+            return;
+        }
+        $('#doctor_service_' + serviceId).prop('checked', true);
+    }
+
     window.openDoctorInvoiceModal = function (opts) {
         opts = opts || {};
         $('#doctor_invoice_return_to').val(opts.returnTo || 'invoices');
         $('#doctor_invoice_appointment_id').val(opts.appointmentId || '');
+        $('.doctor-service-cb, .doctor-group-cb').prop('checked', false);
         if (opts.patientId) {
             $('#doctor_invoice_patient_id').val(opts.patientId).trigger('change');
         }
         if (opts.serviceIds && opts.serviceIds.length) {
-            $('#doctor_invoice_service_ids').val(opts.serviceIds).trigger('change');
+            opts.serviceIds.forEach(function (id) {
+                checkService(id);
+            });
         }
         updatePreview();
         $('#doctorAddInvoiceModal').modal('show');
@@ -72,16 +82,9 @@
                 dir: 'rtl',
                 dropdownParent: $('#doctorAddInvoiceModal')
             });
-            $('.doctor-invoice-multi-select').select2({
-                width: '100%',
-                dir: 'rtl',
-                placeholder: '— اختر —',
-                allowClear: true,
-                dropdownParent: $('#doctorAddInvoiceModal')
-            });
         }
 
-        $('#doctor_invoice_service_ids, #doctor_invoice_group_ids').on('change', updatePreview);
+        $(document).on('change', '.doctor-service-cb, .doctor-group-cb', updatePreview);
 
         $(document).on('click', '.btn-open-doctor-invoice-modal', function (e) {
             e.preventDefault();
@@ -103,8 +106,8 @@
         });
 
         $('#doctor-invoice-form').on('submit', function (e) {
-            var services = ($('#doctor_invoice_service_ids').val() || []).length;
-            var groups = ($('#doctor_invoice_group_ids').val() || []).length;
+            var services = $('.doctor-service-cb:checked').length;
+            var groups = $('.doctor-group-cb:checked').length;
             if (!services && !groups) {
                 e.preventDefault();
                 alert('يرجى اختيار خدمة مفردة أو مجموعة خدمات واحدة على الأقل.');
@@ -115,11 +118,9 @@
             $('#doctor-invoice-form')[0].reset();
             $('#doctor_invoice_appointment_id').val('');
             $('#doctor_invoice_return_to').val('invoices');
+            $('.doctor-service-cb, .doctor-group-cb').prop('checked', false);
             if ($('.doctor-invoice-select2').data('select2')) {
                 $('.doctor-invoice-select2').val('').trigger('change');
-            }
-            if ($('.doctor-invoice-multi-select').data('select2')) {
-                $('.doctor-invoice-multi-select').val(null).trigger('change');
             }
             updatePreview();
         });

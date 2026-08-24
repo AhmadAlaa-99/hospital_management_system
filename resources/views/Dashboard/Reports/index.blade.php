@@ -3,7 +3,10 @@
 @section('page-header')
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto"><h4 class="content-title mb-0">التقارير والإحصائيات</h4></div>
-    <a href="{{ route('export.reports') }}" class="btn btn-success btn-sm"><i class="fas fa-file-export ml-1"></i> تصدير CSV</a>
+    <div class="d-flex" style="gap:8px">
+        <a href="{{ route('export.reports') }}" class="btn btn-success btn-sm"><i class="fas fa-file-excel ml-1"></i> تصدير Excel</a>
+        <a href="{{ route('export.reports.pdf') }}" class="btn btn-danger btn-sm"><i class="fas fa-file-pdf ml-1"></i> تصدير PDF</a>
+    </div>
 </div>
 @endsection
 @section('content')

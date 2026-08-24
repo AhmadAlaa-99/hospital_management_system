@@ -44,7 +44,7 @@
                 </div>
                 <div class="col">
                     <label>نوع الفاتورة</label>
-                    <select wire:model="type" class="form-control" @if($updateMode) disabled @endif>
+                    <select wire:model="type" class="form-control" required>
                         <option value="">-- اختار من القائمة --</option>
                         <option value="1">نقدي</option>
                         <option value="2">اجل</option>
@@ -60,11 +60,22 @@
                         <small class="text-muted">(يمكن اختيار أكثر من مجموعة — كل مجموعة تُنشئ فاتورة مستقلة)</small>
                     </div>
                     <div class="card-body py-3">
-                        <select wire:model="Group_ids" multiple class="form-control" size="8" required>
+                        <div class="row">
                             @foreach($Groups as $Group)
-                                <option value="{{ $Group->id }}">{{ $Group->name }} — {{ number_format($Group->Total_with_tax, 2) }}</option>
+                                <div class="col-md-6 col-lg-4 mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox"
+                                               wire:model="Group_ids"
+                                               value="{{ $Group->id }}"
+                                               id="group_cb_{{ $Group->id }}"
+                                               class="custom-control-input">
+                                        <label class="custom-control-label" for="group_cb_{{ $Group->id }}">
+                                            {{ $Group->name }} — {{ number_format($Group->Total_with_tax, 2) }}
+                                        </label>
+                                    </div>
+                                </div>
                             @endforeach
-                        </select>
+                        </div>
                         <small class="text-muted d-block mt-2">الخصم والضريبة تُحسب تلقائياً لكل مجموعة (بما فيها خصم التأمين إن وُجد).</small>
                         @if($insurance_note)
                             <small class="text-info d-block mt-2">{{ $insurance_note }}</small>

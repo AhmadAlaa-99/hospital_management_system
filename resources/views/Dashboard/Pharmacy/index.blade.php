@@ -33,7 +33,7 @@
                     <td>{{ optional($dx->patient)->name ?? '#'.$dx->patient_id }}</td>
                     <td>{{ optional($dx->Doctor)->name ?? '—' }}</td>
                     <td>{{ \Illuminate\Support\Str::limit($dx->diagnosis, 40) }}</td>
-                    <td>{{ $dx->prescriptions->where('is_dispensed', false)->count() }} دواء</td>
+                    <td>{{ $dx->prescriptions->where('is_dispensed', false)->pluck('medicine_name')->join('، ') ?: '—' }}</td>
                     <td>{{ $dx->date }}</td>
                     <td>
                         <a href="{{ route('pharmacy.dispense-prescription', $dx) }}" class="btn btn-sm btn-success">صرف الوصفة</a>
@@ -89,7 +89,7 @@
             <div class="card-header">مخزون صيدلية العيادة (أدوية شائعة)</div>
             <div class="card-body">
                 <table class="table hms-table table-sm">
-                    <thead><tr><th>الدواء</th><th>علمي</th><th>الكمية</th><th>السعر</th><th>الانتهاء</th><th>الحالة</th></tr></thead>
+                    <thead><tr><th>الدواء</th><th>علمي</th><th>الكمية</th><th>السعر</th><th>الانتهاء</th><th>الحالة</th><th></th></tr></thead>
                     <tbody>
                     @foreach($medicines as $med)
                         <tr class="{{ $med->isLowStock() ? 'table-warning' : '' }}">
@@ -113,6 +113,22 @@
                                     <span class="badge badge-success">متوفر</span>
                                 @endif
                             </td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary btn-edit-medicine"
+                                        data-toggle="modal"
+                                        data-target="#editMedicineModal"
+                                        data-id="{{ $med->id }}"
+                                        data-name="{{ $med->name }}"
+                                        data-generic="{{ $med->generic_name }}"
+                                        data-quantity="{{ $med->quantity }}"
+                                        data-price="{{ $med->unit_price }}"
+                                        data-expiry="{{ optional($med->expiry_date)->format('Y-m-d') }}"
+                                        data-min="{{ $med->min_stock_level }}"
+                                        data-active="{{ $med->is_active ? '1' : '0' }}">
+                                    <i class="fas fa-edit"></i> تعديل
+                                </button>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -122,4 +138,75 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editMedicineModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="editMedicineForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title">تعديل دواء</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>اسم الدواء</label>
+                        <input type="text" name="name" id="edit_med_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الاسم العلمي</label>
+                        <input type="text" name="generic_name" id="edit_med_generic" class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label>الكمية</label>
+                            <input type="number" name="quantity" id="edit_med_quantity" class="form-control" min="0" required>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label>السعر</label>
+                            <input type="number" step="0.01" name="unit_price" id="edit_med_price" class="form-control" min="0" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label>تاريخ الانتهاء</label>
+                            <input type="date" name="expiry_date" id="edit_med_expiry" class="form-control">
+                        </div>
+                        <div class="col-6 form-group">
+                            <label>الحد الأدنى للمخزون</label>
+                            <input type="number" name="min_stock_level" id="edit_med_min" class="form-control" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="is_active" value="1" id="edit_med_active" class="form-check-input">
+                        <label class="form-check-label" for="edit_med_active">مفعّل في المخزون</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التعديل</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+@section('js')
+<script>
+$(function () {
+    var updateUrl = @json(route('pharmacy.medicines.update', ['medicine' => 'MED_ID']));
+    $(document).on('click', '.btn-edit-medicine', function () {
+        var $btn = $(this);
+        $('#editMedicineForm').attr('action', updateUrl.replace('MED_ID', $btn.data('id')));
+        $('#edit_med_name').val($btn.data('name'));
+        $('#edit_med_generic').val($btn.data('generic') || '');
+        $('#edit_med_quantity').val($btn.data('quantity'));
+        $('#edit_med_price').val($btn.data('price'));
+        $('#edit_med_expiry').val($btn.data('expiry') || '');
+        $('#edit_med_min').val($btn.data('min'));
+        $('#edit_med_active').prop('checked', String($btn.data('active')) === '1');
+    });
+});
+</script>
 @endsection

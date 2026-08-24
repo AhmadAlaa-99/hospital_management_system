@@ -89,14 +89,16 @@
                                                        </div>
                                                    </td>
                                                </tr>
-                                               @include('Dashboard.doctor.invoices.add_diagnosis')
-                                               @include('Dashboard.doctor.invoices.add_review')
-                                               @include('Dashboard.doctor.invoices.xray_conversion')
-                                               @include('Dashboard.doctor.invoices.Laboratorie_conversion')
                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
+                                    @foreach($invoices as $invoice)
+                                        @include('Dashboard.doctor.invoices.add_diagnosis')
+                                        @include('Dashboard.doctor.invoices.add_review')
+                                        @include('Dashboard.doctor.invoices.xray_conversion')
+                                        @include('Dashboard.doctor.invoices.Laboratorie_conversion')
+                                    @endforeach
                                 </div><!-- bd -->
                             </div><!-- bd -->
                         </div>
@@ -136,5 +138,6 @@
     <script src="{{URL::asset('dashboard/plugins/pickerjs/picker.min.js')}}"></script>
     <!-- Internal form-elements js -->
     <script src="{{URL::asset('dashboard/js/form-elements.js')}}"></script>
+    @include('Dashboard.doctor.invoices.add_diagnosis_scripts')
 
 @endsection

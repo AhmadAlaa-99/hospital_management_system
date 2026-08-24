@@ -48,13 +48,23 @@
                                     <small class="text-muted">(يمكن اختيار أكثر من خدمة)</small>
                                 </div>
                                 <div class="card-body py-3">
-                                    <select name="Service_ids[]" id="doctor_invoice_service_ids" class="form-control doctor-invoice-multi-select" multiple>
+                                    <div class="row doctor-service-checkboxes">
                                         @foreach($services as $service)
-                                            <option value="{{ $service->id }}" data-price="{{ $service->price }}">
-                                                {{ $service->name }} — {{ number_format($service->price, 2) }}
-                                            </option>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox"
+                                                           name="Service_ids[]"
+                                                           value="{{ $service->id }}"
+                                                           id="doctor_service_{{ $service->id }}"
+                                                           class="custom-control-input doctor-service-cb"
+                                                           data-price="{{ $service->price }}">
+                                                    <label class="custom-control-label" for="doctor_service_{{ $service->id }}">
+                                                        {{ $service->name }} — {{ number_format($service->price, 2) }}
+                                                    </label>
+                                                </div>
+                                            </div>
                                         @endforeach
-                                    </select>
+                                    </div>
                                     <small class="text-muted d-block mt-2">كل خدمة تُنشئ فاتورة مستقلة — الخصم والضريبة تُحسب تلقائياً.</small>
                                 </div>
                             </div>
@@ -66,17 +76,26 @@
                                     <small class="text-muted">(يمكن اختيار أكثر من مجموعة)</small>
                                 </div>
                                 <div class="card-body py-3">
-                                    <select name="Group_ids[]" id="doctor_invoice_group_ids" class="form-control doctor-invoice-multi-select" multiple>
+                                    <div class="row doctor-group-checkboxes">
                                         @foreach($groups as $group)
-                                            <option value="{{ $group->id }}"
-                                                    data-price="{{ $group->Total_before_discount }}"
-                                                    data-discount="{{ $group->discount_value }}"
-                                                    data-tax-rate="{{ $group->tax_rate }}"
-                                                    data-total="{{ $group->Total_with_tax }}">
-                                                {{ $group->name }} — {{ number_format($group->Total_with_tax, 2) }}
-                                            </option>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox"
+                                                           name="Group_ids[]"
+                                                           value="{{ $group->id }}"
+                                                           id="doctor_group_{{ $group->id }}"
+                                                           class="custom-control-input doctor-group-cb"
+                                                           data-price="{{ $group->Total_before_discount }}"
+                                                           data-discount="{{ $group->discount_value }}"
+                                                           data-tax-rate="{{ $group->tax_rate }}"
+                                                           data-total="{{ $group->Total_with_tax }}">
+                                                    <label class="custom-control-label" for="doctor_group_{{ $group->id }}">
+                                                        {{ $group->name }} — {{ number_format($group->Total_with_tax, 2) }}
+                                                    </label>
+                                                </div>
+                                            </div>
                                         @endforeach
-                                    </select>
+                                    </div>
                                     <small class="text-muted d-block mt-2">كل مجموعة تُنشئ فاتورة مستقلة بأسعار المجموعة المعرفة من الإدارة.</small>
                                 </div>
                             </div>

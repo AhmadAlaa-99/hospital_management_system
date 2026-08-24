@@ -119,15 +119,12 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
             return;
         }
 
-        if (!$request->has('medicines') || !is_array($request->medicines)) {
+        $items = $this->collectPrescriptionItems($request);
+        if (empty($items)) {
             return;
         }
 
-        foreach ($request->medicines as $item) {
-            if (empty($item['medicine_name'])) {
-                continue;
-            }
-
+        foreach ($items as $item) {
             Prescription::create([
                 'diagnostic_id' => $diagnosis->id,
                 'medicine_name' => $item['medicine_name'],
@@ -137,6 +134,76 @@ class DiagnosisRepository implements DiagnosisRepositoryInterface
                 'instructions' => $this->nullableString($item['instructions'] ?? null),
             ]);
         }
+    }
+
+    /**
+     * @return array<int, array{medicine_name:string,dosage?:mixed,frequency?:mixed,duration_days?:mixed,instructions?:mixed}>
+     */
+    protected function collectPrescriptionItems($request): array
+    {
+        $items = [];
+        $seenNames = [];
+
+        if ($request->has('medicines') && is_array($request->medicines)) {
+            foreach ($request->medicines as $item) {
+                $name = trim((string) ($item['medicine_name'] ?? ''));
+                if ($name === '') {
+                    continue;
+                }
+
+                foreach ($this->splitMedicineNames($name) as $splitName) {
+                    $key = mb_strtolower($splitName);
+                    if (isset($seenNames[$key])) {
+                        continue;
+                    }
+                    $seenNames[$key] = true;
+                    $items[] = [
+                        'medicine_name' => $splitName,
+                        'dosage' => $item['dosage'] ?? null,
+                        'frequency' => $item['frequency'] ?? null,
+                        'duration_days' => $item['duration_days'] ?? null,
+                        'instructions' => $item['instructions'] ?? null,
+                    ];
+                }
+            }
+        }
+
+        $notes = trim((string) ($request->input('medicine') ?? ''));
+        if ($notes !== '') {
+            foreach ($this->splitMedicineNames($notes) as $splitName) {
+                $key = mb_strtolower($splitName);
+                if (isset($seenNames[$key])) {
+                    continue;
+                }
+                $seenNames[$key] = true;
+                $items[] = ['medicine_name' => $splitName];
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function splitMedicineNames(string $value): array
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return [];
+        }
+
+        $parts = preg_split('/[\r\n,،+]+|\s+و\s+|(?:\s+and\s+)/iu', $value) ?: [];
+        $names = [];
+
+        foreach ($parts as $part) {
+            $part = trim($part, " \t\n\r\0\x0B-•");
+            if ($part !== '' && mb_strlen($part) >= 2) {
+                $names[] = $part;
+            }
+        }
+
+        return $names ?: [$value];
     }
 
     protected function createFollowUpPlan($request, Diagnostic $diagnosis): void

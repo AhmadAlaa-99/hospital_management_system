@@ -232,6 +232,7 @@ class GroupInvoices extends Component
                     $fund_accounts->Debit = $group_invoices->total_with_tax;
                     $fund_accounts->credit = 0.00;
                     $fund_accounts->save();
+                    PatientAccount::where('invoice_id', $group_invoices->id)->delete();
                     $this->InvoiceUpdated =true;
                     $this->show_table =true;
 
@@ -284,6 +285,7 @@ class GroupInvoices extends Component
                     $patient_accounts->Debit = $group_invoices->total_with_tax;
                     $patient_accounts->credit = 0.00;
                     $patient_accounts->save();
+                    FundAccount::where('invoice_id', $group_invoices->id)->delete();
                     $this->InvoiceUpdated =true;
                     $this->show_table =true;
 

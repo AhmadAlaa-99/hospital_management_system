@@ -76,6 +76,6 @@ class SiteSettingController extends Controller
         AuditLogService::log('sham_cash_settings_updated', $setting);
 
         session()->flash('edit');
-        return back();
+        return redirect()->route('site-settings.edit', ['tab' => 'sham-cash']);
     }
 }

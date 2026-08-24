@@ -262,6 +262,7 @@ Route::group(
 
         Route::get('export/insurance-claims', [\App\Http\Controllers\Dashboard\ExportController::class, 'insuranceClaims'])->name('export.insurance-claims');
         Route::get('export/reports', [\App\Http\Controllers\Dashboard\ExportController::class, 'reports'])->name('export.reports');
+        Route::get('export/reports/pdf', [\App\Http\Controllers\Dashboard\ExportController::class, 'reportsPdf'])->name('export.reports.pdf');
         Route::get('export/table', [\App\Http\Controllers\Dashboard\ExportController::class, 'table'])->name('export.table');
 
         Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');

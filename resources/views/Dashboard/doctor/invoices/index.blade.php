@@ -101,14 +101,16 @@
                                                        </div>
                                                    </td>
                                                </tr>
-                                               @include('Dashboard.doctor.invoices.add_diagnosis')
-                                               @include('Dashboard.doctor.invoices.add_review')
-                                               @include('Dashboard.doctor.invoices.xray_conversion')
-                                               @include('Dashboard.doctor.invoices.Laboratorie_conversion')
                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
+                                    @foreach($invoices as $invoice)
+                                        @include('Dashboard.doctor.invoices.add_diagnosis')
+                                        @include('Dashboard.doctor.invoices.add_review')
+                                        @include('Dashboard.doctor.invoices.xray_conversion')
+                                        @include('Dashboard.doctor.invoices.Laboratorie_conversion')
+                                    @endforeach
                                 </div><!-- bd -->
                             </div><!-- bd -->
                         </div>
@@ -141,6 +143,7 @@
     <!-- Internal Select2.min js -->
     <script src="{{URL::asset('dashboard/plugins/select2/js/select2.min.js')}}"></script>
     @include('Dashboard.doctor.invoices.add_invoice_modal_scripts')
+    @include('Dashboard.doctor.invoices.add_diagnosis_scripts')
     <!--Internal Ion.rangeSlider.min js -->
     <script src="{{URL::asset('dashboard/plugins/ion-rangeslider/js/ion.rangeSlider.min.js')}}"></script>
     <!--Internal  jquery-simple-datetimepicker js -->
